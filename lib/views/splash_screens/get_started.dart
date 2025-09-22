@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
@@ -51,7 +52,9 @@ class GetStarted extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 1.h),
-                    customButton("Sign Up With Email",color: buttonPinkColor,textColor: whiteColor),
+                    customButton("Sign Up With Email",color: buttonPinkColor,textColor: whiteColor,ontap: (){
+                      Get.toNamed('login');
+                    }),
                     SizedBox(height: 1.h),
                     customButton("Join For Free With Google",textColor: blackColor,path: "assets/png/socail_icon/google.png",fontweight: FontWeight.w500),
                     SizedBox(height: 1.h),

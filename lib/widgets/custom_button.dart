@@ -5,8 +5,9 @@ import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:sizer/sizer.dart';
 
-Widget customButton(String text,{String? path,Color? color,FontWeight? fontweight,double? fontsize,Color? textColor}){
+Widget customButton(String text,{String? path,Color? color,FontWeight? fontweight,double? fontsize,Color? textColor,VoidCallback? ontap}){
  return InkWell(
+   onTap: ontap,
    child: Container(
      height: 6.h,
      width: double.infinity,
