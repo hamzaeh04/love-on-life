@@ -15,8 +15,8 @@ class GetStarted extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              // begin: Alignment.topLeft,
-              // end: Alignment.bottomRight,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
               colors: [
                 Color(0xFF030C1A),
                 Color(0xFF09395B),
