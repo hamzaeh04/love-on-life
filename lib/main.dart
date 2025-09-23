@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
+import 'package:love_on_life/controllers/navigation_controller.dart';
 import 'package:love_on_life/utils/App_Routing.dart';
 import 'package:love_on_life/utils/init_binding.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
+  Get.put(NavigationController());
   runApp(const MyApp());
 }
 

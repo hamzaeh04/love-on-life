@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 2.h),
                 customButton("Sign In",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
-
+                Get.toNamed("bottomnavbar");
                 }),
                 SizedBox(height: 3.h),
                 Row(
