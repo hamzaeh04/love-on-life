@@ -68,8 +68,9 @@ class GetStarted extends StatelessWidget {
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             color: whiteColor,
+                          letterSpacing: -0.4,
                         ),
-                        SizedBox(width: 0.5.w),
+                        SizedBox(width: 1.w),
                         customText(
                             text: "Terms",
                             fontSize: 14.sp,
@@ -77,16 +78,18 @@ class GetStarted extends StatelessWidget {
                             color: whiteColor,
                           txtDecoration: TextDecoration.underline,
                           decorationColor: whiteColor,
-                          decorationThickness: 2.0
+                          decorationThickness: 2.0,
+                          height: 0.1.h,
+                          letterSpacing: -0.4,
                         ),
-                        SizedBox(width: 0.5.w),
+                        SizedBox(width: 1.w),
                         customText(
                             text: "&",
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w400,
                             color: whiteColor,
                         ),
-                        SizedBox(width: 0.5.w),
+                        SizedBox(width: 1.w),
                         customText(
                             text: " Privacy Policy.",
                             fontSize: 14.sp,
@@ -95,6 +98,8 @@ class GetStarted extends StatelessWidget {
                             txtDecoration: TextDecoration.underline,
                           decorationColor: whiteColor,
                           decorationThickness: 2.0,
+                          height: 0.1.h,
+                          letterSpacing: -0.4,
                         ),
                       ],
                     ),
@@ -107,6 +112,7 @@ class GetStarted extends StatelessWidget {
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w400,
                           color: whiteColor,
+                          letterSpacing: -0.4,
                         ),
                         SizedBox(width: 0.5.w),
                         customText(
@@ -116,7 +122,9 @@ class GetStarted extends StatelessWidget {
                             color: whiteColor,
                             txtDecoration: TextDecoration.underline,
                             decorationColor: whiteColor,
-                            decorationThickness: 2.0
+                            decorationThickness: 2.0,
+                          height: 0.1.h,
+                          letterSpacing: -0.4,
                         ),
                       ],
                     )
