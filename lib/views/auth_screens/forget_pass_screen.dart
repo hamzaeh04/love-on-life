@@ -4,9 +4,8 @@ import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../constants/constants_widgets.dart';
-import '../../widgets/custom_text_field.dart';
+
 class ForgetPassScreen extends StatelessWidget {
   const ForgetPassScreen({super.key});
 

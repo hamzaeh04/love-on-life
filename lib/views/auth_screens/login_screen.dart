@@ -54,7 +54,6 @@ class LoginScreen extends StatelessWidget {
                       fontSize: 15.sp,
                       fontWeight: FontWeight.w600,
                     txtDecoration: TextDecoration.underline,
-
                   ),
                 ),
                 SizedBox(height: 2.h),
@@ -89,9 +88,17 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    socialIconWidget("assets/png/socail_icon/google.png"),
+                    InkWell(
+                      onTap: (){
+                        Get.toNamed('profile');
+                      },
+                        child: socialIconWidget("assets/png/socail_icon/google.png")),
                     SizedBox(width: 4.w),
-                    socialIconWidget("assets/png/socail_icon/apple.png")
+                    InkWell(
+                        onTap: (){
+                          Get.toNamed('community');
+                        },
+                        child: socialIconWidget("assets/png/socail_icon/apple.png"))
                   ],
                 ),
                 SizedBox(height: 3.h),
