@@ -5,6 +5,8 @@ import 'package:love_on_life/views/dashboard_screens/bottom_nav_bar.dart';
 import 'package:love_on_life/views/splash_screens/get_started.dart';
 
 import '../views/auth_screens/forget_pass_screen.dart';
+import '../views/dashboard_screens/community_screen.dart';
+import '../views/dashboard_screens/profile_screen.dart';
 import '../views/splash_screens/splash_one.dart';
 class AppRoutes {
   static List<GetPage<dynamic>> routes = [
@@ -14,6 +16,8 @@ class AppRoutes {
     GetPage(name: '/forgot', page: () => ForgetPassScreen()),
     GetPage(name: '/reset', page: () => ResetPassScreen()),
     GetPage(name: '/bottomnavbar', page: () => BottomNavBar()),
+    GetPage(name: '/profile', page: () => ProfileScreen()),
+    GetPage(name: '/community', page: () => CommunityScreen()),
     //
   ];
 }

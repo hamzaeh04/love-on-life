@@ -92,13 +92,13 @@ class LoginScreen extends StatelessWidget {
                       onTap: (){
                         Get.toNamed('profile');
                       },
-                        child: socialIconWidget("assets/png/socail_icon/google.png")),
+                        child: socialIconWidget("assets/png/social_icons/google.png")),
                     SizedBox(width: 4.w),
                     InkWell(
                         onTap: (){
                           Get.toNamed('community');
                         },
-                        child: socialIconWidget("assets/png/socail_icon/apple.png"))
+                        child: socialIconWidget("assets/png/social_icons/apple.png"))
                   ],
                 ),
                 SizedBox(height: 3.h),

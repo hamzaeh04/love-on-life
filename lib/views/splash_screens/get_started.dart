@@ -56,9 +56,9 @@ class GetStarted extends StatelessWidget {
                       Get.toNamed('login');
                     }),
                     SizedBox(height: 1.h),
-                    customButton("Join For Free With Google",textColor: blackColor,path: "assets/png/socail_icon/google.png",fontweight: FontWeight.w500),
+                    customButton("Join For Free With Google",textColor: blackColor,path: "assets/png/social_icons/google.png",fontweight: FontWeight.w500),
                     SizedBox(height: 1.h),
-                    customButton("Join For Free With Apple",textColor: blackColor,path: "assets/png/socail_icon/apple.png",fontweight: FontWeight.w500),
+                    customButton("Join For Free With Apple",textColor: blackColor,path: "assets/png/social_icons/apple.png",fontweight: FontWeight.w500),
                     SizedBox(height: 2.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

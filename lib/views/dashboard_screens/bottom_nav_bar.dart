@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:love_on_life/controllers/navigation_controller.dart';
-import 'package:love_on_life/views/dashboard_screens/testing.dart';
+import 'package:love_on_life/views/dashboard_screens/discover_screen.dart';
+import 'package:love_on_life/views/dashboard_screens/home_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -19,7 +20,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   late PageController _pageController;
 
   final List<Widget> pages = [
-    Testing(),
+    HomeScreen(),
+    DiscoverScreen(),
   ];
 
   @override
@@ -54,48 +56,61 @@ class _BottomNavBarState extends State<BottomNavBar> {
         children: pages,
       ),
       extendBody: true,
-      bottomNavigationBar: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          /// 👇 ye blur effect full width lega
-          BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-            child: Container(
-              height: 10.h, // thoda zyada so it covers padding area
-              color: Colors.white.withOpacity(0.1),
-            ),
-          ),
-
-          /// 👇 nav bar with padding
-          Padding(
-            padding: EdgeInsets.only(left: 6.w, right: 6.w, bottom: 4.h),
-            child: Container(
-              height: 6.h,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(30.sp),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 15,
-                    offset: Offset(0, 5),
+      bottomNavigationBar: SizedBox(
+        height: 10.h, // jitna space blur lena hai (padding + nav bar)
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            // 👇 Blur sirf is chhoti height ke andar apply hoga
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ClipRect(
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
+                    child: Container(
+                      height: 11.h, // blur ke liye same height
+                      color: Colors.white.withOpacity(0.2),
+                    ),
                   ),
-                ],
+                ),
               ),
-              child: Obx(() => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  navItem("assets/png/bottom_nav_icon/home-2.png", 0, 'Home'),
-                  navItem("assets/png/bottom_nav_icon/compass.png", 1, 'Compass'),
-                  navItem("assets/png/bottom_nav_icon/community.png", 2, 'Community'),
-                  navItem("assets/png/bottom_nav_icon/ticket.png", 3, 'Tickets'),
-                  navItem("assets/png/bottom_nav_icon/profile.png", 4, 'Profile'),
-                ],
-              )),
             ),
-          ),
-        ],
+
+            // 👇 Actual nav bar
+            Padding(
+              padding: EdgeInsets.only(left: 6.w, right: 6.w, bottom: 4.h),
+              child: Container(
+                height: 6.h,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30.sp),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 15,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Obx(() => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    navItem("assets/png/bottom_nav_icon/home-2.png", 0, 'Home'),
+                    navItem("assets/png/bottom_nav_icon/compass.png", 1, 'Compass'),
+                    navItem("assets/png/bottom_nav_icon/community.png", 2, 'Community'),
+                    navItem("assets/png/bottom_nav_icon/ticket.png", 3, 'Tickets'),
+                    navItem("assets/png/bottom_nav_icon/profile.png", 4, 'Profile'),
+                  ],
+                )),
+              ),
+            ),
+          ],
+        ),
       ),
+
+
+
     );
   }
 
