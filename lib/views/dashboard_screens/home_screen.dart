@@ -69,17 +69,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget homeShareWidget(String path) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 1.h),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: whiteColor,
-        border: Border.all(color: textfieldBorderColor, width: 0.3.w),
-      ),
-      child: Image.asset(path, width: 6.w, height: 3.h),
-    );
-  }
+
 
   Widget moreContainer(String title, {VoidCallback? ontap}) {
     return InkWell(
@@ -108,4 +98,15 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+}
+Widget homeShareWidget(String path,{double? height, double? width,double? hori,double? vert}) {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: hori??2.5.w, vertical: vert??1.h),
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      color: whiteColor,
+      border: Border.all(color: textfieldBorderColor, width: 0.3.w),
+    ),
+    child: Center(child: Image.asset(path, width: width ?? 6.w, height: height ?? 3.h)),
+  );
 }

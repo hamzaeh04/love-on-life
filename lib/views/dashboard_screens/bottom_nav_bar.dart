@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:love_on_life/controllers/navigation_controller.dart';
+import 'package:love_on_life/views/dashboard_screens/community_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/discover_screen.dart';
+import 'package:love_on_life/views/dashboard_screens/event_details_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/home_screen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,6 +24,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
   final List<Widget> pages = [
     HomeScreen(),
     DiscoverScreen(),
+    CommunityScreen(),
+    EventDetailsScreen(),
   ];
 
   @override
@@ -67,7 +71,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 alignment: Alignment.bottomCenter,
                 child: ClipRect(
                   child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
+                    filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                     child: Container(
                       height: 11.h, // blur ke liye same height
                       color: Colors.white.withOpacity(0.2),

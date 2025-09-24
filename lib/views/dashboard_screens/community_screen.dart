@@ -127,6 +127,7 @@ class CommunityScreen extends StatelessWidget {
                 margin: EdgeInsets.only(right: 4.w),
                 width: double.infinity,
                 decoration: BoxDecoration(
+                  color: whiteColor,
                   border: Border.all(color: textfieldBorderColor),
                   borderRadius: BorderRadius.circular(25.sp)
                 ),
@@ -154,6 +155,7 @@ class CommunityScreen extends StatelessWidget {
                 '8 mins',
                 'assets/png/community_icon/person1.png',
               ),
+              SizedBox(height: 15.h),
             ],
           ),
         ),
@@ -528,6 +530,7 @@ Widget communitySuggestion (){
 
     width: 45.w,
     decoration: BoxDecoration(
+      color: whiteColor,
       borderRadius: BorderRadius.circular(14.sp),
       border: Border.all(color: textfieldBorderColor)
     ),

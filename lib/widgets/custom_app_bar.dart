@@ -1,20 +1,19 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
 
-Widget customAppBar(){
+Widget customAppBar() {
   return ClipRect(
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
       child: Container(
+        height: 14.h, // 🔹 fix height taake blur limited ho
         padding: EdgeInsets.only(top: 7.h, left: 4.w, right: 4.w, bottom: 1.5.h),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.2),
-          // frosted effect
+          color: Colors.white.withOpacity(0.2), // frosted effect
         ),
         child: Row(
           children: [
