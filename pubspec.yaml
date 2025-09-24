@@ -66,6 +66,8 @@ flutter:
      - assets/png/
      - assets/png/socail_icon/
      - assets/png/bottom_nav_icon/
+     - assets/png/community_icon/
+     - assets/png/event_detail_icon/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
