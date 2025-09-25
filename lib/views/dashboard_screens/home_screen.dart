@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:love_on_life/widgets/custom_app_bar.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
+import '../../widgets/ticketClipper.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

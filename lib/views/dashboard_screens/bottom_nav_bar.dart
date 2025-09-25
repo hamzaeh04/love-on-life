@@ -8,6 +8,7 @@ import 'package:love_on_life/views/dashboard_screens/community_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/discover_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/event_details_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/home_screen.dart';
+import 'package:love_on_life/views/dashboard_screens/ticket_screen.dart';
 import 'package:sizer/sizer.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -25,7 +26,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     HomeScreen(),
     DiscoverScreen(),
     CommunityScreen(),
-    EventDetailsScreen(),
+    TicketScreen(),
   ];
 
   @override

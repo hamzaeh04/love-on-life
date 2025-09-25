@@ -16,6 +16,10 @@ const selectedTabColor = Color(0xFFD9F3FB);
 const publicButtonColor = Color(0xFFDEE2FF);
 const joinButtonColor = Color(0xFFD9F3FB);
 const containerPinkColor = Color(0xFFFFE4F8);
+const lightPurple = Color(0xFFEDEFFF);
+const darkPurpleColor = Color(0xFF6E75AE);
+const ticketGreyColor = Color(0xFFE3E4EA);
+const ticketBlueColor = Color(0xFF34A0C2);
 // const Color(0xFF604D7A);
 
 
