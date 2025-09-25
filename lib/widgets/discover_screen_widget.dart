@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:sizer/sizer.dart';
 
@@ -216,7 +217,9 @@ Widget discoverWidget({
                         fontsize: 15.sp,
                         height: 5.h,
                         textColor: whiteColor,
-                        ontap: onViewLocation,
+                        ontap: (){
+                          Get.toNamed('singleTicket');
+                        },
                       ),
                     ),
                     SizedBox(width: 2.w),
@@ -228,7 +231,9 @@ Widget discoverWidget({
                         fontsize: 15.sp,
                         height: 5.h,
                         textColor: whiteColor,
-                        ontap: onJoinNow,
+                        ontap: (){
+                          Get.toNamed('event');
+                        },
                       ),
                     ),
                   ],
