@@ -2,10 +2,12 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../widgets/custom_button.dart';
 import '../../widgets/discover_screen_widget.dart';
 
 class EventDetailsScreen extends StatelessWidget {
@@ -35,7 +37,7 @@ class EventDetailsScreen extends StatelessWidget {
                   // SizedBox(height: 6.h,),
 
                   //Body
-                  SizedBox(height: 11.h,),
+                  SizedBox(height: 11.65.h,),
                   ClipRRect(
                       borderRadius: BorderRadius.circular(13.sp),
                       child: Stack(
@@ -237,6 +239,43 @@ class EventDetailsScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 1.5.h,),
                   // Gallery items to be added
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              'assets/png/event_detail_icon/gallery1.png',
+                              height: 26.h, // Can keep relative height like this if you use responsive package
+                              fit: BoxFit.contain,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 3.w),
+                      Flexible(
+                        flex: 3,
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              'assets/png/event_detail_icon/gallery2.png',
+                              width: double.infinity, // takes full Flexible width
+                              fit: BoxFit.contain,
+                            ),
+                            SizedBox(height: 1.25.h),
+                            Image.asset(
+                              'assets/png/event_detail_icon/gallery3.png',
+                              width: double.infinity,
+                              fit: BoxFit.contain,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
 
                   SizedBox(height: 1.5.h,),
                   customText(
@@ -359,6 +398,57 @@ class EventDetailsScreen extends StatelessWidget {
                           fontFamily: 'dmsans',
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: ClipRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+                child: Container(
+                  // height: 14.h, // 🔹 blur limited to this height
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2), // frosted effect
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 4.w, right: 4.w, top: 3.h, bottom: 3.h),
+                    child: //AppBar
+                    Row(
+                      children: [
+                        Expanded(
+                          child: customButton(
+                            "Mark in Calendar",
+                            color: blackColor,
+                            fontweight: FontWeight.w500,
+                            fontsize: 15.sp,
+                            height: 5.h,
+                            textColor: whiteColor,
+                            ontap: (){
+                              Get.toNamed('singleTicket');
+                            },
+                          ),
+                        ),
+                        SizedBox(width: 4.w),
+                        Expanded(
+                          child: customButton(
+                            "Join for \$40",
+                            color: buttonPinkColor,
+                            fontweight: FontWeight.w500,
+                            fontsize: 15.sp,
+                            height: 5.h,
+                            textColor: whiteColor,
+                            ontap: (){
+                              Get.toNamed('event');
+                            },
+                          ),
                         ),
                       ],
                     ),
