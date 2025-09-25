@@ -10,8 +10,8 @@ Widget customAppBar() {
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
       child: Container(
-        height: 14.h, // 🔹 fix height taake blur limited ho
-        padding: EdgeInsets.only(top: 7.h, left: 4.w, right: 4.w, bottom: 1.5.h),
+        height: 13.h, // 🔹 fix height taake blur limited ho
+        padding: EdgeInsets.only(top: 7.h, left: 4.w, right: 4.w, bottom: 1.h),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2), // frosted effect
         ),

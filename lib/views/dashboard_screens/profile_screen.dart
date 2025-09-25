@@ -99,7 +99,7 @@ Widget items(String path, String title, {String? path2, bool? isLast}) {
             customText(
               text: title,
               fontFamily: 'dmsans',
-              fontSize: 16.sp,
+              fontSize: 15.sp,
               fontWeight: FontWeight.w500,
 
             ),

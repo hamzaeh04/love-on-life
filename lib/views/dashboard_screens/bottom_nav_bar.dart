@@ -8,6 +8,7 @@ import 'package:love_on_life/views/dashboard_screens/community_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/discover_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/event_details_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/home_screen.dart';
+import 'package:love_on_life/views/dashboard_screens/profile_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/ticket_screen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,6 +28,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     DiscoverScreen(),
     CommunityScreen(),
     TicketScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -102,7 +104,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     navItem("assets/png/bottom_nav_icon/home-2.png", 0, 'Home'),
-                    navItem("assets/png/bottom_nav_icon/compass.png", 1, 'Compass'),
+                    navItem("assets/png/bottom_nav_icon/compass.png", 1, 'Discover'),
                     navItem("assets/png/bottom_nav_icon/community.png", 2, 'Community'),
                     navItem("assets/png/bottom_nav_icon/ticket.png", 3, 'Tickets'),
                     navItem("assets/png/bottom_nav_icon/profile.png", 4, 'Profile'),

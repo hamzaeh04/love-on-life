@@ -329,6 +329,7 @@ Widget communityPost(
     {
   bool? isGroup = false,
       bool? isGroupOnly = true,
+      bool? isFollow = true,
 }) {
   return Container(
     margin: EdgeInsets.only(right: 4.w),
@@ -415,6 +416,7 @@ Widget communityPost(
               ],
             ),
             Spacer(),
+            if(isFollow!)
             Container(
               padding: EdgeInsets.symmetric(horizontal: 4.5.w, vertical: 0.5.h),
               decoration: BoxDecoration(
