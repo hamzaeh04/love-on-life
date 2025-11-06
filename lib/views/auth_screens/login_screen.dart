@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
+import 'package:love_on_life/views/dashboard_screens/profile_screen.dart';
+import 'package:love_on_life/views/menu_screens/my_profile.dart';
 import 'package:love_on_life/views/payment_method_screens/select_card_screen.dart';
 import 'package:love_on_life/widgets/custom_text_field.dart';
 import 'package:love_on_life/widgets/social_icon_widget.dart';
@@ -115,16 +117,14 @@ class LoginScreen extends StatelessWidget {
                       }
 
                     ),
-                    InkWell(
-                        onTap: (){
+              socialIconWidget(
+                "assets/png/social_icons/apple.png",
+                ontap: () {
+                  Get.to(MyProfile());
+                },
+              ),
 
-                        },
-                        child: socialIconWidget("assets/png/social_icons/apple.png")),
-                    InkWell(
-                        onTap: (){
-
-                        },
-                        child: socialIconWidget("assets/png/social_icons/facebook_logo.png")),
+              socialIconWidget("assets/png/social_icons/facebook_logo.png")
                   ],
                 ),
                 SizedBox(height: 3.h),

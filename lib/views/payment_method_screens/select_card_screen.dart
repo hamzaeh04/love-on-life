@@ -79,9 +79,10 @@ SizedBox(height: 2.h),
            ),
            SizedBox(height: 4.h),
            customButton("Proceed",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
-             successDialog(context, "Done!", "Your ticket has successfully placed!", "Ok", (){
-               Get.back();
-             });
+             Get.toNamed("payment");
+             // successDialog(context, "Done!", "Your ticket has successfully placed!", "Ok", (){
+             //   Get.back();
+             // });
            }),
          ],
        ),

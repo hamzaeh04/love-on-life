@@ -147,6 +147,89 @@ Widget customTextFeild(
     ],
   );
 }
+Widget defaultTextFeild(
+    String title,
+    String hintText, {
+      bool? isRequired,
+      bool? istitle = true,
+      bool? isSuffix = false,
+    }) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // ✅ Show title only if istitle = true
+      istitle == true
+          ? Padding(
+        padding: EdgeInsets.only(left: 1.w),
+        child: Row(
+          children: [
+            customText(
+              text: title,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: blackColor,
+            ),
+            isRequired == true
+                ? customText(
+              text: "*",
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: redColor,
+            )
+                : const SizedBox.shrink(),
+          ],
+        ),
+      )
+          : SizedBox(height: 1.7.h),
 
+      istitle == true ? SizedBox(height: 0.5.h) : SizedBox(height: 0.8.h),
 
+      TextField(
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
 
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 1.7.h,
+            horizontal: 4.w,
+          ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.sp),
+            borderSide: BorderSide(
+              color: textfieldBorderColor,
+              width: 0.8,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.sp),
+            borderSide: BorderSide(
+              color: textfieldBorderColor,
+              width: 1.2,
+            ),
+          ),
+
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontFamily: 'dmsans',
+            fontWeight: FontWeight.w400,
+            fontSize: 15.sp,
+          ),
+
+          // ✅ Show suffix only if isSuffix = true
+          suffixIcon: isSuffix == true
+              ? IconButton(
+            onPressed: () {},
+            icon: Image.asset(
+              "assets/png/question_mark.png",
+              width: 5.w,
+              height: 5.w,
+              fit: BoxFit.contain,
+            ),
+          )
+              : null,
+        ),
+      ),
+    ],
+  );
+}
