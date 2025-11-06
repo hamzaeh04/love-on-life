@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/search_controller.dart';
+import 'package:love_on_life/widgets/custom_header.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/color_constants.dart';
@@ -9,6 +10,7 @@ import '../../constants/constants_widgets.dart';
 import '../../controllers/dashboard_controller.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/discover_screen_widget.dart';
+import '../dashboard_screens/discover_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -27,8 +29,8 @@ class SearchScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //customAppBar(),
-                  SizedBox(height: 1.h),
+                  customHeader('Search'),
+                  SizedBox(height: 2.5.h),
 
                   /// 🔹 Search Bar
                   Row(
@@ -231,25 +233,4 @@ class SearchScreen extends StatelessWidget {
 
     );
   }
-}
-Widget options(String title){
-  return Column(
-    children: [
-      Row(
-        children: [
-          customText(
-              text: title,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w400
-          ),
-          Spacer(),
-          Icon(Icons.cancel_outlined, color: Colors.black.withOpacity(0.5), size: 16.5.sp,)
-        ],
-      ),
-      Padding(
-        padding: EdgeInsets.symmetric(vertical: 0.5.h),
-        child: Divider(),
-      )
-    ],
-  );
 }

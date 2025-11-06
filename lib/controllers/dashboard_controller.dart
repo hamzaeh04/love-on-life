@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 class DashboardController extends GetxController{
    RxInt discoverIndex = 0.obs;
    var selectedIndex = 0.obs;
+   RxBool isHomePage = false.obs;
 
 
    final List<String> discoverList = [

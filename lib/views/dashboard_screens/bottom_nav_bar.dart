@@ -64,7 +64,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       extendBody: true,
       bottomNavigationBar: SizedBox(
-        height: 10.h, // jitna space blur lena hai (padding + nav bar)
+        height: 11.h, // jitna space blur lena hai (padding + nav bar)
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
@@ -86,9 +86,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
             // 👇 Actual nav bar
             Padding(
-              padding: EdgeInsets.only(left: 6.w, right: 6.w, bottom: 4.h),
+              padding: EdgeInsets.only(left: 4.w, right: 4.w, bottom: 4.h),
               child: Container(
-                height: 6.h,
+                height: 7.h,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30.sp),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/controllers/dashboard_controller.dart';
+import 'package:love_on_life/controllers/login_contoller.dart';
 import 'package:love_on_life/controllers/navigation_controller.dart';
+import 'package:love_on_life/controllers/payment_controller.dart';
 import 'package:love_on_life/utils/App_Routing.dart';
 import 'package:love_on_life/utils/init_binding.dart';
 import 'package:sizer/sizer.dart';
@@ -10,6 +12,8 @@ import 'package:sizer/sizer.dart';
 void main() {
   Get.put(NavigationController());
   Get.put(DashboardController());
+  Get.put(LoginController());
+  Get.put(PaymentController());
   runApp(const MyApp());
 }
 

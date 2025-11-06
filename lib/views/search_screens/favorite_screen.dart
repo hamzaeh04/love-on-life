@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
 import '../../controllers/dashboard_controller.dart';
+import '../../widgets/custom_header.dart';
 import '../../widgets/discover_screen_widget.dart';
 
 class FavoriteScreen extends StatelessWidget {
@@ -24,9 +25,8 @@ class FavoriteScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              SizedBox(height: 1.h),
-
+              customHeader('Favorites'),
+              SizedBox(height: 2.5.h),
               /// 🔹 Search Bar
               Row(
                 children: [

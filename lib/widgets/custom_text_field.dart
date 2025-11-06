@@ -11,6 +11,7 @@ Widget customTextFeild(
     String hintText,
     String path,
     bool isPass,
+{bool? isRequired}
     ) {
   final loginController = Get.put(LoginController());
 
@@ -18,12 +19,24 @@ Widget customTextFeild(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Padding(
-        padding: EdgeInsets.only(left: 6.w),
-        child: customText(
-          text: title,
-          fontSize: 14.sp,
-          fontWeight: FontWeight.w400,
-          color: loginGreyColor,
+        padding: EdgeInsets.only(left: 1.w),
+        child: Row(
+          children: [
+            customText(
+              text: title,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: blackColor,
+            ),
+            isRequired == true ?
+            customText(
+              text: "*",
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+              color: redColor,
+            ):
+                SizedBox.shrink(),
+          ],
         ),
       ),
       SizedBox(height: 0.5.h),
@@ -34,7 +47,7 @@ Widget customTextFeild(
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(vertical: 1.8.h),
+            contentPadding: EdgeInsets.symmetric(vertical: 1.7.h),
 
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(25.sp),
@@ -57,7 +70,7 @@ Widget customTextFeild(
               children: [
                 SizedBox(width: 6.w),
                 Image.asset(path, height: 5.w, fit: BoxFit.contain),
-                SizedBox(width: 4.w),
+                SizedBox(width: 2.w),
               ],
             ),
 
@@ -91,7 +104,7 @@ Widget customTextFeild(
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          contentPadding: EdgeInsets.symmetric(vertical: 1.8.h),
+          contentPadding: EdgeInsets.symmetric(vertical: 1.7.h),
 
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.sp),
@@ -114,7 +127,7 @@ Widget customTextFeild(
             children: [
               SizedBox(width: 6.w), // left side gap from border
               Image.asset(path, height: 5.w, fit: BoxFit.contain),
-              SizedBox(width: 4.w), // icon aur hint text ke beech gap
+              SizedBox(width: 2.w), // icon aur hint text ke beech gap
             ],
           ),
 
@@ -134,3 +147,6 @@ Widget customTextFeild(
     ],
   );
 }
+
+
+

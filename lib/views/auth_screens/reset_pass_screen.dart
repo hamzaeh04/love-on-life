@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
+import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/constants_widgets.dart';
@@ -22,9 +23,8 @@ class ResetPassScreen extends StatelessWidget {
               fontSize: 20.sp,
               fontWeight: FontWeight.w700
           ),
-          SizedBox(height: 1.h),
           customText(
-              text: 'Type in a new password',
+              text: 'Set a new password for your account',
               fontSize: 14.sp,
               fontWeight: FontWeight.w400,
               color: loginGreyColor
@@ -40,17 +40,21 @@ class ResetPassScreen extends StatelessWidget {
                   '•••••••••••',
                   'assets/png/lock.png',
                   true, // 👈 password field, eye button aa jayega
+                  isRequired: true,
                 ),
                 SizedBox(height: 1.h,),
                 customTextFeild(
-                  'Retype New Password',
+                  'Confirm Password',
                   '•••••••••••',
                   'assets/png/lock.png',
                   true, // 👈 password field, eye button aa jayega
+                  isRequired: true,
                 ),
                 SizedBox(height: 3.5.h),
-                customButton("Continue",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
-
+                customButton("Update",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
+                successDialog(context,"Successfully","Your password updated successfully.\nPlease login to continue","Ok",(){
+                  Get.back();
+                });
                 }),
                 SizedBox(height: 20.h,),
                 Padding(

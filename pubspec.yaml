@@ -40,18 +40,22 @@ dependencies:
   flutter_otp_text_field: ^1.5.1+1
   ticket_widget: ^1.0.2
   carousel_slider: ^5.1.1
+  country_picker: ^2.0.27
+  country_icons: ^3.0.0
   table_calendar: ^3.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/png/splash_one_logo.png"
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -73,6 +77,8 @@ flutter:
      - assets/png/community_icon/
      - assets/png/event_detail_icon/
      - assets/png/carousal_images/
+     - assets/png/card_icons/
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 
