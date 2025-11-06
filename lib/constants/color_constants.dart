@@ -20,6 +20,7 @@ const lightPurple = Color(0xFFEDEFFF);
 const darkPurpleColor = Color(0xFF6E75AE);
 const ticketGreyColor = Color(0xFFE3E4EA);
 const ticketBlueColor = Color(0xFF34A0C2);
+const searchColor = Color(0xFF030C1A);
 // const Color(0xFF604D7A);
 
 

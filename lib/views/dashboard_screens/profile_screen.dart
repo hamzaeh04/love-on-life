@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:sizer/sizer.dart';
@@ -23,7 +24,11 @@ class ProfileScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     //color: Colors.yellow
                   ),
-                  child: Image.asset('assets/png/profile.png'),
+                  child: InkWell(
+                      onTap: (){
+                        Get.toNamed('search');
+                      },
+                      child: Image.asset('assets/png/profile.png')),
                 ),
                 SizedBox(width: 1.w),
                 Column(

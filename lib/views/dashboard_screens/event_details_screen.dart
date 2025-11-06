@@ -8,6 +8,7 @@ import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_calendar.dart';
 import '../../widgets/discover_screen_widget.dart';
 
 class EventDetailsScreen extends StatelessWidget {
@@ -390,7 +391,11 @@ class EventDetailsScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                               border: Border.all(color: textfieldBorderColor)
                           ),
-                          child: Icon(Icons.arrow_back, size: 18.sp,),
+                          child: InkResponse(
+                              onTap: (){
+                                Get.back();
+                              },
+                              child: Icon(Icons.arrow_back, size: 18.sp,)),
                         ),
                         SizedBox(width: 16.w,),
                         customText(
@@ -432,7 +437,7 @@ class EventDetailsScreen extends StatelessWidget {
                             height: 5.h,
                             textColor: whiteColor,
                             ontap: (){
-                              Get.toNamed('singleTicket');
+                              showBlurredCalendar(context);
                             },
                           ),
                         ),
@@ -595,4 +600,35 @@ Widget comments (String path, String name, String role, String time, String like
     ],
   );
 
+}
+void showBlurredCalendar(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierColor: Colors.black.withOpacity(0.3), // dim background
+    builder: (context) {
+      return BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8), // blur effect
+        child: Dialog(
+          elevation: 0,
+          backgroundColor: Colors.white, // glossy white
+          insetPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 15.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 2.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                color: Colors.white,
+                width: 1.2,
+              ),
+            ),
+            child: const CustomCalendar(),
+          ),
+        ),
+      );
+    },
+  );
 }
