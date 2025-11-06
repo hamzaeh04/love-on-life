@@ -144,7 +144,7 @@ class CommunityScreen extends StatelessWidget {
                     color: Colors.white.withOpacity(0.2), // frosted effect
                   ),
                   child: Padding(
-                    padding: EdgeInsets.only(left: 4.w, top: 4.h, bottom: 1.h),
+                    padding: EdgeInsets.only(left: 4.w, top: 6.h , bottom: 0.5.h),
                     child: Row(
                       children: [
                         customText(
@@ -290,16 +290,16 @@ Widget createPost() {
               customText(
                 text: 'Image/video',
                 fontFamily: 'dmsans',
-                fontSize: 12.5.sp,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
               ),
-              SizedBox(width: 10.w),
+              SizedBox(width: 7.w),
               Image.asset('assets/png/location.png', width: 5.w),
-              SizedBox(width: 2.5.w),
+              SizedBox(width: 1.5.w),
               customText(
                 text: 'Check-in',
                 fontFamily: 'dmsans',
-                fontSize: 12.5.sp,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
               ),
               SizedBox(width: 10.w),
@@ -308,7 +308,7 @@ Widget createPost() {
               customText(
                 text: 'Activity',
                 fontFamily: 'dmsans',
-                fontSize: 12.5.sp,
+                fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
               ),
             ],

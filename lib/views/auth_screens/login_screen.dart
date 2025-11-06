@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
+import 'package:love_on_life/views/payment_method_screens/select_card_screen.dart';
 import 'package:love_on_life/widgets/custom_text_field.dart';
 import 'package:love_on_life/widgets/social_icon_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -36,27 +37,47 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 SizedBox(height: 2.5.h,),
-                customTextFeild('Email Address', 'yourname@gmail.com', 'assets/png/person.png', false),
+                customTextFeild('Email Address', 'yourname@gmail.com', 'assets/png/email_logo.png', false,isRequired: true),
                 SizedBox(height: 1.h,),
                 customTextFeild(
                   'Password',
                   '•••••••••••',
                   'assets/png/lock.png',
                   true, // 👈 password field, eye button aa jayega
-                ),
-                SizedBox(height: 1.h),
-                InkWell(
-                  onTap: (){
-                    Get.toNamed('forgot');
-                  },
-                  child: customText(
-                      text: 'Forgot password?',
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w600,
-                    txtDecoration: TextDecoration.underline,
-                  ),
+                    isRequired: true
                 ),
                 SizedBox(height: 2.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        checkBox(isChecked: false),
+                        SizedBox(width: 2.w),
+                        customText(
+                            text: 'Remember Me',
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w400,
+                            color: loginGreyColor
+                        ),
+                      ],
+                    ),
+                    InkWell(
+                      onTap: (){
+                        Get.toNamed('forgot');
+                      },
+                      child: customText(
+                          text: 'Forgot password?',
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w500,
+                        color: buttonPinkColor,
+                        txtDecoration: TextDecoration.underline,
+                        decorationColor: buttonPinkColor
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 3.h),
                 customButton("Sign In",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
                 Get.toNamed("bottomnavbar");
                 }),
@@ -88,23 +109,30 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InkWell(
-                      onTap: (){
-                        Get.toNamed('profile');
-                      },
-                        child: socialIconWidget("assets/png/social_icons/google.png")),
-                    SizedBox(width: 4.w),
+                    socialIconWidget("assets/png/social_icons/google.png",
+                      ontap: (){
+                      Get.to(SelectCardScreen());
+                      }
+
+                    ),
                     InkWell(
                         onTap: (){
-                          Get.toNamed('community');
+
                         },
-                        child: socialIconWidget("assets/png/social_icons/apple.png"))
+                        child: socialIconWidget("assets/png/social_icons/apple.png")),
+                    InkWell(
+                        onTap: (){
+
+                        },
+                        child: socialIconWidget("assets/png/social_icons/facebook_logo.png")),
                   ],
                 ),
                 SizedBox(height: 3.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    checkBox(isChecked: false),
+                    SizedBox(width: 2.w),
                     customText(
                       text: "By Signing Up you agree to our",
                       fontSize: 14.sp,
@@ -143,19 +171,24 @@ class LoginScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     customText(
-                      text: "Already Have a Account?",
+                      text: "Don't have an account?",
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w400,
                       letterSpacing: -0.4,
                     ),
                     SizedBox(width: 0.5.w),
-                    customText(
-                        text: "Sign In",
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        txtDecoration: TextDecoration.underline,
-                      height: 0.1.h,
-                      letterSpacing: -0.4,
+                    InkWell(
+                      onTap: (){
+                        Get.toNamed("signup");
+                      },
+                      child: customText(
+                          text: "Sign Up",
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          txtDecoration: TextDecoration.underline,
+                        height: 0.1.h,
+                        letterSpacing: -0.4,
+                      ),
                     ),
                   ],
                 )
@@ -167,4 +200,21 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
+}
+Widget checkBox({bool? isChecked}){
+  return Container(
+    height: 2.h,
+    width: 4.3.w,
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: textfieldBorderColor,
+        width: 0.2.w,
+      ),
+      borderRadius: BorderRadius.circular(8.sp),
+      color: whiteColor
+    ),
+    child: isChecked == true ?
+    Icon(Icons.check):
+    SizedBox.shrink(),
+  );
 }

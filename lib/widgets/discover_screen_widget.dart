@@ -218,7 +218,6 @@ Widget discoverWidget({
                         height: 5.h,
                         textColor: whiteColor,
                         ontap: (){
-                          Get.toNamed('singleTicket');
                         },
                       ),
                     ),

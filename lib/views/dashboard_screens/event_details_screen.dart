@@ -59,7 +59,7 @@ class EventDetailsScreen extends StatelessWidget {
                                 child: customText(
                                   text: 'Motivational',
                                   fontFamily: 'dmsans',
-                                  fontSize: 12.sp,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.w500,
                                 ),
                               )
@@ -74,17 +74,17 @@ class EventDetailsScreen extends StatelessWidget {
                       customText(
                         text: 'Events Details',
                         fontFamily: 'dmsans',
-                        fontSize: 15.5.sp,
+                        fontSize: 17.sp,
                         fontWeight: FontWeight.w500,
                       ),
                       SizedBox(height: 0.2.h),
                       customText(
-                        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean\npretium.'
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nAenean pretium. '
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing\nelit. Aenean pretium. '
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing\nelit. Aenean pretium.',
+                        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.'
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. '
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. '
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
                         fontFamily: 'dmsans',
-                        fontSize: 12.5.sp,
+                        fontSize: 13.5.sp,
                         fontWeight: FontWeight.w400,
                       ),
                     ],
@@ -129,7 +129,7 @@ class EventDetailsScreen extends StatelessWidget {
                                     customText(
                                       text: '12:00 AM',
                                       fontFamily: 'dmsans',
-                                      fontSize: 12.sp,
+                                      fontSize: 13.sp,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ],
@@ -193,18 +193,18 @@ class EventDetailsScreen extends StatelessWidget {
                   customText(
                     text: 'Event Organizers',
                     fontFamily: 'dmsans',
-                    fontSize: 16.sp,
+                    fontSize: 17.sp,
                     fontWeight: FontWeight.w500,
                   ),
                   SizedBox(height: 1.5.h,),
-                  event_organizers('assets/png/event_detail_icon/image 1.png', 'Youth Influencer', 'Training youth for their bright future'),
+                  eventOrganizers('assets/png/event_detail_icon/image 1.png', 'Youth Influencer', 'Training youth for their bright future'),
                   SizedBox(height: 1.5.h,),
-                  event_organizers('assets/png/event_detail_icon/image 2.png', 'Planning Expert', 'Crafting Experiences for every occassion '),
+                  eventOrganizers('assets/png/event_detail_icon/image 2.png', 'Planning Expert', 'Crafting Experiences for every occassion '),
                   SizedBox(height: 1.5.h,),
                   customText(
                     text: 'Location',
                     fontFamily: 'dmsans',
-                    fontSize: 16.sp,
+                    fontSize: 17.sp,
                     fontWeight: FontWeight.w500,
                   ),
                   SizedBox(height: 1.5.h,),
@@ -234,7 +234,7 @@ class EventDetailsScreen extends StatelessWidget {
                   customText(
                     text: 'Gallery',
                     fontFamily: 'dmsans',
-                    fontSize: 16.sp,
+                    fontSize: 17.sp,
                     fontWeight: FontWeight.w500,
                   ),
                   SizedBox(height: 1.5.h,),
@@ -281,7 +281,7 @@ class EventDetailsScreen extends StatelessWidget {
                   customText(
                     text: 'Comments',
                     fontFamily: 'dmsans',
-                    fontSize: 16.sp,
+                    fontSize: 17.sp,
                     fontWeight: FontWeight.w500,
                   ),
                   SizedBox(height: 1.5.h,),
@@ -299,7 +299,7 @@ class EventDetailsScreen extends StatelessWidget {
                   customText(
                     text: 'Discover Similar Events',
                     fontFamily: 'dmsans',
-                    fontSize: 16.sp,
+                    fontSize: 15.sp,
                     fontWeight: FontWeight.w700,
                   ),
                   SizedBox(height: 1.5.h,),
@@ -379,7 +379,7 @@ class EventDetailsScreen extends StatelessWidget {
                     color: Colors.white.withOpacity(0.2), // frosted effect
                   ),
                   child: Padding(
-                    padding: EdgeInsets.only(left: 4.w, top: 5.h, bottom: 1.5.h),
+                    padding: EdgeInsets.only(left: 4.w, top: 6.h, bottom: 1.h),
                     child: //AppBar
                     Row(
                       children: [
@@ -390,7 +390,11 @@ class EventDetailsScreen extends StatelessWidget {
                               shape: BoxShape.circle,
                               border: Border.all(color: textfieldBorderColor)
                           ),
-                          child: Icon(Icons.arrow_back, size: 18.sp,),
+                          child: InkWell(child: Icon(Icons.arrow_back, size: 18.sp,),
+                            onTap: (){
+                            Get.back();
+                            },
+                          ),
                         ),
                         SizedBox(width: 16.w,),
                         customText(
@@ -401,6 +405,7 @@ class EventDetailsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+
                   ),
                 ),
               ),
@@ -462,7 +467,7 @@ class EventDetailsScreen extends StatelessWidget {
     );
   }
 }
-Widget event_organizers(String path, String title, String desc){
+Widget eventOrganizers(String path, String title, String desc){
   return Row(
     children: [
       ClipRRect(
@@ -475,12 +480,12 @@ Widget event_organizers(String path, String title, String desc){
           customText(
             text: title,
             fontFamily: 'dmsans',
-            fontSize: 14.5.sp,
+            fontSize: 15.sp,
             fontWeight: FontWeight.w500,
           ),customText(
             text: desc,
             fontFamily: 'dmsans',
-            fontSize: 12.5.sp,
+            fontSize: 13.sp,
             fontWeight: FontWeight.w500,
             color: Color(0xFF83848D),
             height: 0.15.h
