@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
 import '../../controllers/dashboard_controller.dart';
+import '../../widgets/custom_app_bar.dart';
 import '../../widgets/discover_screen_widget.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -26,7 +27,7 @@ class SearchScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
+                  //customAppBar(),
                   SizedBox(height: 1.h),
 
                   /// 🔹 Search Bar
