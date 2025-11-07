@@ -3,14 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
+import 'package:love_on_life/views/dashboard_screens/notification_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/profile_screen.dart';
-import 'package:love_on_life/views/menu_screens/my_profile.dart';
+import 'package:love_on_life/views/menu_screens/privacy_policy.dart';
+import 'package:love_on_life/views/menu_screens/profile_screens/my_profile.dart';
 import 'package:love_on_life/views/payment_method_screens/select_card_screen.dart';
 import 'package:love_on_life/widgets/custom_text_field.dart';
 import 'package:love_on_life/widgets/social_icon_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../widgets/custom_button.dart';
+import '../menu_screens/faq_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -124,7 +127,9 @@ class LoginScreen extends StatelessWidget {
                 },
               ),
 
-              socialIconWidget("assets/png/social_icons/facebook_logo.png")
+              socialIconWidget("assets/png/social_icons/facebook_logo.png",ontap: (){
+                Get.to(NotificationScreen());
+              })
                   ],
                 ),
                 SizedBox(height: 3.h),
