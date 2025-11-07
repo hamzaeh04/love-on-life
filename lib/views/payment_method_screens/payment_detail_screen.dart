@@ -17,11 +17,11 @@ class PaymentDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 6.h),
+        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 5.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            customHeader("Select Card"),
+            customHeader("Payment Details",padding: 19.w),
             SizedBox(height: 4.h),
             customText(
                 text: 'Enter your credit card details to proceed\nwith payment',
@@ -48,7 +48,12 @@ class PaymentDetailScreen extends StatelessWidget {
             SizedBox(height: 1.5.h),
             Row(
               children: [
-                checkBox(),
+                customCheckBox(
+                  initialValue: false,
+                  onChanged: (value) {
+                    print("Checkbox state: $value");
+                  },
+                ),
                 SizedBox(width: 3.w),
                 customText(
                     text: 'Save this card for a faster checkout next time',

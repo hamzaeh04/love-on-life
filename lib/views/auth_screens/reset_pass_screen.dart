@@ -6,9 +6,11 @@ import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/constants_widgets.dart';
+import '../../controllers/login_contoller.dart';
 import '../../widgets/custom_text_field.dart';
 class ResetPassScreen extends StatelessWidget {
-  const ResetPassScreen({super.key});
+  ResetPassScreen({super.key});
+  LoginController controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +55,11 @@ class ResetPassScreen extends StatelessWidget {
                 SizedBox(height: 3.5.h),
                 customButton("Update",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
                 successDialog(context,"Successfully","Your password updated successfully.\nPlease login to continue","Ok",(){
+                  controller.forgotPassword.value = false;
                   Get.back();
                 });
                 }),
-                SizedBox(height: 20.h,),
+                SizedBox(height: 22.8.h,),
                 Padding(
                   padding: EdgeInsets.only(left: 5.w),
                   child: InkWell(

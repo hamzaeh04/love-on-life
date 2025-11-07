@@ -67,12 +67,12 @@ class CustomDrawer extends StatelessWidget {
             SizedBox(height: 4.h),
 
             /// 🔹 Drawer Menu Items
-            drawerTile('assets/png/drawer_icons/profile.png', "My Profile"),
-            drawerTile('assets/png/drawer_icons/myevents.png', "My Events"),
-            drawerTile('assets/png/drawer_icons/favorites.png', "Favorites"),
-            drawerTile('assets/png/drawer_icons/CreditCard.png', "Payment Methods"),
-            drawerTile('assets/png/drawer_icons/FAQs.png', "Privacy Policy"),
-            drawerTile('assets/png/drawer_icons/conditions.png', "Terms & Conditions"),
+            drawerTile('assets/png/drawer_icons/profile.png', "My Profile",ontap: (){Get.toNamed("profile");}),
+            drawerTile('assets/png/drawer_icons/myevents.png', "My Events",ontap: (){Get.toNamed("myevent");}),
+            drawerTile('assets/png/drawer_icons/favorites.png', "Favorites",ontap: (){Get.toNamed("favourite");}),
+            drawerTile('assets/png/drawer_icons/CreditCard.png', "Payment Methods",ontap: (){Get.toNamed("card");}),
+            drawerTile('assets/png/drawer_icons/FAQs.png', "Privacy Policy",ontap: (){Get.toNamed("privacy");}),
+            drawerTile('assets/png/drawer_icons/conditions.png', "Terms & Conditions",ontap: (){Get.toNamed("term");}),
 
             const Spacer(),
 
@@ -143,7 +143,7 @@ Get.back();
   }
 
   /// Custom drawer tile widget
-  Widget drawerTile(String path, String title) {
+  Widget drawerTile(String path, String title,{VoidCallback? ontap}) {
     return Column(
       children: [
         Padding(
@@ -152,7 +152,7 @@ Get.back();
             children: [
               InkWell(
                 borderRadius: BorderRadius.circular(12),
-                onTap: () {},
+                onTap: ontap,
                 child: Row(
                   children: [
                     Image.asset(path, width: 6.5.w,),

@@ -118,7 +118,7 @@ class VerificationCodeScreen extends StatelessWidget {
 
                   }),
                 ),
-                SizedBox(height: 28.h,),
+                SizedBox(height: 26.5.h,),
                 Padding(
                   padding: EdgeInsets.only(left: 5.w),
                   child: InkWell(

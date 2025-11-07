@@ -25,7 +25,7 @@ class FavoriteScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              customHeader('Favorites'),
+              customHeader('Favorites',padding: 29.w),
               SizedBox(height: 2.5.h),
               /// 🔹 Search Bar
               Row(

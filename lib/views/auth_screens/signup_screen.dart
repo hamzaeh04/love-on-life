@@ -124,7 +124,12 @@ class SignupScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      checkBox(isChecked: false),
+                      customCheckBox(
+                        initialValue: false,
+                        onChanged: (value) {
+                          print("Checkbox state: $value");
+                        },
+                      ),
                       SizedBox(width: 2.w),
                       customText(
                         text: "By Signing Up you agree to our",

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/dashboard_controller.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
-import 'package:love_on_life/widgets/custom_header.dart';
-import 'package:love_on_life/widgets/custom_text_field.dart';
 import 'package:love_on_life/widgets/discover_screen_widget.dart';
 import 'package:sizer/sizer.dart';
 
@@ -12,14 +10,13 @@ import '../../constants/constants_widgets.dart';
 import '../../controllers/search_controller.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_drawer_widget.dart';
+import '../../widgets/custom_text_field.dart';
 
 class DiscoverScreen extends StatelessWidget {
   DiscoverScreen({super.key});
   final DashboardController controller = Get.find<DashboardController>();
   final SearchController2 searchController = Get.put(SearchController2());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final DashboardController dashboardController =
-      Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +28,10 @@ class DiscoverScreen extends StatelessWidget {
           /// 👇 Scrollable content (AppBar ke neeche se start hoga)
           Positioned.fill(
             child: Obx(
-              () => SingleChildScrollView(
-                padding:
-                    searchController.isSearch.value == false
-                        ? EdgeInsets.only(top: 12.5.h)
-                        : EdgeInsets.only(top: 9.5.h),
-
+                  () => SingleChildScrollView(
+                padding: searchController.isSearch.value == false
+                    ? EdgeInsets.only(top: 9.h)
+                    : EdgeInsets.only(top: 9.5.h),
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.w),
                   child: Column(
@@ -47,7 +42,6 @@ class DiscoverScreen extends StatelessWidget {
                       /// 🔹 Search Bar
                       Row(
                         children: [
-                          // 🔍 Search Bar
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
@@ -60,9 +54,7 @@ class DiscoverScreen extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: 3.w,
-                                  vertical: 0.6.h,
-                                ),
+                                    horizontal: 3.w, vertical: 0.6.h),
                                 child: Row(
                                   children: [
                                     Image.asset(
@@ -74,8 +66,7 @@ class DiscoverScreen extends StatelessWidget {
                                     Expanded(
                                       child: TextField(
                                         onTap: () {
-                                          searchController.isSearch.value =
-                                              true;
+                                          searchController.isSearch.value = true;
                                         },
                                         style: TextStyle(
                                           fontSize: 14.sp,
@@ -90,8 +81,7 @@ class DiscoverScreen extends StatelessWidget {
                                           border: InputBorder.none,
                                           isCollapsed: true,
                                           contentPadding: EdgeInsets.symmetric(
-                                            vertical: 0.5.h,
-                                          ),
+                                              vertical: 0.5.h),
                                         ),
                                       ),
                                     ),
@@ -100,29 +90,21 @@ class DiscoverScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                          SizedBox(width: 3.w),
 
-                          SizedBox(
-                            width: 3.w,
-                          ), // spacing between search and button
-                          // 🎯 Circular Filter Button
+                          /// 🎯 Filter Button
                           InkWell(
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
-                                isScrollControlled:
-                                    true, // makes the modal use full height if needed
-                                backgroundColor:
-                                    Colors
-                                        .transparent, // makes rounded corners visible
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
                                 builder: (context) {
                                   return FractionallySizedBox(
-                                    heightFactor:
-                                        0.49, // adjust this value to control the sheet height (0.55 = 55% of screen)
+                                    heightFactor: 0.49,
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
-                                        horizontal: 5.w,
-                                        vertical: 3.h,
-                                      ),
+                                          horizontal: 5.w, vertical: 3.h),
                                       width: double.infinity,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
@@ -133,9 +115,9 @@ class DiscoverScreen extends StatelessWidget {
                                       ),
                                       child: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
-                                          /// 🔹 Header Row
+                                          /// 🔹 Header
                                           Row(
                                             children: [
                                               customText(
@@ -178,11 +160,9 @@ class DiscoverScreen extends StatelessWidget {
                                           SizedBox(height: 3.5.h),
 
                                           /// 🔹 Buttons
-                                          customButton(
-                                            'Apply',
-                                            color: ticketBlueColor,
-                                            textColor: whiteColor,
-                                          ),
+                                          customButton('Apply',
+                                              color: ticketBlueColor,
+                                              textColor: whiteColor),
                                           SizedBox(height: 1.h),
                                           customButton(
                                             'Clear',
@@ -214,152 +194,83 @@ class DiscoverScreen extends StatelessWidget {
                           ),
                         ],
                       ),
+
                       SizedBox(height: 1.h),
 
-                      /// 🔹 Tabs
-                      // Obx(
-                      //       () => Row(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       ...List.generate(
-                      //         controller.discoverList.length,
-                      //             (index) {
-                      //           final item = controller.discoverList[index];
-                      //           final isSelected =
-                      //               controller.discoverIndex.value == index;
-                      //
-                      //           return Padding(
-                      //             padding: EdgeInsets.only(
-                      //               right: index ==
-                      //                   controller.discoverList.length - 1
-                      //                   ? 0
-                      //                   : 1.1.w,
-                      //             ),
-                      //             child: InkWell(
-                      //               onTap: () => controller.switchDiscoverTab(index),
-                      //               borderRadius: BorderRadius.circular(25.sp),
-                      //               child: Container(
-                      //                 decoration: BoxDecoration(
-                      //                   borderRadius: BorderRadius.circular(25.sp),
-                      //                   color: isSelected
-                      //                       ? selectedTabColor
-                      //                       : whiteColor,
-                      //                   border: Border.all(
-                      //                     color: textfieldBorderColor,
-                      //                     width: 0.2.w,
-                      //                   ),
-                      //                 ),
-                      //                 child: Padding(
-                      //                   padding: EdgeInsets.symmetric(
-                      //                     horizontal: 2.38.w,
-                      //                     vertical: 0.4.h,
-                      //                   ),
-                      //                   child: customText(
-                      //                     text: item,
-                      //                     fontWeight: FontWeight.w500,
-                      //                     fontSize: 13.sp,
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //           );
-                      //         },
-                      //       ),
-                      //
-                      //       /// ➕ Add Button
-                      //       InkWell(
-                      //         onTap: () {},
-                      //         borderRadius: BorderRadius.circular(25.sp),
-                      //         child: Container(
-                      //           padding: EdgeInsets.symmetric(
-                      //             horizontal: 1.8.w,
-                      //             vertical: 0.4.h,
-                      //           ),
-                      //           decoration: BoxDecoration(
-                      //             shape: BoxShape.circle,
-                      //             color: whiteColor,
-                      //             border: Border.all(
-                      //               color: textfieldBorderColor,
-                      //               width: 0.2.w,
-                      //             ),
-                      //           ),
-                      //           child: Icon(Icons.add, size: 16.sp),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      // SizedBox(height: 2.h),
+                      /// 🔹 Event List with ListView.builder
                       Obx(
-                        () =>
-                            searchController.isSearch.value == false
-                                ? Column(
+                            () => searchController.isSearch.value == false
+                            ? SizedBox(
+                          //height: 70.h,
+                          child: ListView.builder(
+                            itemCount: controller.events.length,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              var event = controller.events[index];
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 1.h),
+                                child: discoverWidget(
+                                  index: index,
+                                  imagePath: event['imagePath'],
+                                  eventName: event['eventName'],
+                                  description: event['description'],
+                                  date: event['date'],
+                                  time: event['time'],
+                                  ticketPrice: event['ticketPrice'],
+                                  tag: event['tag'],
+                                  noOfPeople: event['noOfPeople'],
+                                  ticketsLeft: event['ticketsLeft'],
+                                  context: context,
+                                  onViewLocation: () {
+                                    print(
+                                        "View Location clicked for index $index");
+                                  },
+                                  onJoinNow: () {
+                                    print(
+                                        "Join Now clicked for index $index");
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                            : Column(
+                          children: [
+                            SizedBox(height: 1.h),
+                            Row(
+                              children: [
+                                customText(
+                                  text: 'Recent Searches',
+                                  fontSize: 15.5.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                Spacer(),
+                                Column(
                                   children: [
-                                    /// 🔹 Events Widgets
-                                    SizedBox(
-                                      height: 70.h,
-                                      child: ListView.builder(
-                                          scrollDirection: Axis.vertical,
-                                          itemCount:
-                                              dashboardController.events.length,
-                                          itemBuilder: (context, index) {
-                                            var event =
-                                                dashboardController
-                                                    .events[index];
-                                            return discoverWidget(
-                                              index: index,
-                                              imagePath: event['imagePath'],
-                                              eventName: event['eventName'],
-                                              description: event['description'],
-                                              date: event['date'],
-                                              time: event['time'],
-                                              tag: event['tag'],
-                                              noOfPeople: event['noOfPeople'],
-                                              ticketPrice: event['ticketPrice'],
-                                              ticketsLeft: event['ticketsLeft'],
-                                            );
-                                          },
-                                        ),
+                                    customText(
+                                      text: 'Clear All',
+                                      height: 0,
+                                      fontSize: 14.sp,
                                     ),
-                                    SizedBox(height: 13.h),
-                                  ],
-                                )
-                                : Column(
-                                  children: [
-                                    SizedBox(height: 1.h),
-                                    Row(
-                                      children: [
-                                        customText(
-                                          text: 'Recent Searches',
-                                          fontSize: 15.5.sp,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        Spacer(),
-                                        Column(
-                                          children: [
-                                            customText(
-                                              text: 'Clear All',
-                                              height: 0,
-                                              fontSize: 14.sp,
-                                            ),
-
-                                            Container(
-                                              height: 0.1.h,
-                                              width: 12.2.w,
-                                              color: Colors.black,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 3.h),
-                                    options('Educational'),
-                                    options('Music'),
-                                    options('Business'),
-                                    options('Motivational'),
+                                    Container(
+                                      height: 0.1.h,
+                                      width: 12.2.w,
+                                      color: Colors.black,
+                                    )
                                   ],
                                 ),
+                              ],
+                            ),
+                            SizedBox(height: 3.h),
+                            options('Educational'),
+                            options('Music'),
+                            options('Business'),
+                            options('Motivational'),
+                          ],
+                        ),
                       ),
+
                       SizedBox(height: 13.h),
                     ],
                   ),
@@ -368,54 +279,48 @@ class DiscoverScreen extends StatelessWidget {
             ),
           ),
 
-          /// 👇 Fixed AppBar with Blur
+          /// 👇 Fixed AppBar
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: Obx(
-              () =>
-                  searchController.isSearch.value == false
-                      ? customAppBar(
-                        "Discover Events",
-                        ontap: () => _scaffoldKey.currentState!.openDrawer(),
-                      )
-                      : Padding(
-                        padding: EdgeInsets.only(
-                          top: 5.h,
-                          left: 4.w,
-                          right: 4.w,
+                  () => searchController.isSearch.value == false
+                  ? customAppBar(
+                "Discover Events",
+                ontap: () => _scaffoldKey.currentState!.openDrawer(),
+              )
+                  : Padding(
+                padding: EdgeInsets.only(top: 5.h, left: 4.w, right: 4.w),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        searchController.isSearch.value = false;
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: whiteColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                              color: textfieldBorderColor, width: 0.2.w),
                         ),
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                searchController.isSearch.value = false;
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: whiteColor,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: textfieldBorderColor,
-                                    width: 0.2.w,
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.all(1.w),
-                                  child: Icon(Icons.arrow_back, size: 19.sp),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 27.w),
-                            customText(
-                              text: 'Search',
-                              fontSize: 17.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ],
+                        child: Padding(
+                          padding: EdgeInsets.all(1.w),
+                          child:
+                          Icon(Icons.arrow_back, size: 19.sp),
                         ),
                       ),
+                    ),
+                    SizedBox(width: 30.w),
+                    customText(
+                      text: 'Search',
+                      fontSize: 17.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ],
@@ -424,21 +329,24 @@ class DiscoverScreen extends StatelessWidget {
   }
 }
 
-Widget options(String title) {
+Widget options(String title){
   return Column(
     children: [
       Row(
         children: [
-          customText(text: title, fontSize: 15.sp, fontWeight: FontWeight.w400),
-          Spacer(),
-          Icon(
-            Icons.cancel_outlined,
-            color: Colors.black.withOpacity(0.5),
-            size: 16.sp,
+          customText(
+              text: title,
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w400
           ),
+          Spacer(),
+          Icon(Icons.cancel_outlined, color: Colors.black.withOpacity(0.5), size: 16.sp,)
         ],
       ),
-      Padding(padding: EdgeInsets.symmetric(vertical: 0.5.h), child: Divider()),
+      Padding(
+        padding: EdgeInsets.symmetric(vertical: 0.5.h),
+        child: Divider(),
+      )
     ],
   );
 }

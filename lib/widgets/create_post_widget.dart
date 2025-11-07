@@ -51,26 +51,58 @@ Widget createPost() {
             Spacer(),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.7.h),
-
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.sp),
                 color: publicButtonColor,
                 border: Border.all(color: textfieldBorderColor),
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  customText(
-                    text: 'Public',
-                    fontFamily: 'dmsans',
-                    fontSize: 12.5.sp,
-                    fontWeight: FontWeight.w400,
+              child: PopupMenuButton<String>(
+                color: whiteColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15.sp),
+                ),
+                elevation: 2,
+                offset: const Offset(0, 35),
+
+                onSelected: (String value) {
+                  print('Selected: $value');
+                  // Handle your selection here
+                  // e.g. setState(() => selectedVisibility = value);
+                },
+
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'Public',
+                    child: Text('Public'),
                   ),
-                  SizedBox(width: 1.w),
-                  Icon(Icons.keyboard_arrow_down, size: 14.5.sp),
+                  const PopupMenuItem(
+                    value: 'Private',
+                    child: Text('Private'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'Friends Only',
+                    child: Text('Friends Only'),
+                  ),
                 ],
+
+                // 👇 The visible part (dropdown trigger)
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    customText(
+                      text: 'Public',
+                      fontFamily: 'dmsans',
+                      fontSize: 12.5.sp,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    SizedBox(width: 1.w),
+                    Icon(Icons.keyboard_arrow_down, size: 14.5.sp),
+                  ],
+                ),
               ),
-            ),
+            )
+
           ],
         ),
         SizedBox(height: 0.2.h),

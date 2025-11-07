@@ -115,16 +115,21 @@ class GetStarted extends StatelessWidget {
                           letterSpacing: -0.4,
                         ),
                         SizedBox(width: 0.5.w),
-                        customText(
-                            text: "Sign In",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                            color: whiteColor,
-                            txtDecoration: TextDecoration.underline,
-                            decorationColor: whiteColor,
-                            decorationThickness: 2.0,
-                          height: 0.1.h,
-                          letterSpacing: -0.4,
+                        InkWell(
+                          onTap: (){
+                            Get.toNamed("login");
+                          },
+                          child: customText(
+                              text: "Sign In",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              color: whiteColor,
+                              txtDecoration: TextDecoration.underline,
+                              decorationColor: whiteColor,
+                              decorationThickness: 2.0,
+                            height: 0.1.h,
+                            letterSpacing: -0.4,
+                          ),
                         ),
                       ],
                     )

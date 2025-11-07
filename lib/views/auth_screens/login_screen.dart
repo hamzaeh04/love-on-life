@@ -3,17 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
-import 'package:love_on_life/views/dashboard_screens/notification_screen.dart';
-import 'package:love_on_life/views/dashboard_screens/profile_screen.dart';
-import 'package:love_on_life/views/menu_screens/privacy_policy.dart';
-import 'package:love_on_life/views/menu_screens/profile_screens/my_profile.dart';
-import 'package:love_on_life/views/payment_method_screens/select_card_screen.dart';
 import 'package:love_on_life/widgets/custom_text_field.dart';
 import 'package:love_on_life/widgets/social_icon_widget.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../widgets/custom_button.dart';
-import '../menu_screens/faq_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -57,7 +51,12 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        checkBox(isChecked: false),
+                        customCheckBox(
+                          initialValue: false,
+                          onChanged: (value) {
+                            print("Checkbox state: $value");
+                          },
+                        ),
                         SizedBox(width: 2.w),
                         customText(
                             text: 'Remember Me',
@@ -116,19 +115,16 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     socialIconWidget("assets/png/social_icons/google.png",
                       ontap: (){
-                      Get.to(SelectCardScreen());
                       }
 
                     ),
               socialIconWidget(
                 "assets/png/social_icons/apple.png",
                 ontap: () {
-                  Get.to(MyProfile());
                 },
               ),
 
               socialIconWidget("assets/png/social_icons/facebook_logo.png",ontap: (){
-                Get.to(NotificationScreen());
               })
                   ],
                 ),
@@ -136,7 +132,12 @@ class LoginScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    checkBox(isChecked: false),
+                    customCheckBox(
+                      initialValue: false,
+                      onChanged: (value) {
+                        print("Checkbox state: $value");
+                      },
+                    ),
                     SizedBox(width: 2.w),
                     customText(
                       text: "By Signing Up you agree to our",
@@ -206,20 +207,39 @@ class LoginScreen extends StatelessWidget {
     );
   }
 }
-Widget checkBox({bool? isChecked}){
-  return Container(
-    height: 2.h,
-    width: 4.3.w,
-    decoration: BoxDecoration(
-      border: Border.all(
-        color: textfieldBorderColor,
-        width: 0.2.w,
+Widget customCheckBox({
+  bool initialValue = false,
+  Function(bool)? onChanged,
+}) {
+  RxBool isChecked = initialValue.obs;
+
+  return Obx(
+        () => GestureDetector(
+      onTap: () {
+        isChecked.value = !isChecked.value;
+        if (onChanged != null) onChanged(isChecked.value);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        height: 2.h,
+        width: 4.2.w,
+        decoration: BoxDecoration(
+          color: isChecked.value ? buttonPinkColor : whiteColor,
+          border: Border.all(
+            color: isChecked.value ? buttonPinkColor : textfieldBorderColor,
+            width: 0.2.w,
+          ),
+          borderRadius: BorderRadius.circular(8.sp),
+        ),
+        child: isChecked.value
+            ? Icon(
+          Icons.check,
+          color: whiteColor,
+          size: 16.sp,
+        )
+            : null,
       ),
-      borderRadius: BorderRadius.circular(8.sp),
-      color: whiteColor
     ),
-    child: isChecked == true ?
-    Icon(Icons.check):
-    SizedBox.shrink(),
   );
 }
+

@@ -17,7 +17,7 @@ class SelectCardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
      body: Padding(
-       padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 6.h),
+       padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 5.h),
        child: Column(
          crossAxisAlignment: CrossAxisAlignment.start,
          children: [

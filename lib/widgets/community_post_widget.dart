@@ -117,10 +117,48 @@ Widget communityPost(
                 ),
               ),
             SizedBox(width: 2.w),
-            Image.asset(
-              'assets/png/community_icon/DotsThreeVertical.png',
-              width: 7.w,
-            ),
+            PopupMenuButton<String>(
+              color: Colors.white, // 👈 makes the popup background white
+              elevation: 3, // adds subtle shadow
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.sp), // smooth rounded corners
+              ),
+              padding: EdgeInsets.zero,
+              offset: Offset(0, 40),// keeps trigger image tight
+              onSelected: (value) {
+                if (value == 'edit') {
+                  print("Edit tapped");
+                } else if (value == 'delete') {
+                  print("Delete tapped");
+                }
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 'edit',
+                  child: customText(
+                    text: "Edit",
+                    fontSize: 14.sp,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: customText(
+                    text: "Delete",
+                    fontSize: 14.sp,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+              child: Image.asset(
+                'assets/png/community_icon/DotsThreeVertical.png',
+                width: 7.w,
+              ),
+            )
+
+
           ],
         ),
         SizedBox(height: 1.h),
@@ -138,7 +176,7 @@ Widget communityPost(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/png/community_icon/Like.png', width: 5.5.w),
+              Image.asset('assets/png/community_icon/Like.png', width: 5.5.w,color:  Colors.red,),
               SizedBox(width: 2.w),
               customText(
                 text: 'Like',

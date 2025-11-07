@@ -22,6 +22,7 @@ Widget discoverWidget({
   String? ticketsLeft,
   VoidCallback? onViewLocation,
   VoidCallback? onJoinNow,
+  BuildContext? context
 }) {
   final DashboardController dashboardController = Get.find<DashboardController>();
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:love_on_life/views/dashboard_screens/ticket_screen.dart';
 import 'package:love_on_life/widgets/custom_app_bar.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:love_on_life/widgets/events_carousal.dart';
@@ -28,7 +29,7 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 15.h),
+                  SizedBox(height: 11.h),
                   Padding(
                     padding:EdgeInsets.symmetric(horizontal: 4.w),
                     child: customText(
@@ -56,7 +57,9 @@ class HomeScreen extends StatelessWidget {
                         textColor: whiteColor,
                         height: 5.h,
                         width: 35.w,
-                        ontap: () {},
+                        ontap: () {
+                          showTicketDialog(context);
+                        },
                       ),
                     ],
                   ),

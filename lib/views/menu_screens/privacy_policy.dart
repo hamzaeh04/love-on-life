@@ -16,12 +16,12 @@ class PrivacyPolicy extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 6.h),
+        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 5.h),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              customHeader("Privacy Policy",padding: 21.w),
+              customHeader("Privacy Policy",padding: 22.w),
               SizedBox(height: 4.h),
               customText(
                   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis commodo egestas massa, at euismod neque commodo in. Maecenas ipsum urna, vestibulum eu mollis nec, malesuada vel felis. Phasellus ultricies elementum justo, a viverra ipsum efficitur eget. Etiam cursus malesuada pretium. Nam nec massa at augue malesuada consequat. Nulla gravida placerat molestie. In eleifend felis bibendum malesuada cursus. Fusce sed auctor ex, a sollicitudin velit. Morbi sed lacinia lorem. Nam eu fermentum mauris, vitae lobortis ipsum. In a gravida ligula, dapibus cursus orci.',
@@ -44,11 +44,6 @@ class PrivacyPolicy extends StatelessWidget {
                   color: blackColor
               ),
               SizedBox(height: 3.5.h),
-              customButton("Update",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
-                successDialog(context, "Done!", "Password has been Updated successfully.", "Ok", (){
-                  Get.back();
-                });
-              }),
             ],
           ),
         ),

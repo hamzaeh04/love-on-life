@@ -90,4 +90,5 @@ class DashboardController extends GetxController{
    void switchDiscoverTab(int index){
     discoverIndex.value = index;
   }
+
 }

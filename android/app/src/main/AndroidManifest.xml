@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="love_on_life"
+        android:label="Love On Life"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

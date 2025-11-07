@@ -6,8 +6,10 @@ import 'package:sizer/sizer.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
 import '../../controllers/dashboard_controller.dart';
+import '../../controllers/search_controller.dart';
 import '../../widgets/custom_header.dart';
 import '../../widgets/discover_screen_widget.dart';
+import '../dashboard_screens/discover_screen.dart';
 
 class EventScreen extends StatelessWidget {
   const EventScreen({super.key});
@@ -15,7 +17,7 @@ class EventScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DashboardController controller = Get.find<DashboardController>();
-
+    final SearchController2 searchController = Get.find<SearchController2>();
     return Scaffold(
       body: /// 👇 Scrollable content (AppBar ke neeche se start hoga)
       SingleChildScrollView(
@@ -25,7 +27,7 @@ class EventScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              customHeader('My Events'),
+              customHeader('My Events',padding: 27.w),
               SizedBox(height: 2.5.h),
               /// 🔹 Search Bar
               Row(
@@ -99,85 +101,157 @@ class EventScreen extends StatelessWidget {
               SizedBox(height: 2.h),
 
               /// 🔹 Events Widgets
-              discoverWidget(
-                imagePath: 'assets/png/discover1.jpeg',
-                eventName: 'Young Education Program',
-                description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                date: '10 Sep, 2025',
-                time: '12:00 AM',
-                ticketPrice: '\$40',
-                tag: "Educational",
-                noOfPeople: "25 people attending",
-                ticketsLeft: '7 Tickets left',
-                onViewLocation: () {
-                  print("View Location clicked");
-                },
-                onJoinNow: () {
-                  print("Join Now clicked");
-                },
+              // discoverWidget(
+              //   imagePath: 'assets/png/discover1.jpeg',
+              //   eventName: 'Young Education Program',
+              //   description:
+              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
+              //   date: '10 Sep, 2025',
+              //   time: '12:00 AM',
+              //   ticketPrice: '\$40',
+              //   tag: "Educational",
+              //   noOfPeople: "25 people attending",
+              //   ticketsLeft: '7 Tickets left',
+              //   onViewLocation: () {
+              //     print("View Location clicked");
+              //   },
+              //   onJoinNow: () {
+              //     print("Join Now clicked");
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              //
+              // discoverWidget(
+              //   imagePath: 'assets/png/event_detail_icon/people.png',
+              //   eventName: 'Young Education Program',
+              //   description:
+              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
+              //   date: '10 Sep, 2025',
+              //   time: '12:00 AM',
+              //   ticketPrice: '\$40',
+              //   tag: "Educational",
+              //   noOfPeople: "25 people attending",
+              //   ticketsLeft: '7 Tickets left',
+              //   onViewLocation: () {
+              //     print("View Location clicked");
+              //   },
+              //   onJoinNow: () {
+              //     print("Join Now clicked");
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              //
+              // discoverWidget(
+              //   imagePath: 'assets/png/event_detail_icon/people.png',
+              //   eventName: 'Young Education Program',
+              //   description:
+              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
+              //   date: '10 Sep, 2025',
+              //   time: '12:00 AM',
+              //   ticketPrice: '\$40',
+              //   tag: "Educational",
+              //   noOfPeople: "25 people attending",
+              //   ticketsLeft: '7 Tickets left',
+              //   onViewLocation: () {
+              //     print("View Location clicked");
+              //   },
+              //   onJoinNow: () {
+              //     print("Join Now clicked");
+              //   },
+              // ),
+              // SizedBox(height: 1.h),
+              //
+              // discoverWidget(
+              //   imagePath: 'assets/png/event_detail_icon/people.png',
+              //   eventName: 'Young Education Program',
+              //   description:
+              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
+              //   date: '10 Sep, 2025',
+              //   time: '12:00 AM',
+              //   ticketPrice: '\$40',
+              //   tag: "Educational",
+              //   noOfPeople: "25 people attending",
+              //   ticketsLeft: '7 Tickets left',
+              //   onViewLocation: () {
+              //     print("View Location clicked");
+              //   },
+              //   onJoinNow: () {
+              //     print("Join Now clicked");
+              //   },
+              // ),
+              /// 🔹 Event List with ListView.builder
+              Obx(
+                    () => searchController.isSearch.value == false
+                    ? SizedBox(
+                  //height: 90.h,
+                  child: ListView.builder(
+                    itemCount: controller.events.length,
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      var event = controller.events[index];
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 1.h),
+                        child: discoverWidget(
+                          index: index,
+                          imagePath: event['imagePath'],
+                          eventName: event['eventName'],
+                          description: event['description'],
+                          date: event['date'],
+                          time: event['time'],
+                          ticketPrice: event['ticketPrice'],
+                          tag: event['tag'],
+                          noOfPeople: event['noOfPeople'],
+                          ticketsLeft: event['ticketsLeft'],
+                          context: context,
+                          onViewLocation: () {
+                            print(
+                                "View Location clicked for index $index");
+                          },
+                          onJoinNow: () {
+                            print(
+                                "Join Now clicked for index $index");
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                )
+                    : Column(
+                  children: [
+                    SizedBox(height: 1.h),
+                    Row(
+                      children: [
+                        customText(
+                          text: 'Recent Searches',
+                          fontSize: 15.5.sp,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        Spacer(),
+                        Column(
+                          children: [
+                            customText(
+                              text: 'Clear All',
+                              height: 0,
+                              fontSize: 14.sp,
+                            ),
+                            Container(
+                              height: 0.1.h,
+                              width: 12.2.w,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 3.h),
+                    options('Educational'),
+                    options('Music'),
+                    options('Business'),
+                    options('Motivational'),
+                  ],
+                ),
               ),
-              SizedBox(height: 1.h),
-
-              discoverWidget(
-                imagePath: 'assets/png/event_detail_icon/people.png',
-                eventName: 'Young Education Program',
-                description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                date: '10 Sep, 2025',
-                time: '12:00 AM',
-                ticketPrice: '\$40',
-                tag: "Educational",
-                noOfPeople: "25 people attending",
-                ticketsLeft: '7 Tickets left',
-                onViewLocation: () {
-                  print("View Location clicked");
-                },
-                onJoinNow: () {
-                  print("Join Now clicked");
-                },
-              ),
-              SizedBox(height: 1.h),
-
-              discoverWidget(
-                imagePath: 'assets/png/event_detail_icon/people.png',
-                eventName: 'Young Education Program',
-                description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                date: '10 Sep, 2025',
-                time: '12:00 AM',
-                ticketPrice: '\$40',
-                tag: "Educational",
-                noOfPeople: "25 people attending",
-                ticketsLeft: '7 Tickets left',
-                onViewLocation: () {
-                  print("View Location clicked");
-                },
-                onJoinNow: () {
-                  print("Join Now clicked");
-                },
-              ),
-              SizedBox(height: 1.h),
-
-              discoverWidget(
-                imagePath: 'assets/png/event_detail_icon/people.png',
-                eventName: 'Young Education Program',
-                description:
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                date: '10 Sep, 2025',
-                time: '12:00 AM',
-                ticketPrice: '\$40',
-                tag: "Educational",
-                noOfPeople: "25 people attending",
-                ticketsLeft: '7 Tickets left',
-                onViewLocation: () {
-                  print("View Location clicked");
-                },
-                onJoinNow: () {
-                  print("Join Now clicked");
-                },
-              ),
-
               SizedBox(height: 13.h),
             ],
           ),
