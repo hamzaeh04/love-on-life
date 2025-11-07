@@ -24,7 +24,9 @@ const ticketBlueColor = Color(0xFF34A0C2);
 const greyBorderColor = Color(0xFFE6E6E6);
 const selectedContainerColor = Color(0xFFCCCCCC);
 const darkBlackColor = Color(0xFF1A1A1A);
+const notificationGreyColor = Color(0xFFA6A6A6);
 const searchColor = Color(0xFF030C1A);
+
 // const Color(0xFF604D7A);
 
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
-import '../../constants/color_constants.dart';
-import '../../constants/constants_widgets.dart';
-import '../../widgets/custom_button.dart';
+import '../../../constants/color_constants.dart';
+import '../../../constants/constants_widgets.dart';
+import '../../../widgets/custom_button.dart';
 
 class MyProfile extends StatelessWidget {
   const MyProfile({super.key});
