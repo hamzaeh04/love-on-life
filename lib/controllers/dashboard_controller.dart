@@ -20,6 +20,17 @@ class DashboardController extends GetxController{
   }
 
 
+   RxMap<int,bool> postLike = <int,bool>{}.obs;
+
+   void toggleLiked(int? index){
+     if(index == null) return;
+     postLike[index] = !(postLike[index] ?? false);
+   }
+
+   bool isLiked(int? index){
+     if(index == null) return false;
+     return postLike[index] ?? false;
+   }
 
    final List<String> discoverList = [
     "All",

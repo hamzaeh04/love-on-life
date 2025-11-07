@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:love_on_life/controllers/dashboard_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
@@ -12,10 +14,12 @@ Widget communityPost(
     String path2,
     String mainImage,
     {
+      int? index,
       bool? isGroup = false,
       bool? isGroupOnly = true,
       bool? isFollow = true,
     }) {
+  final DashboardController controller = Get.find<DashboardController>();
   return Container(
     margin: EdgeInsets.only(right: 4.w),
     width: double.infinity,
@@ -176,7 +180,18 @@ Widget communityPost(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/png/community_icon/Like.png', width: 5.5.w,color:  Colors.red,),
+              Obx(() {
+                bool isLike = controller.isLiked(index);
+                return GestureDetector(
+                  onTap: () => controller.toggleLiked(index), // 👈 toggles like
+                  child: Image.asset(
+                    isLike
+                        ? 'assets/png/community_icon/like_red.png' // 👈 red if liked
+                        : 'assets/png/community_icon/Like.png',   // 👈 normal if not liked
+                    width: 5.5.w,
+                  ),
+                );
+              }),
               SizedBox(width: 2.w),
               customText(
                 text: 'Like',

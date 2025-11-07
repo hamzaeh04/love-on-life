@@ -90,6 +90,7 @@ class HomeScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         communityPost(
+                          index: 5,
                           'assets/png/community_icon/person3.png',
                           'Youth Influencer',
                           'Rufus Schulist',
@@ -103,6 +104,7 @@ class HomeScreen extends StatelessWidget {
                         Divider(),
                         SizedBox(height: 1.h),
                         communityPost(
+                          index: 6,
                           'assets/png/community_icon/person3.png',
                           'Youth Influencer',
                           'Rufus Schulist',
