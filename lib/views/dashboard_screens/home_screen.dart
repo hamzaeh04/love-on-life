@@ -9,13 +9,17 @@ import 'package:sizer/sizer.dart';
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
 import '../../widgets/community_post_widget.dart';
+import '../../widgets/custom_drawer_widget.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: CustomDrawer(),
       body: Stack(
         children: [
           // Scrollable area starts from here
@@ -124,7 +128,10 @@ class HomeScreen extends StatelessWidget {
             top: 0,
             left: 0,
             right: 0,
-            child: customAppBar(""),
+            child: customAppBar("", ontap: ()=>
+                _scaffoldKey.currentState!.openDrawer(),
+
+            ),
           ),
         ],
       ),

@@ -9,12 +9,15 @@ Widget customButton(String text,{String? path,Color? color,FontWeight? fontweigh
  return InkWell(
    onTap: ontap,
    child: Container(
-     height: height ?? 5.h,
+     height: height ?? 5.5.h,
      width: width ?? double.infinity,
      decoration: BoxDecoration(
        color: color!=null ? color : whiteColor,
        borderRadius: BorderRadius.circular(25.sp),
-       border: Border.all(color: borderColor ?? Colors.transparent)
+       border: Border.all(
+         color: borderColor!=null ? borderColor : Colors.transparent,
+         width: 0.2.w
+       )
      ),
      child: Row(
        mainAxisAlignment: MainAxisAlignment.center,

@@ -6,7 +6,7 @@ import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:sizer/sizer.dart';
 
-Widget customHeader(String title,){
+Widget customHeader(String title,{double? padding}){
   return Row(
     children: [
       InkWell(
@@ -28,7 +28,7 @@ Widget customHeader(String title,){
           ),
         ),
       ),
-      SizedBox(width: 27.w),
+      SizedBox(width: padding!=null ? padding : 24.w),
       customText(
         text: title,
         fontSize: 17.sp,

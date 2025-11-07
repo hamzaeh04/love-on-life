@@ -9,13 +9,19 @@ import '../../widgets/community_post_widget.dart';
 import '../../widgets/community_suggestion_widget.dart';
 import '../../widgets/create_post_widget.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/custom_drawer_widget.dart';
 
 class CommunityScreen extends StatelessWidget {
-  const CommunityScreen({super.key});
+  CommunityScreen({super.key});
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+        key: _scaffoldKey,
+        drawer: CustomDrawer(),
       body: Stack(
         children: [
           Positioned.fill(child: Padding(
@@ -147,46 +153,9 @@ class CommunityScreen extends StatelessWidget {
                     color: Colors.white.withOpacity(0.2), // frosted effect
                   ),
                   child: Padding(
-                    padding: EdgeInsets.only(left: 4.w, top: 4.h, bottom: 1.h),
-                    child: Row(
-                      children: [
-                        customText(
-                          text: 'Community',
-                          fontFamily: 'dmsans',
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        const Spacer(),
-                        Stack(
-                          children: [
-                            Container(
-                              margin: EdgeInsets.only(right: 4.w),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 2.w,
-                                vertical: 0.8.h,
-                              ),
-
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: textfieldBorderColor,
-                                  width: 0.3.w,
-                                ),
-                              ),
-                              child: Image.asset('assets/png/bell_icon.png', width: 3.5.w,),
-                            ),
-                            Positioned(
-                              right: 6.2.w,
-                              top: 0.8.h,
-                              child: Image.asset(
-                                'assets/png/bell_icon2.png',
-                                width: 1.5.w,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                    padding: EdgeInsets.only( bottom: 0.h),
+                    child: customAppBar('Community', ontap: ()=>
+                        _scaffoldKey.currentState!.openDrawer(),),
                   ),
                 ),
               ),

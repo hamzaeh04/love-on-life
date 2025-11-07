@@ -6,7 +6,7 @@ import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
 import 'custom_button.dart';
 
-void successDialog(BuildContext context,String title, String description,String buttonText,VoidCallback ontap) {
+void successDialog(BuildContext context,String title, String description,String buttonText,VoidCallback ontap,{bool? isLogout = false,VoidCallback? ontap2,String? buttonText2}) {
   showDialog(
     context: context,
     // barrierDismissible: true,
@@ -35,7 +35,7 @@ void successDialog(BuildContext context,String title, String description,String 
                     SizedBox(
                       height: 7.h,
                       width: 7.h,
-                      child: Image.asset("assets/png/dialog_icon.png"),
+                      child: isLogout == false ? Image.asset("assets/png/dialog_icon.png"): Image.asset('assets/png/oops.png'),
                     ),
                     SizedBox(height: 1.h),
 
@@ -58,6 +58,7 @@ void successDialog(BuildContext context,String title, String description,String 
                     SizedBox(height: 3.h),
 
                     /// ✅ OK Button
+                    isLogout == false ?
                     customButton(
                       buttonText,
                       color: buttonPinkColor,
@@ -66,7 +67,35 @@ void successDialog(BuildContext context,String title, String description,String 
                       fontsize: 16.sp,
                       textColor: whiteColor,
                       ontap: ontap
-                    ),
+                    ):
+                        Row(
+                          children: [
+                            Expanded(
+                              child: customButton(
+                                  buttonText,
+                                  color: whiteColor,
+                                  fontweight: FontWeight.w700,
+                                  height: 5.5.h,
+                                  fontsize: 16.sp,
+                                  textColor: buttonPinkColor,
+                                  ontap: ontap,
+                                borderColor: buttonPinkColor
+                              ),
+                            ),
+                            SizedBox(width: 2.w,),
+                            Expanded(
+                              child: customButton(
+                                  buttonText2!,
+                                  color: buttonPinkColor,
+                                  fontweight: FontWeight.w700,
+                                  height: 5.5.h,
+                                  fontsize: 16.sp,
+                                  textColor: whiteColor,
+                                  ontap: ontap2
+                              ),
+                            )
+                          ],
+                        )
                   ],
                 ),
               ),

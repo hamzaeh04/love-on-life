@@ -4,8 +4,9 @@ import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
+import 'custom_drawer_widget.dart';
 
-Widget customAppBar(String title) {
+Widget customAppBar(String title,{VoidCallback? ontap}) {
   return ClipRect(
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
@@ -18,12 +19,14 @@ Widget customAppBar(String title) {
         child: Row(
           children: [
             /// Location
-            Image.asset("assets/png/home_icons/header_profile.png", width: 10.w, fit: BoxFit.contain,),
+            InkWell(
+              onTap: ontap,
+                child: Image.asset("assets/png/home_icons/header_profile.png", width: 10.w, fit: BoxFit.contain,)),
             Spacer(),
             customText(
               text: title,
               fontFamily: 'dmsans',
-              fontSize: 16.sp,
+              fontSize: 17.sp,
               fontWeight: FontWeight.w700,
             ),
 

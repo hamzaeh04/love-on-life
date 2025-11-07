@@ -28,7 +28,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     DiscoverScreen(),
     CommunityScreen(),
     TicketScreen(),
-    ProfileScreen(),
+    //ProfileScreen(),
   ];
 
   @override
@@ -107,7 +107,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     navItem("assets/png/bottom_nav_icon/compass.png", 1, 'Discover'),
                     navItem("assets/png/bottom_nav_icon/community.png", 2, 'Community'),
                     navItem("assets/png/bottom_nav_icon/ticket.png", 3, 'Tickets'),
-                    navItem("assets/png/bottom_nav_icon/profile.png", 4, 'Profile'),
+                    //navItem("assets/png/bottom_nav_icon/profile.png", 4, 'Profile'),
                   ],
                 )),
               ),

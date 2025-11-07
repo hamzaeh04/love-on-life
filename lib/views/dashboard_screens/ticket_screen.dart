@@ -3,21 +3,27 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/dashboard_controller.dart';
+import 'package:love_on_life/widgets/custom_app_bar.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/custom_drawer_widget.dart';
 import '../../widgets/ticketClipper.dart';
 
 class TicketScreen extends StatelessWidget {
   TicketScreen({super.key});
 
   final DashboardController controller = Get.find<DashboardController>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: CustomDrawer(),
       body: Stack(
         children: [
           Positioned.fill(
@@ -26,7 +32,7 @@ class TicketScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: 13.h),
+                    SizedBox(height: 15.h),
                     rowWidget(),
                     SizedBox(height: 1.h),
 
@@ -337,57 +343,12 @@ class TicketScreen extends StatelessWidget {
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                 child: Container(
-                  height: 11.h, // 🔹 give it a fixed height
+                  //height: 11.h, // 🔹 give it a fixed height
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.2), // frosted effect
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 4.w, right: 7.w, top: 4.h),
-                    child: Row(
-                      children: [
-                        customText(
-                          text: 'Tickets',
-                          fontFamily: 'dmsans',
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        const Spacer(),
-                        Stack(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 2.w,
-                                vertical: 0.8.h,
-                              ),
-                              height: 4.h,
-                              width: 8.5.w,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: whiteColor,
-                                border: Border.all(
-                                  color: textfieldBorderColor,
-                                  width: 0.3.w,
-                                ),
-                              ),
-                              child: Image.asset(
-                                'assets/png/bell_icon.png',
-                                width: 2.w,
-                                height: 2.h,
-                              ),
-                            ),
-                            Positioned(
-                              right: 2.2.w,
-                              top: 0.8.h,
-                              child: Image.asset(
-                                'assets/png/bell_icon2.png',
-                                width: 1.6.w,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                  child: customAppBar('Tickets', ontap: ()=>
+                      _scaffoldKey.currentState!.openDrawer(),),
                 ),
               ),
             ),

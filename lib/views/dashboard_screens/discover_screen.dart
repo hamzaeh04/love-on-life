@@ -11,15 +11,20 @@ import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
 import '../../controllers/search_controller.dart';
 import '../../widgets/custom_app_bar.dart';
+import '../../widgets/custom_drawer_widget.dart';
 
 class DiscoverScreen extends StatelessWidget {
   DiscoverScreen({super.key});
   final DashboardController controller = Get.find<DashboardController>();
   final SearchController2 searchController = Get.put(SearchController2());
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: CustomDrawer(),
       body: Stack(
         children: [
           /// 👇 Scrollable content (AppBar ke neeche se start hoga)
@@ -93,34 +98,81 @@ class DiscoverScreen extends StatelessWidget {
 
                           // 🎯 Circular Filter Button
                           InkWell(
-                            onTap: (){
-                              showModalBottomSheet(context: context, builder: (context) {
-                                return Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20.sp,), topRight: Radius.circular(20.sp,))
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Row(
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true, // makes the modal use full height if needed
+                                backgroundColor: Colors.transparent, // makes rounded corners visible
+                                builder: (context) {
+                                  return FractionallySizedBox(
+                                    heightFactor: 0.49, // adjust this value to control the sheet height (0.55 = 55% of screen)
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(20.sp),
+                                          topRight: Radius.circular(20.sp),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          customText(text: 'Filters', fontSize: 17.sp, fontWeight: FontWeight.w600),
-                                          Spacer(),
-                                          Icon(Icons.cancel_outlined, size: 18.sp,)
+                                          /// 🔹 Header Row
+                                          Row(
+                                            children: [
+                                              customText(
+                                                text: 'Filters',
+                                                fontSize: 17.sp,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              Spacer(),
+                                              InkWell(
+                                                  onTap: (){
+                                                    Get.back();
+                                                  },
+                                                  child: Icon(Icons.cancel_outlined, size: 18.sp)),
+                                            ],
+                                          ),
+                                          SizedBox(height: 1.h),
+                                          Divider(),
+                                          SizedBox(height: 1.h),
+
+                                          /// 🔹 Filters Fields
+                                          defaultTextFeild(
+                                            'Event Category',
+                                            'Environment',
+                                            isSuffix: true,
+                                            isDropDown: true,
+                                          ),
+                                          SizedBox(height: 1.5.h),
+                                          defaultTextFeild(
+                                            'Event Date',
+                                            'Upcoming',
+                                            isSuffix: true,
+                                            isDropDown: true,
+                                            isDate: true,
+                                          ),
+
+                                          SizedBox(height: 3.5.h),
+
+                                          /// 🔹 Buttons
+                                          customButton('Apply',
+                                              color: ticketBlueColor, textColor: whiteColor),
+                                          SizedBox(height: 1.h),
+                                          customButton(
+                                            'Clear',
+                                            color: whiteColor,
+                                            textColor: ticketBlueColor,
+                                            borderColor: ticketBlueColor,
+                                          ),
                                         ],
                                       ),
-                                      SizedBox(height: 1.h,),
-                                      Divider(),
-                                      SizedBox(height: 1.h,),
-                                      customButton('Apply', color: ticketBlueColor, textColor: whiteColor),
-                                      SizedBox(height: 0.8.h,),
-                                      customButton('Clear', color: whiteColor, textColor: ticketBlueColor, borderColor: ticketBlueColor)
-                                    ],
-                                  ),
-                                );
-                              },);
+                                    ),
+                                  );
+                                },
+                              );
                             },
                             child: Container(
                               height: 5.h,
@@ -136,7 +188,8 @@ class DiscoverScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          ),
+                          )
+
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -351,7 +404,8 @@ class DiscoverScreen extends StatelessWidget {
             top: 0,
             left: 0,
             right: 0,
-            child: Obx(() => searchController.isSearch.value == false ? customAppBar("Discover Events"): Padding(
+            child: Obx(() => searchController.isSearch.value == false ? customAppBar("Discover Events",  ontap: ()=>
+                _scaffoldKey.currentState!.openDrawer(),): Padding(
               padding: EdgeInsets.only(top: 5.h, left: 4.w, right: 4.w),
               child: Row(
                 children: [
