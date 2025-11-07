@@ -18,7 +18,8 @@ class DiscoverScreen extends StatelessWidget {
   final DashboardController controller = Get.find<DashboardController>();
   final SearchController2 searchController = Get.put(SearchController2());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final DashboardController dashboardController =
+      Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,20 +30,20 @@ class DiscoverScreen extends StatelessWidget {
         children: [
           /// 👇 Scrollable content (AppBar ke neeche se start hoga)
           Positioned.fill(
-            child: Obx(() =>
-              SingleChildScrollView(
+            child: Obx(
+              () => SingleChildScrollView(
                 padding:
-                searchController.isSearch.value == false
-                    ? EdgeInsets.only(top: 12.5.h)
-                    : EdgeInsets.only(top: 9.5.h),
+                    searchController.isSearch.value == false
+                        ? EdgeInsets.only(top: 12.5.h)
+                        : EdgeInsets.only(top: 9.5.h),
 
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       SizedBox(height: 2.5.h),
+
                       /// 🔹 Search Bar
                       Row(
                         children: [
@@ -58,7 +59,10 @@ class DiscoverScreen extends StatelessWidget {
                                 ),
                               ),
                               child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 3.w, vertical: 0.6.h),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 3.w,
+                                  vertical: 0.6.h,
+                                ),
                                 child: Row(
                                   children: [
                                     Image.asset(
@@ -69,8 +73,9 @@ class DiscoverScreen extends StatelessWidget {
                                     SizedBox(width: 1.w),
                                     Expanded(
                                       child: TextField(
-                                        onTap: (){
-                                          searchController.isSearch.value = true;
+                                        onTap: () {
+                                          searchController.isSearch.value =
+                                              true;
                                         },
                                         style: TextStyle(
                                           fontSize: 14.sp,
@@ -84,7 +89,9 @@ class DiscoverScreen extends StatelessWidget {
                                           ),
                                           border: InputBorder.none,
                                           isCollapsed: true,
-                                          contentPadding: EdgeInsets.symmetric(vertical: 0.5.h),
+                                          contentPadding: EdgeInsets.symmetric(
+                                            vertical: 0.5.h,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -94,20 +101,28 @@ class DiscoverScreen extends StatelessWidget {
                             ),
                           ),
 
-                          SizedBox(width: 3.w), // spacing between search and button
-
+                          SizedBox(
+                            width: 3.w,
+                          ), // spacing between search and button
                           // 🎯 Circular Filter Button
                           InkWell(
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
-                                isScrollControlled: true, // makes the modal use full height if needed
-                                backgroundColor: Colors.transparent, // makes rounded corners visible
+                                isScrollControlled:
+                                    true, // makes the modal use full height if needed
+                                backgroundColor:
+                                    Colors
+                                        .transparent, // makes rounded corners visible
                                 builder: (context) {
                                   return FractionallySizedBox(
-                                    heightFactor: 0.49, // adjust this value to control the sheet height (0.55 = 55% of screen)
+                                    heightFactor:
+                                        0.49, // adjust this value to control the sheet height (0.55 = 55% of screen)
                                     child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 3.h),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 5.w,
+                                        vertical: 3.h,
+                                      ),
                                       width: double.infinity,
                                       decoration: BoxDecoration(
                                         color: Colors.white,
@@ -117,7 +132,8 @@ class DiscoverScreen extends StatelessWidget {
                                         ),
                                       ),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           /// 🔹 Header Row
                                           Row(
@@ -129,10 +145,14 @@ class DiscoverScreen extends StatelessWidget {
                                               ),
                                               Spacer(),
                                               InkWell(
-                                                  onTap: (){
-                                                    Get.back();
-                                                  },
-                                                  child: Icon(Icons.cancel_outlined, size: 18.sp)),
+                                                onTap: () {
+                                                  Get.back();
+                                                },
+                                                child: Icon(
+                                                  Icons.cancel_outlined,
+                                                  size: 18.sp,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                           SizedBox(height: 1.h),
@@ -158,8 +178,11 @@ class DiscoverScreen extends StatelessWidget {
                                           SizedBox(height: 3.5.h),
 
                                           /// 🔹 Buttons
-                                          customButton('Apply',
-                                              color: ticketBlueColor, textColor: whiteColor),
+                                          customButton(
+                                            'Apply',
+                                            color: ticketBlueColor,
+                                            textColor: whiteColor,
+                                          ),
                                           SizedBox(height: 1.h),
                                           customButton(
                                             'Clear',
@@ -188,8 +211,7 @@ class DiscoverScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                          )
-
+                          ),
                         ],
                       ),
                       SizedBox(height: 1.h),
@@ -268,128 +290,75 @@ class DiscoverScreen extends StatelessWidget {
                       //   ),
                       // ),
                       // SizedBox(height: 2.h),
+                      Obx(
+                        () =>
+                            searchController.isSearch.value == false
+                                ? Column(
+                                  children: [
+                                    /// 🔹 Events Widgets
+                                    SizedBox(
+                                      height: 70.h,
+                                      child: ListView.builder(
+                                          scrollDirection: Axis.vertical,
+                                          itemCount:
+                                              dashboardController.events.length,
+                                          itemBuilder: (context, index) {
+                                            var event =
+                                                dashboardController
+                                                    .events[index];
+                                            return discoverWidget(
+                                              index: index,
+                                              imagePath: event['imagePath'],
+                                              eventName: event['eventName'],
+                                              description: event['description'],
+                                              date: event['date'],
+                                              time: event['time'],
+                                              tag: event['tag'],
+                                              noOfPeople: event['noOfPeople'],
+                                              ticketPrice: event['ticketPrice'],
+                                              ticketsLeft: event['ticketsLeft'],
+                                            );
+                                          },
+                                        ),
+                                    ),
+                                    SizedBox(height: 13.h),
+                                  ],
+                                )
+                                : Column(
+                                  children: [
+                                    SizedBox(height: 1.h),
+                                    Row(
+                                      children: [
+                                        customText(
+                                          text: 'Recent Searches',
+                                          fontSize: 15.5.sp,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        Spacer(),
+                                        Column(
+                                          children: [
+                                            customText(
+                                              text: 'Clear All',
+                                              height: 0,
+                                              fontSize: 14.sp,
+                                            ),
 
-                      Obx(() =>
-                      searchController.isSearch.value == false ?
-                      Column(
-                        children: [
-                          /// 🔹 Events Widgets
-                          discoverWidget(
-                            imagePath: 'assets/png/discover1.jpeg',
-                            eventName: 'Young Education Program',
-                            description:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                            date: '10 Sep, 2025',
-                            time: '12:00 AM',
-                            ticketPrice: '\$40',
-                            tag: "Educational",
-                            noOfPeople: "25 people attending",
-                            ticketsLeft: '7 Tickets left',
-                            onViewLocation: () {
-                              print("View Location clicked");
-                            },
-                            onJoinNow: () {
-                              print("Join Now clicked");
-                            },
-                          ),
-                          SizedBox(height: 1.h),
-
-                          discoverWidget(
-                            imagePath: 'assets/png/event_detail_icon/people.png',
-                            eventName: 'Young Education Program',
-                            description:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                            date: '10 Sep, 2025',
-                            time: '12:00 AM',
-                            ticketPrice: '\$40',
-                            tag: "Educational",
-                            noOfPeople: "25 people attending",
-                            ticketsLeft: '7 Tickets left',
-                            onViewLocation: () {
-                              print("View Location clicked");
-                            },
-                            onJoinNow: () {
-                              print("Join Now clicked");
-                            },
-                          ),
-                          SizedBox(height: 1.h),
-
-                          discoverWidget(
-                            imagePath: 'assets/png/event_detail_icon/people.png',
-                            eventName: 'Young Education Program',
-                            description:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                            date: '10 Sep, 2025',
-                            time: '12:00 AM',
-                            ticketPrice: '\$40',
-                            tag: "Educational",
-                            noOfPeople: "25 people attending",
-                            ticketsLeft: '7 Tickets left',
-                            onViewLocation: () {
-                              print("View Location clicked");
-                            },
-                            onJoinNow: () {
-                              print("Join Now clicked");
-                            },
-                          ),
-                          SizedBox(height: 1.h),
-
-                          discoverWidget(
-                            imagePath: 'assets/png/event_detail_icon/people.png',
-                            eventName: 'Young Education Program',
-                            description:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                            date: '10 Sep, 2025',
-                            time: '12:00 AM',
-                            ticketPrice: '\$40',
-                            tag: "Educational",
-                            noOfPeople: "25 people attending",
-                            ticketsLeft: '7 Tickets left',
-                            onViewLocation: () {
-                              print("View Location clicked");
-                            },
-                            onJoinNow: () {
-                              print("Join Now clicked");
-                            },
-                          ),
-
-                          SizedBox(height: 13.h),
-                        ],
-                      ): Column(
-                        children: [
-                          SizedBox(height: 1.h,),
-                          Row(
-                            children: [
-                              customText(
-                                  text: 'Recent Searches',
-                                  fontSize: 15.5.sp,
-                                  fontWeight: FontWeight.w600
-                              ),
-                              Spacer(),
-                              Column(
-                                children: [
-                                  customText(
-                                      text: 'Clear All',
-                                      height: 0,
-                                    fontSize: 14.sp
-                                  ),
-
-                                  Container(
-                                    height: 0.1.h,
-                                    width: 12.2.w,
-                                    color: Colors.black,
-                                  )
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 3.h,),
-                          options('Educational'),
-                          options('Music'),
-                          options('Business'),
-                          options('Motivational'),
-                        ],
-                      ),
+                                            Container(
+                                              height: 0.1.h,
+                                              width: 12.2.w,
+                                              color: Colors.black,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 3.h),
+                                    options('Educational'),
+                                    options('Music'),
+                                    options('Business'),
+                                    options('Motivational'),
+                                  ],
+                                ),
                       ),
                       SizedBox(height: 13.h),
                     ],
@@ -404,63 +373,72 @@ class DiscoverScreen extends StatelessWidget {
             top: 0,
             left: 0,
             right: 0,
-            child: Obx(() => searchController.isSearch.value == false ? customAppBar("Discover Events",  ontap: ()=>
-                _scaffoldKey.currentState!.openDrawer(),): Padding(
-              padding: EdgeInsets.only(top: 5.h, left: 4.w, right: 4.w),
-              child: Row(
-                children: [
-                  InkWell(
-                    onTap: (){
-                      searchController.isSearch.value = false;
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: whiteColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              color: textfieldBorderColor,
-                              width: 0.2.w
-                          )
+            child: Obx(
+              () =>
+                  searchController.isSearch.value == false
+                      ? customAppBar(
+                        "Discover Events",
+                        ontap: () => _scaffoldKey.currentState!.openDrawer(),
+                      )
+                      : Padding(
+                        padding: EdgeInsets.only(
+                          top: 5.h,
+                          left: 4.w,
+                          right: 4.w,
+                        ),
+                        child: Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                searchController.isSearch.value = false;
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: whiteColor,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: textfieldBorderColor,
+                                    width: 0.2.w,
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(1.w),
+                                  child: Icon(Icons.arrow_back, size: 19.sp),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 27.w),
+                            customText(
+                              text: 'Search',
+                              fontSize: 17.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ],
+                        ),
                       ),
-                      child: Padding(
-                        padding: EdgeInsets.all(1.w),
-                        child: Icon(Icons.arrow_back,size: 19.sp),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 27.w),
-                  customText(
-                    text: 'Search',
-                    fontSize: 17.sp,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ],
-              ),
-            ))
+            ),
           ),
         ],
       ),
     );
   }
 }
-Widget options(String title){
+
+Widget options(String title) {
   return Column(
     children: [
       Row(
         children: [
-          customText(
-              text: title,
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w400
-          ),
+          customText(text: title, fontSize: 15.sp, fontWeight: FontWeight.w400),
           Spacer(),
-          Icon(Icons.cancel_outlined, color: Colors.black.withOpacity(0.5), size: 16.sp,)
+          Icon(
+            Icons.cancel_outlined,
+            color: Colors.black.withOpacity(0.5),
+            size: 16.sp,
+          ),
         ],
       ),
-      Padding(
-        padding: EdgeInsets.symmetric(vertical: 0.5.h),
-        child: Divider(),
-      )
+      Padding(padding: EdgeInsets.symmetric(vertical: 0.5.h), child: Divider()),
     ],
   );
 }

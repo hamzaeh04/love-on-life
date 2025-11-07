@@ -169,7 +169,7 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
-Widget homeShareWidget(String path,{double? height, double? width,double? hori,double? vert}) {
+Widget homeShareWidget(String path,{double? height, double? width,double? hori,double? vert, Color? color}) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: hori??2.5.w, vertical: vert??1.h),
     decoration: BoxDecoration(
@@ -177,7 +177,7 @@ Widget homeShareWidget(String path,{double? height, double? width,double? hori,d
       color: whiteColor,
       border: Border.all(color: textfieldBorderColor, width: 0.3.w),
     ),
-    child: Center(child: Image.asset(path, width: width ?? 6.w, height: height ?? 3.h)),
+    child: Center(child: Image.asset(path, width: width ?? 6.w, height: height ?? 3.h, color: color ?? Colors.grey,)),
   );
 }
 
