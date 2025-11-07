@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
@@ -11,11 +12,14 @@ Widget customAppBar(String title,{VoidCallback? ontap}) {
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
       child: Container(
-        height: 13.h, // 🔹 fix height taake blur limited ho
-        padding: EdgeInsets.only(top: 7.h, left: 4.w, right: 4.w, bottom: 1.h),
+        // height: 9.h, // 🔹 fix height taake blur limited ho
+        padding: EdgeInsets.only(top: 4.5.h, left: 4.w, right: 4.w,bottom: 1.h),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2), // frosted effect
         ),
+
+
+
         child: Row(
           children: [
             /// Location
@@ -35,16 +39,21 @@ Widget customAppBar(String title,{VoidCallback? ontap}) {
             /// Bell Icon
             Stack(
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.8.h),
-                  height: 4.5.h,
-                  width: 8.5.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: whiteColor,
-                    border: Border.all(color: textfieldBorderColor, width: 0.3.w),
+                InkWell(
+                  onTap: (){
+                    Get.toNamed("notification");
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.8.h),
+                    height: 4.5.h,
+                    width: 8.5.w,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: whiteColor,
+                      border: Border.all(color: textfieldBorderColor, width: 0.3.w),
+                    ),
+                    child: Image.asset('assets/png/bell_icon.png', width: 2.5.w, height: 2.5.h),
                   ),
-                  child: Image.asset('assets/png/bell_icon.png', width: 2.5.w, height: 2.5.h),
                 ),
                 Positioned(
                   right: 2.2.w,

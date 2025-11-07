@@ -25,7 +25,7 @@ class CommunityScreen extends StatelessWidget {
       body: Stack(
         children: [
           Positioned.fill(child: Padding(
-            padding: EdgeInsets.only(left: 4.w, top: 8.h),
+            padding: EdgeInsets.only(left: 4.w, top: 8.5.h),
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(

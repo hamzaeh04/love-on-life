@@ -52,26 +52,57 @@ class NotificationScreen extends StatelessWidget {
                               ),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 3.w, vertical: 0.3.h),
-                              child: Row(
-                                children: [
-                                  customText(
-                                    text: 'All',
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.w400,
-                                    color: notificationGreyColor,
+                              padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.2.h),
+                              child: PopupMenuButton<String>(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15.sp),
+                                ),
+                                color: whiteColor,
+                                elevation: 2,
+                                offset: const Offset(0, 35),
+
+                                onSelected: (String value) {
+                                  print('Selected: $value');
+                                  // You can handle your selection here
+                                  // e.g. setState(() => selectedFilter = value);
+                                },
+
+                                itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 'All',
+                                    child: Text('All'),
                                   ),
-                                  SizedBox(width: 2.w),
-                                  Icon(
-                                    Icons.keyboard_arrow_down_rounded,
-                                    size: 18.sp,
-                                    color: notificationGreyColor,
+                                  const PopupMenuItem(
+                                    value: 'Read',
+                                    child: Text('Read'),
+                                  ),
+                                  const PopupMenuItem(
+                                    value: 'Unread',
+                                    child: Text('Unread'),
                                   ),
                                 ],
+
+                                // 👇 Child that triggers the popup
+                                child: Row(
+                                  children: [
+                                    customText(
+                                      text: 'All',
+                                      fontSize: 15.sp,
+                                      fontWeight: FontWeight.w400,
+                                      color: notificationGreyColor,
+                                    ),
+                                    SizedBox(width: 1.w),
+                                    Icon(
+                                      Icons.keyboard_arrow_down_rounded,
+                                      size: 18.sp,
+                                      color: notificationGreyColor,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
+                          )
+
                         ],
                       ),
                       customText(

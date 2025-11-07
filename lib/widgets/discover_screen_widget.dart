@@ -6,6 +6,7 @@ import 'package:sizer/sizer.dart';
 
 import '../constants/constants_widgets.dart';
 import '../views/dashboard_screens/home_screen.dart';
+import '../views/dashboard_screens/ticket_screen.dart';
 import 'custom_button.dart';
 
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ Widget discoverWidget({
   String? ticketsLeft,
   VoidCallback? onViewLocation,
   VoidCallback? onJoinNow,
+  BuildContext? context,
 }) {
   return Container(
     decoration: BoxDecoration(
@@ -207,36 +209,17 @@ Widget discoverWidget({
                 ),
 
                 SizedBox(height: 2.h),
-                Row(
-                  children: [
-                    Expanded(
-                      child: customButton(
-                        "View Location",
-                        color: blackColor,
-                        fontweight: FontWeight.w500,
-                        fontsize: 15.sp,
-                        height: 5.h,
-                        textColor: whiteColor,
-                        ontap: (){
-                        },
-                      ),
+                    customButton(
+                      "Join Now",
+                      color: buttonPinkColor,
+                      fontweight: FontWeight.w500,
+                      fontsize: 15.sp,
+                      height: 5.h,
+                      textColor: whiteColor,
+                      ontap: (){
+                        showTicketDialog(context!);
+                      },
                     ),
-                    SizedBox(width: 2.w),
-                    Expanded(
-                      child: customButton(
-                        "Join Now",
-                        color: buttonPinkColor,
-                        fontweight: FontWeight.w500,
-                        fontsize: 15.sp,
-                        height: 5.h,
-                        textColor: whiteColor,
-                        ontap: (){
-                          Get.toNamed('event');
-                        },
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

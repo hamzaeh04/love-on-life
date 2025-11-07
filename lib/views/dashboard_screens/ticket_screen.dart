@@ -32,304 +32,782 @@ class TicketScreen extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    SizedBox(height: 15.h),
+                    SizedBox(height: 11.h),
                     rowWidget(),
                     SizedBox(height: 1.h),
 
                     // 🔹 Ticket list
-                    ListView.builder(
-                      physics:
-                          NeverScrollableScrollPhysics(), // disable inner scroll
-                      shrinkWrap: true, // ListView height wraps its children
-                      padding: EdgeInsets.zero,
-                      itemCount: controller.discoverList.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 2.h,
-                          ), // spacing between tickets
-                          child: TicketWidget(
-                            width: double.infinity,
-                            height: 22.h,
-                            dyOffset: 2.h,
-                            isCornerRounded: true,
-                            color: whiteColor,
-                            child: Stack(
-                              children: [
-                                // Main content inside ticket
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 4.w,
-                                    vertical: 1.h,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                  Obx(() {
+                    if (controller.selectedIndex.value == 0) {
+                      return Column(
+                        children: [
+                          /// 🔹 Pending Tickets
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.discoverList.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 2.h),
+                                child: TicketWidget(
+                                  width: double.infinity,
+                                  height: 22.h,
+                                  dyOffset: 2.h,
+                                  isCornerRounded: true,
+                                  color: whiteColor,
+                                  child: Stack(
                                     children: [
-                                      // 🔹 Title row with tag and icons
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              top: 0.3.h,
-                                            ),
-                                            child: customText(
-                                              text:
-                                                  controller.ticketList[index],
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          SizedBox(width: 2.w),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              top: 0.6.h,
-                                            ),
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                color: lightPurple,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                      10.sp,
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 4.w,
+                                          vertical: 1.h,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            // 🔹 Title row with tag and icons
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.3.h),
+                                                  child: customText(
+                                                    text: controller.ticketList[index],
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.6.h),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: lightPurple,
+                                                      borderRadius: BorderRadius.circular(10.sp),
                                                     ),
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 1.5.w,
-                                                  vertical: 0.3.h,
-                                                ),
-                                                child: customText(
-                                                  text: "GBD998",
-                                                  fontSize: 13.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: darkPurpleColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: lightPurple,
-                                                  shape: BoxShape.circle,
-                                                ),
-                                                padding: EdgeInsets.all(2.w),
-                                                child: Image.asset(
-                                                  "assets/png/home_icons/location.png",
-                                                  width: 3.w,
-                                                ),
-                                              ),
-                                              SizedBox(width: 2.w),
-                                              Padding(
-                                                padding: EdgeInsets.only(
-                                                  top: 0.2.h,
-                                                ),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color: lightPurple,
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                  padding: EdgeInsets.all(1.w),
-                                                  child: Image.asset(
-                                                    "assets/png/home_icons/qrcode.png",
-                                                    width: 5.w,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-
-                                      SizedBox(height: 0.8.h),
-
-                                      // 🔹 Date & Tickets row
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          // Date & Time
-                                          Expanded(
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                left: 3.w,
-                                                top: 1.h,
-                                                bottom: 1.h,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                      10.sp,
-                                                    ),
-                                                color: const Color(0xFFD9F3FB),
-                                              ),
-                                              child: Row(
-                                                children: [
-                                                  Image.asset(
-                                                    'assets/png/event_detail_icon/date&time.png',
-                                                    width: 7.5.w,
-                                                  ),
-                                                  SizedBox(width: 3.w),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      customText(
-                                                        text: "10 Sep, 2025",
-                                                        fontFamily: 'dmsans',
-                                                        fontSize: 14.sp,
-                                                        fontWeight:
-                                                            FontWeight.w500,
+                                                    child: Padding(
+                                                      padding: EdgeInsets.symmetric(
+                                                        horizontal: 1.5.w,
+                                                        vertical: 0.3.h,
                                                       ),
-                                                      customText(
-                                                        text:
-                                                            "12:00 AM - 2:00 PM",
-                                                        fontFamily: 'dmsans',
+                                                      child: customText(
+                                                        text: "GBD998",
                                                         fontSize: 13.sp,
-                                                        fontWeight:
-                                                            FontWeight.w400,
+                                                        fontWeight: FontWeight.w500,
+                                                        color: darkPurpleColor,
                                                       ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 2.w),
-
-                                          // Tickets
-                                          Expanded(
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                      10.sp,
                                                     ),
-                                                color: const Color(0xFFFFE4F8),
-                                              ),
-                                              child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  left: 3.w,
-                                                  top: 1.h,
-                                                  bottom: 1.h,
+                                                  ),
                                                 ),
-                                                child: Row(
+                                                Spacer(),
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Container(
                                                       decoration: BoxDecoration(
-                                                        color: whiteColor,
+                                                        color: lightPurple,
                                                         shape: BoxShape.circle,
                                                       ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets.all(
-                                                              5,
-                                                            ),
-                                                        child: Image.asset(
-                                                          'assets/png/bottom_nav_icon/ticket.png',
-                                                          width: 5.w,
-                                                          color:
-                                                              buttonPinkColor,
-                                                        ),
+                                                      padding: EdgeInsets.all(2.w),
+                                                      child: Image.asset(
+                                                        "assets/png/home_icons/location.png",
+                                                        width: 3.w,
                                                       ),
                                                     ),
-                                                    SizedBox(width: 3.w),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        customText(
-                                                          text: "\$ 40",
-                                                          fontFamily: 'dmsans',
-                                                          fontSize: 14.sp,
-                                                          fontWeight:
-                                                              FontWeight.w500,
+                                                    SizedBox(width: 2.w),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 0.2.h),
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: lightPurple,
+                                                          shape: BoxShape.circle,
                                                         ),
-                                                        customText(
-                                                          text:
-                                                              "5 Tickets Purchase",
-                                                          fontFamily: 'dmsans',
-                                                          fontSize: 13.sp,
-                                                          fontWeight:
-                                                              FontWeight.w400,
+                                                        padding: EdgeInsets.all(1.w),
+                                                        child: Image.asset(
+                                                          "assets/png/home_icons/qrcode.png",
+                                                          width: 5.w,
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                            SizedBox(height: 0.8.h),
 
-                                      SizedBox(height: 3.5.h),
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            "assets/png/home_icons/barcode.png",
-                                            width: 12.h,
-                                          ),
-                                          SizedBox(width: 3.w),
-                                          Expanded(
-                                            child: customButton(
-                                              "Cancel",
-                                              color: ticketGreyColor,
-                                              fontweight: FontWeight.w500,
-                                              fontsize: 14.sp,
-                                              textColor: blackColor,
-                                              height: 4.h,
-                                              ontap: () {},
+                                            // 🔹 Date & Tickets row
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                      left: 3.w,
+                                                      top: 1.h,
+                                                      bottom: 1.h,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                      color: const Color(0xFFD9F3FB),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/png/event_detail_icon/date&time.png',
+                                                          width: 7.5.w,
+                                                        ),
+                                                        SizedBox(width: 3.w),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          children: [
+                                                            customText(
+                                                              text: "10 Sep, 2025",
+                                                              fontFamily: 'dmsans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
+                                                            customText(
+                                                              text: "12:00 AM - 2:00 PM",
+                                                              fontFamily: 'dmsans',
+                                                              fontSize: 13.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                Expanded(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                      color: const Color(0xFFFFE4F8),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        left: 3.w,
+                                                        top: 1.h,
+                                                        bottom: 1.h,
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            decoration: BoxDecoration(
+                                                              color: whiteColor,
+                                                              shape: BoxShape.circle,
+                                                            ),
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.all(5),
+                                                              child: Image.asset(
+                                                                'assets/png/bottom_nav_icon/ticket.png',
+                                                                width: 5.w,
+                                                                color: buttonPinkColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 3.w),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                            children: [
+                                                              customText(
+                                                                text: "\$ 40",
+                                                                fontFamily: 'dmsans',
+                                                                fontSize: 14.sp,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                              customText(
+                                                                text: "5 Tickets Purchase",
+                                                                fontFamily: 'dmsans',
+                                                                fontSize: 13.sp,
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          SizedBox(width: 3.w),
-                                          Expanded(
-                                            child: customButton(
-                                              "Pay",
-                                              color: ticketBlueColor,
-                                              fontweight: FontWeight.w500,
-                                              fontsize: 14.sp,
-                                              textColor: whiteColor,
-                                              height: 4.h,
-                                              ontap: () {
-                                                showTicketDialog(context);
-                                              },
+                                            SizedBox(height: 3.5.h),
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  "assets/png/home_icons/barcode.png",
+                                                  width: 12.h,
+                                                ),
+                                                SizedBox(width: 3.w),
+                                                Expanded(
+                                                  child: customButton(
+                                                    "Cancel",
+                                                    color: ticketGreyColor,
+                                                    fontweight: FontWeight.w500,
+                                                    fontsize: 14.sp,
+                                                    textColor: blackColor,
+                                                    height: 4.h,
+                                                    ontap: () {},
+                                                  ),
+                                                ),
+                                                SizedBox(width: 3.w),
+                                                Expanded(
+                                                  child: customButton(
+                                                    "Pay",
+                                                    color: ticketBlueColor,
+                                                    fontweight: FontWeight.w500,
+                                                    fontsize: 14.sp,
+                                                    textColor: whiteColor,
+                                                    height: 4.h,
+                                                    ontap: () {
+                                                      Get.toNamed("card");
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 12.9.h,
+                                        right: 3.5.w,
+                                        child: Image.asset(
+                                          'assets/png/home_icons/line.png',
+                                          height: 0.136.h,
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 10.h),
+                        ],
+                      );
+                    } else if (controller.selectedIndex.value == 1) {
+                      return Column(
+                        children: [
+                          /// 🔹 Pending Tickets
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.discoverList.length-3,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 2.h),
+                                child: TicketWidget(
+                                  width: double.infinity,
+                                  height: 22.h,
+                                  dyOffset: 2.h,
+                                  isCornerRounded: true,
+                                  color: whiteColor,
+                                  child: Stack(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 4.w,
+                                          vertical: 1.h,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            // 🔹 Title row with tag and icons
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.3.h),
+                                                  child: customText(
+                                                    text: controller.ticketList[index],
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.6.h),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: lightPurple,
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.symmetric(
+                                                        horizontal: 1.5.w,
+                                                        vertical: 0.3.h,
+                                                      ),
+                                                      child: customText(
+                                                        text: "GBD998",
+                                                        fontSize: 13.sp,
+                                                        fontWeight: FontWeight.w500,
+                                                        color: darkPurpleColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: lightPurple,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      padding: EdgeInsets.all(2.w),
+                                                      child: Image.asset(
+                                                        "assets/png/home_icons/location.png",
+                                                        width: 3.w,
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 2.w),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 0.2.h),
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: lightPurple,
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        padding: EdgeInsets.all(1.w),
+                                                        child: Image.asset(
+                                                          "assets/png/home_icons/qrcode.png",
+                                                          width: 5.w,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 0.8.h),
 
-                                // Optional overlay inside ticket
-                                Positioned(
-                                  top: 12.9.h,
-                                  right: 3.5.w,
-                                  child: Image.asset(
-                                    'assets/png/home_icons/line.png',
-                                    height: 0.136.h,
+                                            // 🔹 Date & Tickets row
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                      left: 3.w,
+                                                      top: 1.h,
+                                                      bottom: 1.h,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                      color: const Color(0xFFD9F3FB),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/png/event_detail_icon/date&time.png',
+                                                          width: 7.5.w,
+                                                        ),
+                                                        SizedBox(width: 3.w),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          children: [
+                                                            customText(
+                                                              text: "10 Sep, 2025",
+                                                              fontFamily: 'dmsans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
+                                                            customText(
+                                                              text: "12:00 AM - 2:00 PM",
+                                                              fontFamily: 'dmsans',
+                                                              fontSize: 13.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                Expanded(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                      color: const Color(0xFFFFE4F8),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        left: 3.w,
+                                                        top: 1.h,
+                                                        bottom: 1.h,
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            decoration: BoxDecoration(
+                                                              color: whiteColor,
+                                                              shape: BoxShape.circle,
+                                                            ),
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.all(5),
+                                                              child: Image.asset(
+                                                                'assets/png/bottom_nav_icon/ticket.png',
+                                                                width: 5.w,
+                                                                color: buttonPinkColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 3.w),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                            children: [
+                                                              customText(
+                                                                text: "\$ 40",
+                                                                fontFamily: 'dmsans',
+                                                                fontSize: 14.sp,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                              customText(
+                                                                text: "5 Tickets Purchase",
+                                                                fontFamily: 'dmsans',
+                                                                fontSize: 13.sp,
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 3.5.h),
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  "assets/png/home_icons/barcode.png",
+                                                  width: 12.h,
+                                                ),
+                                                SizedBox(width: 3.w),
+                                                Expanded(
+                                                  child: customButton(
+                                                    "Cancel",
+                                                    color: ticketGreyColor,
+                                                    fontweight: FontWeight.w500,
+                                                    fontsize: 14.sp,
+                                                    textColor: blackColor,
+                                                    height: 4.h,
+                                                    ontap: () {},
+                                                  ),
+                                                ),
+                                                SizedBox(width: 3.w),
+                                                Expanded(
+                                                  child: customButton(
+                                                    "Pay",
+                                                    color: ticketBlueColor,
+                                                    fontweight: FontWeight.w500,
+                                                    fontsize: 14.sp,
+                                                    textColor: whiteColor,
+                                                    height: 4.h,
+                                                    ontap: () {
+                                                      Get.toNamed("card");
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 12.9.h,
+                                        right: 3.5.w,
+                                        child: Image.asset(
+                                          'assets/png/home_icons/line.png',
+                                          height: 0.136.h,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 10.h),
+                          SizedBox(height: 10.h),
+                        ],
+                      );
+                    } else if (controller.selectedIndex.value == 2) {
+                      return Column(
+                        children: [
+                          /// 🔹 Pending Tickets
+                          ListView.builder(
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemCount: controller.discoverList.length - 4,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 2.h),
+                                child: TicketWidget(
+                                  width: double.infinity,
+                                  height: 22.h,
+                                  dyOffset: 2.h,
+                                  isCornerRounded: true,
+                                  color: whiteColor,
+                                  child: Stack(
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 4.w,
+                                          vertical: 1.h,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            // 🔹 Title row with tag and icons
+                                            Row(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.3.h),
+                                                  child: customText(
+                                                    text: controller.ticketList[index],
+                                                    fontSize: 16.sp,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                Padding(
+                                                  padding: EdgeInsets.only(top: 0.6.h),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: lightPurple,
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.symmetric(
+                                                        horizontal: 1.5.w,
+                                                        vertical: 0.3.h,
+                                                      ),
+                                                      child: customText(
+                                                        text: "GBD998",
+                                                        fontSize: 13.sp,
+                                                        fontWeight: FontWeight.w500,
+                                                        color: darkPurpleColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Row(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        color: lightPurple,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                      padding: EdgeInsets.all(2.w),
+                                                      child: Image.asset(
+                                                        "assets/png/home_icons/location.png",
+                                                        width: 3.w,
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 2.w),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(top: 0.2.h),
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: lightPurple,
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                        padding: EdgeInsets.all(1.w),
+                                                        child: Image.asset(
+                                                          "assets/png/home_icons/qrcode.png",
+                                                          width: 5.w,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 0.8.h),
+
+                                            // 🔹 Date & Tickets row
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    padding: EdgeInsets.only(
+                                                      left: 3.w,
+                                                      top: 1.h,
+                                                      bottom: 1.h,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                      color: const Color(0xFFD9F3FB),
+                                                    ),
+                                                    child: Row(
+                                                      children: [
+                                                        Image.asset(
+                                                          'assets/png/event_detail_icon/date&time.png',
+                                                          width: 7.5.w,
+                                                        ),
+                                                        SizedBox(width: 3.w),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                          CrossAxisAlignment.start,
+                                                          children: [
+                                                            customText(
+                                                              text: "10 Sep, 2025",
+                                                              fontFamily: 'dmsans',
+                                                              fontSize: 14.sp,
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
+                                                            customText(
+                                                              text: "12:00 AM - 2:00 PM",
+                                                              fontFamily: 'dmsans',
+                                                              fontSize: 13.sp,
+                                                              fontWeight: FontWeight.w400,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 2.w),
+                                                Expanded(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius.circular(10.sp),
+                                                      color: const Color(0xFFFFE4F8),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                        left: 3.w,
+                                                        top: 1.h,
+                                                        bottom: 1.h,
+                                                      ),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            decoration: BoxDecoration(
+                                                              color: whiteColor,
+                                                              shape: BoxShape.circle,
+                                                            ),
+                                                            child: Padding(
+                                                              padding: const EdgeInsets.all(5),
+                                                              child: Image.asset(
+                                                                'assets/png/bottom_nav_icon/ticket.png',
+                                                                width: 5.w,
+                                                                color: buttonPinkColor,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 3.w),
+                                                          Column(
+                                                            crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                            children: [
+                                                              customText(
+                                                                text: "\$ 40",
+                                                                fontFamily: 'dmsans',
+                                                                fontSize: 14.sp,
+                                                                fontWeight: FontWeight.w500,
+                                                              ),
+                                                              customText(
+                                                                text: "5 Tickets Purchase",
+                                                                fontFamily: 'dmsans',
+                                                                fontSize: 13.sp,
+                                                                fontWeight: FontWeight.w400,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 3.5.h),
+                                            Row(
+                                              children: [
+                                                Image.asset(
+                                                  "assets/png/home_icons/barcode.png",
+                                                  width: 12.h,
+                                                ),
+                                                SizedBox(width: 3.w),
+                                                Expanded(
+                                                  child: customButton(
+                                                    "Cancel",
+                                                    color: ticketGreyColor,
+                                                    fontweight: FontWeight.w500,
+                                                    fontsize: 14.sp,
+                                                    textColor: blackColor,
+                                                    height: 4.h,
+                                                    ontap: () {},
+                                                  ),
+                                                ),
+                                                SizedBox(width: 3.w),
+                                                Expanded(
+                                                  child: customButton(
+                                                    "Pay",
+                                                    color: ticketBlueColor,
+                                                    fontweight: FontWeight.w500,
+                                                    fontsize: 14.sp,
+                                                    textColor: whiteColor,
+                                                    height: 4.h,
+                                                    ontap: () {
+                                                      Get.toNamed("card");
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 12.9.h,
+                                        right: 3.5.w,
+                                        child: Image.asset(
+                                          'assets/png/home_icons/line.png',
+                                          height: 0.136.h,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(height: 10.h),
+                        ],
+                      );
+                    } else {
+                      return SizedBox.shrink();
+                    }
+                    return SizedBox.shrink();
+                  })
                   ],
                 ),
               ),
@@ -362,7 +840,7 @@ class TicketScreen extends StatelessWidget {
 // Row Widget
 Widget rowWidget() {
   final DashboardController controller = Get.put(DashboardController());
-  final List<String> options = ["Pending", "Approved", "Rejected"];
+
 
   return Obx(() {
     return Container(
@@ -373,9 +851,10 @@ Widget rowWidget() {
           width: 0.2.w,
         ),
       ),
+
       child: Row(
-        children: List.generate(options.length, (index) {
-          final isSelected = controller.selectedIndex.value == index;
+        children: List.generate(controller.options.length, (index) {
+          final bool isSelected = controller.selectedIndex.value == index;
 
           return Expanded(
             child: GestureDetector(
@@ -391,13 +870,11 @@ Widget rowWidget() {
                   ),
                   padding: EdgeInsets.symmetric(vertical: 1.2.h),
                   child: Center(
-                    child: Text(
-                      options[index],
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
-                        color: isSelected ? Colors.white : Colors.grey,
-                      ),
+                    child: customText(
+                      text: controller.options[index],
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      color: isSelected ? whiteColor : Colors.grey,
                     ),
                   ),
                 ),
@@ -409,6 +886,7 @@ Widget rowWidget() {
     );
   });
 }
+
 
 void showTicketDialog(BuildContext context) {
   showDialog(
@@ -676,7 +1154,7 @@ void showTicketDialog(BuildContext context) {
                               textColor: whiteColor,
                               height: 4.h,
                               ontap: () {
-                                showTicketDialog(context);
+                                Get.toNamed("card");
                               },
                             ),
                           ),

@@ -33,7 +33,7 @@ class DiscoverScreen extends StatelessWidget {
               SingleChildScrollView(
                 padding:
                 searchController.isSearch.value == false
-                    ? EdgeInsets.only(top: 12.5.h)
+                    ? EdgeInsets.only(top: 9.h)
                     : EdgeInsets.only(top: 9.5.h),
 
                 child: Padding(
@@ -285,6 +285,7 @@ class DiscoverScreen extends StatelessWidget {
                             tag: "Educational",
                             noOfPeople: "25 people attending",
                             ticketsLeft: '7 Tickets left',
+                            context: context,
                             onViewLocation: () {
                               print("View Location clicked");
                             },
@@ -304,6 +305,28 @@ class DiscoverScreen extends StatelessWidget {
                             ticketPrice: '\$40',
                             tag: "Educational",
                             noOfPeople: "25 people attending",
+                            context: context,
+                            ticketsLeft: '7 Tickets left',
+                            onViewLocation: () {
+                              print("View Location clicked");
+                            },
+                            onJoinNow: () {
+                              print("Join Now clicked");
+                            },
+                          ),
+                          SizedBox(height: 1.h),
+
+                          discoverWidget(
+                            imagePath: 'assets/png/event_detail_icon/people.png',
+                            eventName: 'Young Education Program',
+                            description:
+                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
+                            date: '10 Sep, 2025',
+                            time: '12:00 AM',
+                            ticketPrice: '\$40',
+                            tag: "Educational",
+                            noOfPeople: "25 people attending",
+                            context: context,
                             ticketsLeft: '7 Tickets left',
                             onViewLocation: () {
                               print("View Location clicked");
@@ -325,26 +348,7 @@ class DiscoverScreen extends StatelessWidget {
                             tag: "Educational",
                             noOfPeople: "25 people attending",
                             ticketsLeft: '7 Tickets left',
-                            onViewLocation: () {
-                              print("View Location clicked");
-                            },
-                            onJoinNow: () {
-                              print("Join Now clicked");
-                            },
-                          ),
-                          SizedBox(height: 1.h),
-
-                          discoverWidget(
-                            imagePath: 'assets/png/event_detail_icon/people.png',
-                            eventName: 'Young Education Program',
-                            description:
-                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-                            date: '10 Sep, 2025',
-                            time: '12:00 AM',
-                            ticketPrice: '\$40',
-                            tag: "Educational",
-                            noOfPeople: "25 people attending",
-                            ticketsLeft: '7 Tickets left',
+                            context: context,
                             onViewLocation: () {
                               print("View Location clicked");
                             },
@@ -428,7 +432,7 @@ class DiscoverScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 27.w),
+                  SizedBox(width: 30.w),
                   customText(
                     text: 'Search',
                     fontSize: 17.sp,

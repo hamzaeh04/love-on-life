@@ -5,8 +5,12 @@ import 'package:love_on_life/views/auth_screens/reset_pass_screen.dart';
 import 'package:love_on_life/views/auth_screens/signup_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/bottom_nav_bar.dart';
 import 'package:love_on_life/views/dashboard_screens/event_details_screen.dart';
+import 'package:love_on_life/views/dashboard_screens/notification_screen.dart';
+import 'package:love_on_life/views/menu_screens/privacy_policy.dart';
 import 'package:love_on_life/views/menu_screens/profile_screens/change_password.dart';
 import 'package:love_on_life/views/menu_screens/profile_screens/edit_profile.dart';
+import 'package:love_on_life/views/menu_screens/profile_screens/my_profile.dart';
+import 'package:love_on_life/views/menu_screens/term_and_condition.dart';
 import 'package:love_on_life/views/payment_method_screens/payment_detail_screen.dart';
 import 'package:love_on_life/views/payment_method_screens/select_card_screen.dart';
 import 'package:love_on_life/views/splash_screens/get_started.dart';
@@ -34,6 +38,12 @@ class AppRoutes {
     GetPage(name: '/search', page: () => SearchScreen()),
     GetPage(name: '/favorite', page: () => FavoriteScreen()),
     GetPage(name: '/myevent', page: () => EventScreen()),
+    GetPage(name: '/notification', page: () => NotificationScreen()),
+    GetPage(name: '/privacy', page: () => PrivacyPolicy()),
+    GetPage(name: '/term', page: () => TermAndCondition()),
+    GetPage(name: '/profile', page: () => MyProfile()),
+    GetPage(name: '/favourite', page: () => FavoriteScreen()),
+    GetPage(name: '/card', page: () => SelectCardScreen()),
 
     //
   ];

@@ -25,7 +25,7 @@ class EventScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              customHeader('My Events'),
+              customHeader('My Events',padding: 27.w),
               SizedBox(height: 2.5.h),
               /// 🔹 Search Bar
               Row(
