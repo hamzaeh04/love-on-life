@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:sizer/sizer.dart';
 import '../constants/color_constants.dart';
-import '../controllers/login_contoller.dart';
+import '../controllers/auth_controller.dart';
 
 class CustomPhoneTextFeild extends StatelessWidget {
   CustomPhoneTextFeild({super.key});
 
-  final LoginController controller = Get.find<LoginController>();
+  final AuthController controller = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

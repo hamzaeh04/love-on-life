@@ -2,7 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-class LoginController extends GetxController {
+class AuthController extends GetxController {
   RxBool isPasswordVisible = true.obs;
   RxBool forgotPassword = false.obs;
   RxBool isVerified = false.obs;
@@ -11,6 +11,11 @@ class LoginController extends GetxController {
   RxString countryCode = "+1".obs;
   RxString flagPath =
       "packages/country_icons/icons/flags/png100px/us.png".obs;
+
+
+  /// LogIn Textfields controller
+  final TextEditingController loginEmailField = TextEditingController();
+  final TextEditingController loginPasswordField = TextEditingController();
 
   void openPicker(BuildContext context) {
     showCountryPicker(

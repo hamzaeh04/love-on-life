@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
-import 'package:love_on_life/controllers/login_contoller.dart';
+import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:sizer/sizer.dart';
 import '../../constants/constants_widgets.dart';
@@ -10,7 +10,7 @@ import '../../widgets/custom_text_field.dart';
 
 class ForgotPassScreen extends StatelessWidget {
   ForgotPassScreen({super.key});
-final LoginController controller = Get.find<LoginController>();
+final AuthController controller = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,11 +6,11 @@ import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/constants_widgets.dart';
-import '../../controllers/login_contoller.dart';
+import '../../controllers/auth_controller.dart';
 import '../../widgets/custom_text_field.dart';
 class ResetPassScreen extends StatelessWidget {
   ResetPassScreen({super.key});
-  LoginController controller = Get.find<LoginController>();
+  AuthController controller = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

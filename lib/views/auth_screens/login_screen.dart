@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
+import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/widgets/custom_text_field.dart';
 import 'package:love_on_life/widgets/social_icon_widget.dart';
 import 'package:sizer/sizer.dart';
@@ -10,8 +11,9 @@ import 'package:sizer/sizer.dart';
 import '../../widgets/custom_button.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
 
+  final AuthController controller = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,9 +38,10 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 SizedBox(height: 2.5.h,),
-                customTextFeild('Email Address', 'yourname@gmail.com', 'assets/png/email_logo.png', false,isRequired: true),
+                customTextFeild(controller: controller.loginEmailField, 'Email Address', 'yourname@gmail.com', 'assets/png/email_logo.png', false,isRequired: true),
                 SizedBox(height: 1.h,),
                 customTextFeild(
+                  controller: controller.loginPasswordField,
                   'Password',
                   '•••••••••••',
                   'assets/png/lock.png',

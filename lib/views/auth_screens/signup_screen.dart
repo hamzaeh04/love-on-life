@@ -2,7 +2,7 @@ import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
-import 'package:love_on_life/controllers/login_contoller.dart';
+import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:love_on_life/widgets/custom_phone_feild.dart';
 import 'package:love_on_life/widgets/success_dialog.dart';

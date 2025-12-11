@@ -6,13 +6,13 @@ import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
 import '../../constants/constants_widgets.dart';
-import '../../controllers/login_contoller.dart';
+import '../../controllers/auth_controller.dart';
 
 class VerificationCodeScreen extends StatelessWidget {
   VerificationCodeScreen({
     super.key,
   });
-  final LoginController controller = Get.find<LoginController>();
+  final AuthController controller = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {

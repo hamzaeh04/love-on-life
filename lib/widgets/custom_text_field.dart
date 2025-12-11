@@ -4,16 +4,16 @@ import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
-import '../controllers/login_contoller.dart'; // 👈 apna controller import karo
+import '../controllers/auth_controller.dart'; // 👈 apna controller import karo
 
 Widget customTextFeild(
     String title,
     String hintText,
     String path,
     bool isPass,
-{bool? isRequired}
+{bool? isRequired, TextEditingController? controller}
     ) {
-  final loginController = Get.put(LoginController());
+  final authController = Get.find<AuthController>();
 
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +43,8 @@ Widget customTextFeild(
       isPass
           ? Obx(
             () => TextField(
-          obscureText: loginController.isPasswordVisible.value,
+              controller: controller,
+          obscureText: authController.isPasswordVisible.value,
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -87,14 +88,8 @@ Widget customTextFeild(
             ),
 
             suffixIcon: IconButton(
-              icon: Image.asset(
-                loginController.isPasswordVisible.value
-                    ? "assets/png/eye-off.png"
-                    : "assets/png/eye.png",
-                height: 5.w,
-                fit: BoxFit.contain,
-              ),
-              onPressed: loginController.togglePasswordVisibility,
+              icon: authController.isPasswordVisible.value ? Image.asset('assets/png/eye-off.png', width: 5.5.w,): Icon(Icons.remove_red_eye_outlined, size: 19.sp,),
+              onPressed: authController.togglePasswordVisibility,
             ),
           ),
         ),
