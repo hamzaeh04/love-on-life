@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:love_on_life/controllers/auth_controller.dart';
+import 'package:love_on_life/core/services/base_services.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
+import 'package:love_on_life/widgets/profile_network_image.dart';
 import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../constants/constants_widgets.dart';
+import '../controllers/drawer_controller.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  CustomDrawer({super.key});
+  final BaseService baseService = BaseService();
+  final AuthController controller = Get.find<AuthController>();
+  final Drawercontroller drawerController = Get.find<Drawercontroller>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,41 +31,59 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 2.h,),
+            SizedBox(height: 2.h),
+
             /// 🔹 Profile Section
             Row(
               children: [
                 Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    Image.asset("assets/png/profile.png",width: 20.w),
-                    Positioned(
-                        right: 1.w,
-                        bottom: 0.2.h,
-                        child: Image.asset("assets/png/camera_img.png",width: 5.5.w)
-                    ),
+                    Obx(() {
+                      return ProfileNetworkImage(
+                        imageUrl:
+                            controller.userProfilePic.value.isNotEmpty
+                                ? "${baseService.baseURL}${controller.userProfilePic.value}"
+                                : "",
+                        size: 11.w,
+                        placeholder:
+                            "assets/png/home_icons/profile-placeholder.jpg",
+                      );
+                    }),
+
+                    // Positioned(
+                    //   right: -1.w,
+                    //   bottom: -0.5.h,
+                    //   child: Image.asset(
+                    //     "assets/png/camera_img.png",
+                    //     width: 5.w,
+                    //   ),
+                    // ),
                   ],
                 ),
-                SizedBox(width: 1.w),
+
+                SizedBox(width: 2.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    customText(
-                      text: "Eddie Sanz",
-
+                    Obx(
+                      () => customText(
+                        text:
+                            controller.userName.value.isNotEmpty
+                                ? controller.userName.value
+                                : "User Name",
                         fontSize: 15.5.sp,
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
-                      height: 0
-
+                        height: 0,
+                      ),
                     ),
                     customText(
-                      text: "Joined since 2023",
+                      text: "Joined since ${drawerController.formatYear(controller.date.value)}",
 
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w400,
                       color: Colors.grey,
-
                     ),
                   ],
                 ),
@@ -67,12 +92,48 @@ class CustomDrawer extends StatelessWidget {
             SizedBox(height: 4.h),
 
             /// 🔹 Drawer Menu Items
-            drawerTile('assets/png/drawer_icons/profile.png', "My Profile",ontap: (){Get.toNamed("profile");}),
-            drawerTile('assets/png/drawer_icons/myevents.png', "My Events",ontap: (){Get.toNamed("myevent");}),
-            drawerTile('assets/png/drawer_icons/favorites.png', "Favorites",ontap: (){Get.toNamed("favourite");}),
-            drawerTile('assets/png/drawer_icons/CreditCard.png', "Payment Methods",ontap: (){Get.toNamed("card");}),
-            drawerTile('assets/png/drawer_icons/FAQs.png', "Privacy Policy",ontap: (){Get.toNamed("privacy");}),
-            drawerTile('assets/png/drawer_icons/conditions.png', "Terms & Conditions",ontap: (){Get.toNamed("term");}),
+            drawerTile(
+              'assets/png/drawer_icons/profile.png',
+              "My Profile",
+              ontap: () {
+                Get.toNamed("profile");
+              },
+            ),
+            drawerTile(
+              'assets/png/drawer_icons/myevents.png',
+              "My Events",
+              ontap: () {
+                Get.toNamed("myevent");
+              },
+            ),
+            drawerTile(
+              'assets/png/drawer_icons/favorites.png',
+              "Favorites",
+              ontap: () {
+                Get.toNamed("favourite");
+              },
+            ),
+            drawerTile(
+              'assets/png/drawer_icons/CreditCard.png',
+              "Payment Methods",
+              ontap: () {
+                Get.toNamed("card");
+              },
+            ),
+            drawerTile(
+              'assets/png/drawer_icons/FAQs.png',
+              "Privacy Policy",
+              ontap: () {
+                Get.toNamed("privacy");
+              },
+            ),
+            drawerTile(
+              'assets/png/drawer_icons/conditions.png',
+              "Terms & Conditions",
+              ontap: () {
+                Get.toNamed("term");
+              },
+            ),
 
             const Spacer(),
 
@@ -81,40 +142,41 @@ class CustomDrawer extends StatelessWidget {
               width: double.infinity,
               child: OutlinedButton.icon(
                 onPressed: () {
-                  successDialog(context, 'Oops!', 'Are you sure you want to logout?', "No", buttonText2: "Yes",isLogout: true,ontap2: (){
-                    successDialog(context, "Done!", "You’ve been logged out successfully.", "Ok", (){
+                  successDialog(
+                    context,
+                    'Oops!',
+                    'Are you sure you want to logout?',
+                    "No",
+                    buttonText2: "Yes",
+                    isLogout: true,
+                    ontap2: () {
+                      controller.logout(context);
+                    },
+                    () {
                       Get.back();
-                    });
-                  },(){
-Get.back();
-                  });
+                    },
+                  );
                 },
-                icon: Icon(
-                  Icons.logout,
-                  color: Colors.black,
-                  size: 17.sp,
-                ),
+                icon: Icon(Icons.logout, color: Colors.black, size: 17.sp),
                 label: customText(
                   text: "Logout",
-                    fontSize: 15.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
+                  fontSize: 15.sp,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
                 ),
                 style: OutlinedButton.styleFrom(
-                  backgroundColor: const Color(0xffFFF5F5), // ✅ Added background color
-                  side: const BorderSide(
-                    color: Color(0xffFD6B68),
-                    width: 1.5,
-                  ),
+                  backgroundColor: const Color(
+                    0xffFFF5F5,
+                  ), // ✅ Added background color
+                  side: const BorderSide(color: Color(0xffFD6B68), width: 1.5),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 1.6.h),
                 ),
               ),
-
             ),
-            SizedBox(height: 8.h,)
+            SizedBox(height: 8.h),
 
             /// 🔹 Logout Button at the END
             // Padding(
@@ -143,7 +205,7 @@ Get.back();
   }
 
   /// Custom drawer tile widget
-  Widget drawerTile(String path, String title,{VoidCallback? ontap}) {
+  Widget drawerTile(String path, String title, {VoidCallback? ontap}) {
     return Column(
       children: [
         Padding(
@@ -155,19 +217,22 @@ Get.back();
                 onTap: ontap,
                 child: Row(
                   children: [
-                    Image.asset(path, width: 6.5.w,),
+                    Image.asset(path, width: 6.5.w),
                     SizedBox(width: 3.w),
                     Expanded(
                       child: customText(
                         text: title,
 
-                          fontSize: 15.sp,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-
+                        fontSize: 15.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Icon(Icons.chevron_right, color: Colors.black54, size: 22.sp,),
+                    Icon(
+                      Icons.chevron_right,
+                      color: Colors.black54,
+                      size: 22.sp,
+                    ),
                   ],
                 ),
               ),
@@ -175,11 +240,9 @@ Get.back();
                 padding: EdgeInsets.symmetric(vertical: 1.2.h),
                 child: Divider(),
               ),
-
             ],
           ),
         ),
-
       ],
     );
   }
@@ -230,7 +293,7 @@ class _AnimatedDrawerScreenState extends State<AnimatedDrawerScreen>
       body: Stack(
         children: [
           /// Drawer behind main content
-          const CustomDrawer(),
+          CustomDrawer(),
 
           /// Main screen with transformation
           AnimatedBuilder(
@@ -241,9 +304,10 @@ class _AnimatedDrawerScreenState extends State<AnimatedDrawerScreen>
               double verticalPadding = 40 * _controller.value;
 
               return Transform(
-                transform: Matrix4.identity()
-                  ..translate(slide)
-                  ..scale(scale),
+                transform:
+                    Matrix4.identity()
+                      ..translate(slide)
+                      ..scale(scale),
                 alignment: Alignment.center,
                 child: GestureDetector(
                   onTap: () {
@@ -252,7 +316,9 @@ class _AnimatedDrawerScreenState extends State<AnimatedDrawerScreen>
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(25 * _controller.value),
+                      borderRadius: BorderRadius.circular(
+                        25 * _controller.value,
+                      ),
                       boxShadow: [
                         if (isDrawerOpen)
                           BoxShadow(
@@ -263,8 +329,9 @@ class _AnimatedDrawerScreenState extends State<AnimatedDrawerScreen>
                       ],
                     ),
                     child: ClipRRect(
-                      borderRadius:
-                      BorderRadius.circular(25 * _controller.value),
+                      borderRadius: BorderRadius.circular(
+                        25 * _controller.value,
+                      ),
                       child: Scaffold(
                         backgroundColor: Colors.white,
                         appBar: AppBar(
@@ -303,4 +370,3 @@ class _AnimatedDrawerScreenState extends State<AnimatedDrawerScreen>
     super.dispose();
   }
 }
-

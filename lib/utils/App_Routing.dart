@@ -6,6 +6,7 @@ import 'package:love_on_life/views/auth_screens/signup_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/bottom_nav_bar.dart';
 import 'package:love_on_life/views/dashboard_screens/event_details_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/notification_screen.dart';
+import 'package:love_on_life/views/dashboard_screens/ticket_screen.dart';
 import 'package:love_on_life/views/menu_screens/privacy_policy.dart';
 import 'package:love_on_life/views/menu_screens/profile_screens/change_password.dart';
 import 'package:love_on_life/views/menu_screens/profile_screens/edit_profile.dart';
@@ -44,6 +45,7 @@ class AppRoutes {
     GetPage(name: '/profile', page: () => MyProfile()),
     GetPage(name: '/favourite', page: () => FavoriteScreen()),
     GetPage(name: '/card', page: () => SelectCardScreen()),
+    GetPage(name: '/ticket', page: () => TicketScreen()),
 
     //
   ];

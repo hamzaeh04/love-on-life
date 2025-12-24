@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
+import 'package:love_on_life/controllers/auth_controller.dart';
+import 'package:love_on_life/controllers/community_controller.dart';
 import 'package:love_on_life/controllers/navigation_controller.dart';
+import 'package:love_on_life/controllers/ticket_controller.dart';
 import 'package:love_on_life/views/dashboard_screens/community_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/discover_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/event_details_screen.dart';
@@ -21,6 +24,9 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   final NavigationController controller = Get.find<NavigationController>();
+  final AuthController authController = Get.find<AuthController>();
+  final CommunityController communityController = Get.find<CommunityController>();
+  final TicketController ticketController = Get.find<TicketController>();
   late PageController _pageController;
 
   final List<Widget> pages = [
@@ -28,13 +34,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
     DiscoverScreen(),
     CommunityScreen(),
     TicketScreen(),
+
     //ProfileScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
+    authController.loadUserData();
     _pageController = PageController(initialPage: controller.currentIndex.value);
+    communityController.GetAllPost();
+    communityController.getAllEvents(search: communityController.searchField.text, category: '', page: 1, limit: 10);
+    communityController.getFavoriteEvents();
+    ticketController.getTickets(limit: 10, page: 1, status: 'pending');
 
 
     // Expose this page controller to the controller manually

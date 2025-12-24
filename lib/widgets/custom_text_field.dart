@@ -11,7 +11,7 @@ Widget customTextFeild(
     String hintText,
     String path,
     bool isPass,
-{bool? isRequired, TextEditingController? controller}
+{bool? isRequired, TextEditingController? controller, bool? readOnly,dynamic validator}
     ) {
   final authController = Get.find<AuthController>();
 
@@ -42,8 +42,10 @@ Widget customTextFeild(
       SizedBox(height: 0.5.h),
       isPass
           ? Obx(
-            () => TextField(
+            () => TextFormField(
+              readOnly: readOnly ?? false,
               controller: controller,
+          validator: validator,
           obscureText: authController.isPasswordVisible.value,
           decoration: InputDecoration(
             filled: true,
@@ -94,8 +96,11 @@ Widget customTextFeild(
           ),
         ),
       )
-          : TextField(
+          : TextFormField(
+        validator: validator,
+        readOnly: readOnly ?? false,
         obscureText: false,
+        controller: controller,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,

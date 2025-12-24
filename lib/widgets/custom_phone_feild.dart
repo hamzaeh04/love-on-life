@@ -6,68 +6,72 @@ import '../constants/color_constants.dart';
 import '../controllers/auth_controller.dart';
 
 class CustomPhoneTextFeild extends StatelessWidget {
-  CustomPhoneTextFeild({super.key});
+  final TextEditingController? controller;
 
-  final AuthController controller = Get.find<AuthController>();
+  CustomPhoneTextFeild({this.controller, super.key});
+
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
     return Obx(
           () => Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 1.w),
-                child: Row(
-                  children: [
-                    customText(
-                      text: "Phone No",
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      color: blackColor,
-                    ),
-                    customText(
-                      text: "*",
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: redColor,
-                    )
-                  ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 1.w),
+            child: Row(
+              children: [
+                customText(
+                  text: "Phone No",
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w400,
+                  color: blackColor,
                 ),
-              ),
-              Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.2.h),
-                      decoration: BoxDecoration(
+                customText(
+                  text: "*",
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                  color: redColor,
+                )
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 0.2.h),
+            decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(25.sp),
               border: Border.all(
                 color: textfieldBorderColor,
                 width: 0.8,
               ),
-                      ),
-                      child: Row(
+            ),
+            child: Row(
               children: [
-                /// ✅ Circular Flag Image
+                /// 🇵🇰 Flag
                 GestureDetector(
-                  onTap: () => controller.openPicker(context),
+                  onTap: () => authController.openPicker(context),
                   child: ClipOval(
                     child: Image.asset(
-                      controller.flagPath.value,
+                      authController.flagPath.value,
                       width: 4.h,
                       height: 4.h,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
+
                 SizedBox(width: 2.w),
 
-                /// ✅ Country Code + Dropdown Arrow
+                /// +92 ▼ Country Code
                 GestureDetector(
-                  onTap: () => controller.openPicker(context),
+                  onTap: () => authController.openPicker(context),
                   child: Row(
                     children: [
                       Obx(
                             () => customText(
-                          text: controller.countryCode.value,
+                          text: authController.countryCode.value,
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w400,
                           color: loginGreyColor,
@@ -83,36 +87,39 @@ class CustomPhoneTextFeild extends StatelessWidget {
                   ),
                 ),
 
-
                 SizedBox(width: 3.w),
 
-                /// ✅ Phone TextField
+                /// 📞 Phone Number Input
                 Expanded(
                   child: TextField(
+                    controller: controller,
                     keyboardType: TextInputType.phone,
-                    style: TextStyle(fontSize: 14.sp, color: Colors.black),
+                    style: TextStyle(fontSize: 15.sp, color: Colors.black, fontFamily: 'dmsans'),
                     decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: InputBorder.none,         // ✅ removes default border
-                      enabledBorder: InputBorder.none,  // ✅ removes grey border
-                      focusedBorder: InputBorder.none,  // ✅ removes blue border on focus
+                      border: InputBorder.none,
                       hintText: "Enter Phone Number",
                       hintStyle: TextStyle(
                         fontFamily: 'dmsans',
                         fontWeight: FontWeight.w400,
                         fontSize: 15.sp,
                       ),
-                      contentPadding: EdgeInsets.zero, // optional: remove extra padding
+                      contentPadding: EdgeInsets.zero,
                     ),
-                  ),
-                )
 
+                    /// 👇 UPDATE FULL PHONE NUMBER AUTOMATICALLY
+                    onChanged: (value) {
+                      authController.fullPhoneNumber.value =
+                      "${authController.countryCode.value}$value";
+
+                      //print("📞 Final Phone: ${authController.fullPhoneNumber.value}");
+                    },
+                  ),
+                ),
               ],
-                      ),
-                    ),
-            ],
+            ),
           ),
+        ],
+      ),
     );
   }
 }

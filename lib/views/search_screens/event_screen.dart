@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:love_on_life/controllers/community_controller.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/color_constants.dart';
@@ -17,22 +17,24 @@ class EventScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final DashboardController controller = Get.find<DashboardController>();
-    final SearchController2 searchController = Get.find<SearchController2>();
+    final CommunityController communityController = Get.find<CommunityController>();
+    final SearchController2 searchController = Get.put(SearchController2());
+
     return Scaffold(
-      body: /// 👇 Scrollable content (AppBar ke neeche se start hoga)
-      SingleChildScrollView(
-        padding: EdgeInsets.only(top: 5.h), // AppBar ke neeche se shuru
+      backgroundColor: whiteColor,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 5.h),
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 4.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              customHeader('My Events',padding: 27.w),
+              customHeader('My Events', padding: 27.w),
               SizedBox(height: 2.5.h),
+
               /// 🔹 Search Bar
               Row(
                 children: [
-                  // 🔍 Search Bar
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -55,16 +57,10 @@ class EventScreen extends StatelessWidget {
                             SizedBox(width: 1.w),
                             Expanded(
                               child: TextField(
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: Colors.black,
-                                ),
+                                style: TextStyle(fontSize: 14.sp, color: Colors.black),
                                 decoration: InputDecoration(
                                   hintText: "Search here...",
-                                  hintStyle: TextStyle(
-                                    color: searchColor,
-                                    fontSize: 15.sp,
-                                  ),
+                                  hintStyle: TextStyle(color: searchColor, fontSize: 15.sp),
                                   border: InputBorder.none,
                                   isCollapsed: true,
                                   contentPadding: EdgeInsets.symmetric(vertical: 0.5.h),
@@ -76,189 +72,73 @@ class EventScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  SizedBox(width: 3.w), // spacing between search and button
-
-                  // 🎯 Circular Filter Button
+                  SizedBox(width: 3.w),
                   Container(
-                    height: 5.h,
-                    width: 5.h,
-                    decoration: BoxDecoration(
-                      color: buttonPinkColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/png/community_icon/filter.png',
-                        width: 4.w,
-                      ),
-                    ),
+                    height: 5.h, width: 5.h,
+                    decoration: BoxDecoration(color: buttonPinkColor, shape: BoxShape.circle),
+                    child: Center(child: Image.asset('assets/png/community_icon/filter.png', width: 4.w)),
                   ),
                 ],
               ),
 
-
               SizedBox(height: 2.h),
 
-              /// 🔹 Events Widgets
-              // discoverWidget(
-              //   imagePath: 'assets/png/discover1.jpeg',
-              //   eventName: 'Young Education Program',
-              //   description:
-              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-              //   date: '10 Sep, 2025',
-              //   time: '12:00 AM',
-              //   ticketPrice: '\$40',
-              //   tag: "Educational",
-              //   noOfPeople: "25 people attending",
-              //   ticketsLeft: '7 Tickets left',
-              //   onViewLocation: () {
-              //     print("View Location clicked");
-              //   },
-              //   onJoinNow: () {
-              //     print("Join Now clicked");
-              //   },
-              // ),
-              // SizedBox(height: 1.h),
-              //
-              // discoverWidget(
-              //   imagePath: 'assets/png/event_detail_icon/people.png',
-              //   eventName: 'Young Education Program',
-              //   description:
-              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-              //   date: '10 Sep, 2025',
-              //   time: '12:00 AM',
-              //   ticketPrice: '\$40',
-              //   tag: "Educational",
-              //   noOfPeople: "25 people attending",
-              //   ticketsLeft: '7 Tickets left',
-              //   onViewLocation: () {
-              //     print("View Location clicked");
-              //   },
-              //   onJoinNow: () {
-              //     print("Join Now clicked");
-              //   },
-              // ),
-              // SizedBox(height: 1.h),
-              //
-              // discoverWidget(
-              //   imagePath: 'assets/png/event_detail_icon/people.png',
-              //   eventName: 'Young Education Program',
-              //   description:
-              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-              //   date: '10 Sep, 2025',
-              //   time: '12:00 AM',
-              //   ticketPrice: '\$40',
-              //   tag: "Educational",
-              //   noOfPeople: "25 people attending",
-              //   ticketsLeft: '7 Tickets left',
-              //   onViewLocation: () {
-              //     print("View Location clicked");
-              //   },
-              //   onJoinNow: () {
-              //     print("Join Now clicked");
-              //   },
-              // ),
-              // SizedBox(height: 1.h),
-              //
-              // discoverWidget(
-              //   imagePath: 'assets/png/event_detail_icon/people.png',
-              //   eventName: 'Young Education Program',
-              //   description:
-              //   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium.',
-              //   date: '10 Sep, 2025',
-              //   time: '12:00 AM',
-              //   ticketPrice: '\$40',
-              //   tag: "Educational",
-              //   noOfPeople: "25 people attending",
-              //   ticketsLeft: '7 Tickets left',
-              //   onViewLocation: () {
-              //     print("View Location clicked");
-              //   },
-              //   onJoinNow: () {
-              //     print("Join Now clicked");
-              //   },
-              // ),
-              /// 🔹 Event List with ListView.builder
-              Obx(
-                    () => searchController.isSearch.value == false
-                    ? SizedBox(
-                  //height: 90.h,
-                  child: ListView.builder(
-                    itemCount: controller.events.length,
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      var event = controller.events[index];
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 1.h),
-                        child: discoverWidget(
-                          index: index,
-                          imagePath: event['imagePath'],
-                          eventName: event['eventName'],
-                          description: event['description'],
-                          date: event['date'],
-                          time: event['time'],
-                          ticketPrice: event['ticketPrice'],
-                          tag: event['tag'],
-                          noOfPeople: event['noOfPeople'],
-                          ticketsLeft: event['ticketsLeft'],
-                          context: context,
-                          onViewLocation: () {
-                            print(
-                                "View Location clicked for index $index");
-                          },
-                          onJoinNow: () {
-                            print(
-                                "Join Now clicked for index $index");
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                )
-                    : Column(
-                  children: [
-                    SizedBox(height: 1.h),
-                    Row(
-                      children: [
-                        customText(
-                          text: 'Recent Searches',
-                          fontSize: 15.5.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        Spacer(),
-                        Column(
-                          children: [
-                            customText(
-                              text: 'Clear All',
-                              height: 0,
-                              fontSize: 14.sp,
-                            ),
-                            Container(
-                              height: 0.1.h,
-                              width: 12.2.w,
-                              color: Colors.black,
-                            )
-                          ],
-                        ),
-                      ],
+              /// 🔹 Event List
+              Obx(() => searchController.isSearch.value == true
+                  ? ListView.builder(
+                // IMPORTANT: Dono lists sync honi chahiye crash se bachne ke liye
+                itemCount: controller.events.length,
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  var eventData = controller.events[index];
+
+                  return Padding(
+                    padding: EdgeInsets.only(bottom: 1.h),
+                    child: discoverWidget(
+                      index: index, // Pass index for favorite logic
+                      imagePath: eventData['imagePath'],
+                      eventName: eventData['eventName'],
+                      description: eventData['description'],
+                      date: eventData['date'],
+                      time: eventData['time'],
+                      ticketPrice: eventData['ticketPrice'],
+                      tag: eventData['tag'],
+                      noOfPeople: '20',
+                      ticketsLeft: eventData['ticketsLeft'],
+                      context: context,
+                      onViewLocation: () => print("View Location $index"),
+                      onJoinNow: () => print("Join Now $index"),
                     ),
-                    SizedBox(height: 3.h),
-                    options('Educational'),
-                    options('Music'),
-                    options('Business'),
-                    options('Motivational'),
-                  ],
-                ),
-              ),
+                  );
+                },
+              )
+                  : _buildRecentSearches()), // Moved to a function for cleanliness
               SizedBox(height: 13.h),
             ],
           ),
         ),
       ),
+    );
+  }
 
-
+  Widget _buildRecentSearches() {
+    return Column(
+      children: [
+        SizedBox(height: 1.h),
+        Row(
+          children: [
+            customText(text: 'Recent Searches', fontSize: 15.5.sp, fontWeight: FontWeight.w600),
+            const Spacer(),
+            customText(text: 'Clear All', fontSize: 14.sp),
+          ],
+        ),
+        SizedBox(height: 3.h),
+        options('Educational'),
+        options('Music'),
+        options('Business'),
+        options('Motivational'),
+      ],
     );
   }
 }

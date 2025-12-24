@@ -14,10 +14,5 @@ class Binding implements Bindings {
       return prefs;
     }, permanent: true);
 
-    // 👇 These ensure all controllers are available globally
-    Get.put(NavigationController());
-    Get.put(DashboardController());
-    Get.put(AuthController());
-    Get.put(PaymentController());
   }
 }

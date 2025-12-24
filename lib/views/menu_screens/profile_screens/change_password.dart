@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../constants/color_constants.dart';
+import '../../../controllers/drawer_controller.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_header.dart';
 import '../../../widgets/custom_phone_feild.dart';
@@ -10,7 +11,8 @@ import '../../../widgets/custom_text_field.dart';
 import '../../../widgets/success_dialog.dart';
 
 class ChangePassword extends StatelessWidget {
-  const ChangePassword({super.key});
+  ChangePassword({super.key});
+  final Drawercontroller drawerController = Get.find<Drawercontroller>();
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class ChangePassword extends StatelessWidget {
             customHeader("Change Password",padding: 18.w),
             SizedBox(height: 4.h),
             customTextFeild(
+              controller: drawerController.oldPassField,
               'Old Password',
               '•••••••••••',
               'assets/png/lock.png',
@@ -31,6 +34,7 @@ class ChangePassword extends StatelessWidget {
             ),
             SizedBox(height: 1.h,),
             customTextFeild(
+              controller: drawerController.newPassField,
               'New Password',
               '•••••••••••',
               'assets/png/lock.png',
@@ -39,6 +43,7 @@ class ChangePassword extends StatelessWidget {
             ),
             SizedBox(height: 1.h,),
             customTextFeild(
+              controller: drawerController.confirmPassField,
               'Confirm Password',
               '•••••••••••',
               'assets/png/lock.png',
@@ -47,9 +52,7 @@ class ChangePassword extends StatelessWidget {
             ),
             SizedBox(height: 3.5.h),
             customButton("Update",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
-              successDialog(context, "Done!", "Password has been Updated successfully.", "Ok", (){
-                Get.back();
-              });
+              drawerController.changePassword(context);
             }),
           ],
         ),

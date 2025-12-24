@@ -66,7 +66,7 @@ class PaymentDetailScreen extends StatelessWidget {
             SizedBox(height: 2.h),
             customButton("Confirm",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
               successDialog(context, "Done!", "Your ticket has successfully placed!", "Ok", (){
-                Get.back();
+                Get.toNamed('bottomnavbar');
               });
             }),
           ],

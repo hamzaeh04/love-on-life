@@ -9,6 +9,12 @@ import '../outh_file/local_db_key.dart';
 class SharedPreferencesMethod {
   static var storage = Get.find<SharedPreferences>();
 
+  /// Initialize SharedPreferences
+  static Future<void> init() async {
+    storage = await SharedPreferences.getInstance();
+    Get.put<SharedPreferences>(storage); // optional, if you want to use Get.find()
+  }
+
   static Future<void> clearLocalStorage() async {
     storage.clear();
   }
@@ -55,6 +61,8 @@ class SharedPreferencesMethod {
   static Future<bool> setUserInfo1(Data user) async {
     return await SharedPreferencesMethod.storage.setString(LocalDBKeys.USERDETAIL, jsonEncode(user));
   }
+
+
 }
 class Data {
   String? id;

@@ -1,159 +1,101 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:love_on_life/controllers/community_controller.dart';
 import 'package:love_on_life/controllers/dashboard_controller.dart';
+import 'package:love_on_life/widgets/custom_app_bar.dart';
+import 'package:love_on_life/widgets/profile_network_image.dart';
 import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
+import 'custom_comment_sheet.dart';
 
 Widget communityPost(
     String path,
     String title,
-    String name,
+    String desc,
     String time,
     String path2,
-    String mainImage,
-    {
+    String mainImage, {
       int? index,
       bool? isGroup = false,
       bool? isGroupOnly = true,
       bool? isFollow = true,
+      bool? isLiked = false,
+      String? postId,
+      VoidCallback? likeTapped,
+      VoidCallback? commentTapped,
+      BuildContext? context
     }) {
   final DashboardController controller = Get.find<DashboardController>();
+  final CommunityController communityController = Get.find<CommunityController>();
+
   return Container(
     margin: EdgeInsets.only(right: 4.w),
     width: double.infinity,
-    decoration: BoxDecoration(
-
-    ),
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        /// ---------------- HEADER ----------------
         Row(
           children: [
-            isGroup == true ? Stack(
+            isGroup == true
+                ? Stack(
               clipBehavior: Clip.none,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(11.sp),
-                  ),
-                  child: Image.asset(path, width: 10.w),
+                ProfileNetworkImage(
+                  imageUrl: '${baseService.baseURL}$path',
+                  size: 10.w,
+                  placeholder: 'assets/png/community_icon/person3.png',
                 ),
-                isGroupOnly == true ? Positioned(
-                  bottom: 0.h,
-                  right: -1.2.w,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      //border: Border.all(color: Colors.white, width: 0.5.w)
+                if (isGroupOnly == true)
+                  Positioned(
+                    bottom: 0,
+                    right: -1.2.w,
+                    child: ProfileNetworkImage(
+                      imageUrl: '${baseService.baseURL}$path',
+                      size: 5.5.w,
+                      placeholder: 'assets/png/community_icon/person1.png',
                     ),
-                    child: Image.asset(path2, width: 5.5.w),
                   ),
-                ): SizedBox.shrink()
               ],
-            ): Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                //borderRadius: BorderRadius.circular(11.sp),
-              ),
-              child: Image.asset(path, width: 10.w),
+            )
+                : ProfileNetworkImage(
+              imageUrl: '${baseService.baseURL}$path',
+              size: 11.w,
+              placeholder: 'assets/png/community_icon/person1.png',
             ),
             SizedBox(width: 2.w),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                customText(
-                  text: title,
-                  fontFamily: 'dmsans',
-                  fontSize: 15.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-                (isGroup == true || isGroupOnly == false) ? Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    customText(
-                        text: name,
-                        fontFamily: 'dmsans',
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xFF666666),
-                        height: 0.05
-                    ),
-                    SizedBox(width: 2.4.w), // spacing before divider
-                    Container(
-                      width: 0.1.w, // thickness of line
-                      height: 1.h, // height of divider
-                      color: Color(0xFF666666),
-                    ),
-                    SizedBox(width: 2.4.w), // spacing after divider
-                    customText(
-                      text: time,
-                      fontFamily: 'dmsans',
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF666666),
-                    ),
-                  ],
-                ):customText(
-                  text: time,
-                  fontFamily: 'dmsans',
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF666666),
-                ),
-              ],
-            ),
-            Spacer(),
-            if(isFollow!)
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 4.5.w, vertical: 0.5.h),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14.sp),
-                  color: joinButtonColor,
-                ),
-                child: customText(
-                  text: isGroup == true ? 'Join' : 'Follow',
-                  color: Color(0xFF34A0C2),
-                  fontFamily: 'dmsans',
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customText(
+                    text: title,
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  SizedBox(height: 0.3.h),
+                  customText(
+                    text: "${communityController.formatDate(time)} • ${communityController.formatTime2(time)}",
+                    fontSize: 13.sp,
+                    color: const Color(0xFF666666),
+                  ),
+                ],
               ),
-            SizedBox(width: 2.w),
+            ),
             PopupMenuButton<String>(
-              color: Colors.white, // 👈 makes the popup background white
-              elevation: 3, // adds subtle shadow
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.sp), // smooth rounded corners
+                borderRadius: BorderRadius.circular(15.sp),
               ),
-              padding: EdgeInsets.zero,
-              offset: Offset(0, 40),// keeps trigger image tight
-              onSelected: (value) {
-                if (value == 'edit') {
-                  print("Edit tapped");
-                } else if (value == 'delete') {
-                  print("Delete tapped");
-                }
-              },
+              onSelected: (value) {},
               itemBuilder: (context) => [
                 PopupMenuItem(
-                  value: 'edit',
-                  child: customText(
-                    text: "Edit",
-                    fontSize: 14.sp,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                PopupMenuItem(
+                  onTap: (){
+                    communityController.deletePost(postId!);
+                  },
                   value: 'delete',
-                  child: customText(
-                    text: "Delete",
-                    fontSize: 14.sp,
-                    color: Colors.red,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  child: customText(text: "Delete", color: Colors.red),
                 ),
               ],
               child: Image.asset(
@@ -161,143 +103,150 @@ Widget communityPost(
                 width: 7.w,
               ),
             )
-
-
           ],
         ),
-        SizedBox(height: 1.h),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15.sp),
-          child: Image.asset(
-            mainImage,
-            height: 32.h,
-            width: double.infinity,
-            fit: BoxFit.cover,
+
+        SizedBox(height: 0.8.h),
+        Padding(
+          padding:  EdgeInsets.only(left: 2.w),
+          child: customText(
+              text: desc,
+              fontSize: 14.sp
           ),
         ),
+        SizedBox(height: 0.8.h),
+
+        /// ---------------- POST IMAGE ----------------
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15.sp),
+          child: SizedBox(
+            width: double.infinity,
+            height: 36.h,
+            child: ProfileNetworkImage2(
+              imageUrl: '${baseService.baseURL}$mainImage',
+              size: 39.h,
+              placeholder: 'assets/png/event_detail_icon/people2.jpg',
+            ),
+          ),
+        ),
+
+        /// ---------------- LIKE / COMMENT BAR ----------------
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 1.h),
+          padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 16.w),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // --- Like Button ---
               Obx(() {
-                bool isLike = controller.isLiked(index);
+                // Post ka data direct list se uthao
+                final currentPost = communityController.getAllPostModel.value?.data?[index!];
+                final postIsLiked = currentPost?.isLiked ?? false;
+
                 return GestureDetector(
-                  onTap: () => controller.toggleLiked(index), // 👈 toggles like
-                  child: Image.asset(
-                    isLike
-                        ? 'assets/png/community_icon/like_red.png' // 👈 red if liked
-                        : 'assets/png/community_icon/Like.png',   // 👈 normal if not liked
-                    width: 5.5.w,
+                  onTap: () async {
+                    if (currentPost?.id != null) {
+                      // Specific post ko like karo
+                      await communityController.toggleLike("${currentPost!.id}", index!);
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        postIsLiked
+                            ? 'assets/png/community_icon/like_red.png'
+                            : 'assets/png/community_icon/Like.png',
+                        width: 5.5.w,
+                      ),
+                      SizedBox(width: 2.w),
+                      customText(
+                        text: 'Like',
+                        fontSize: 12.5.sp,
+                        color: postIsLiked ? Colors.red : Colors.black,
+                      ),
+                    ],
                   ),
                 );
               }),
-              SizedBox(width: 2.w),
-              customText(
-                text: 'Like',
-                color: Color(0xFF000000),
-                fontFamily: 'dmsans',
-                fontSize: 12.5.sp,
-                fontWeight: FontWeight.w500,
-              ),
-              SizedBox(width: 12.w),
-              Image.asset('assets/png/community_icon/Comment.png', width: 5.5.w),
-              SizedBox(width: 2.w),
-              customText(
-                text: 'Comments',
-                color: Color(0xFF000000),
-                fontFamily: 'dmsans',
-                fontSize: 12.5.sp,
-                fontWeight: FontWeight.w500,
-              ),
 
-              SizedBox(width: 12.w),
-              Image.asset(
-                'assets/png/community_icon/Messanger.png',
-                width: 5.5.w,
-              ),
-              SizedBox(width: 2.w),
-              customText(
-                text: 'Share',
-                color: Color(0xFF000000),
-                fontFamily: 'dmsans',
-                fontSize: 12.5.sp,
-                fontWeight: FontWeight.w500,
+              // Comment Button
+              GestureDetector(
+                onTap: commentTapped,
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/png/community_icon/Comment.png',
+                      width: 5.5.w,
+                    ),
+                    SizedBox(width: 2.w),
+                    customText(
+                      text: 'Comments',
+                      fontSize: 12.5.sp,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
-        SizedBox(height: 0.5.h),
-        Row(
-          children: [
-            Container(
-              child: Image.asset(
-                'assets/png/community_icon/Oval.png',
-                width: 4.5.w,
+
+        /// ---------------- LIKES INFO ----------------
+        Obx(() {
+          final currentPost = communityController.getAllPostModel.value?.data?[index!];
+          final currentLikes = currentPost?.likesCount ?? 0;
+
+          return RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontFamily: 'dmsans',
+                fontSize: 13.5.sp,
+                color: Colors.black,
               ),
+              children: [
+                const TextSpan(text: 'Liked by '),
+                TextSpan(
+                  text: "$currentLikes ",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                const TextSpan(text: 'users'),
+              ],
             ),
-            SizedBox(width: 2.w,),
-            customText(
-              text: 'Liked by ',
-              fontFamily: 'dmsans',
-              fontSize: 13.5.sp,
-              fontWeight: FontWeight.w400,
-            ),
-            customText(
-              text: 'craig_love',
-              fontFamily: 'dmsans',
-              fontSize: 13.5.sp,
-              fontWeight: FontWeight.bold,
-              txtDecoration: TextDecoration.underline,
-            ),
-            customText(
-              text: ' and ',
-              fontFamily: 'dmsans',
-              fontSize: 13.5.sp,
-              fontWeight: FontWeight.w400,
-            ),
-            customText(
-              text: '44,686 others',
-              fontFamily: 'dmsans',
-              fontSize: 13.5.sp,
-              fontWeight: FontWeight.bold,
-              txtDecoration: TextDecoration.underline,
-            ),
-          ],
-        ),
+          );
+        }),
+
         SizedBox(height: 0.6.h),
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'joshua_l ',
-                    style: TextStyle(
-                      fontFamily: 'dmsans',
-                      fontSize: 13.5.sp,
-                      fontWeight: FontWeight.bold,
-                      decoration: TextDecoration.underline,
-                      color: Colors.black, // required in TextSpan
-                    ),
-                  ),
-                  TextSpan(
-                    text:
-                    'The game in Japan was amazing and I want to\nshare some photos',
-                    style: TextStyle(
-                      fontFamily: 'dmsans',
-                      fontSize: 13.5.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
+        /// ---------------- TOP COMMENT ----------------
+        Obx(() {
+          final currentPost = communityController.getAllPostModel.value?.data?[index!];
+          final topComment = currentPost?.comments?.isNotEmpty == true ? currentPost!.comments!.first : null;
+
+          return currentPost?.commentsCount == 0
+              ? const SizedBox.shrink()
+              : RichText(
+            text: TextSpan(
+              style: TextStyle(
+                fontFamily: 'dmsans',
+                fontSize: 13.5.sp,
+                color: Colors.black,
               ),
+              children: [
+                TextSpan(
+                  text: currentPost?.userId?.fullname ?? "User",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+                TextSpan(
+                  text: " ${topComment?.comment ?? ''}",
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }),
       ],
     ),
   );

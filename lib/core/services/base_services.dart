@@ -10,7 +10,7 @@ import '../../utils/shared_prefrences_methods.dart';
 import '../../utils/utility.dart';
 
 class BaseService {
-  late String baseURL = "http://172.16.25.79:3000";
+  late String baseURL = "https://app.yourwebsitemockup.net";
   late String endPoint;
   late String Url = '$baseURL$endPoint';
   late String baseURLStripe = "";
@@ -26,29 +26,26 @@ class BaseService {
   }
 
 
-  Future<Map<String, dynamic>> basePostAPI(String endPoint,
+  Future<Map<String, dynamic>> basePostAPI(
+      String endPoint,
       dynamic body, {
         bool loading = true,
         bool? isStripe,
       }) async {
+
     if (loading) {
       EasyLoading.show(
         status: 'Please wait...',
         maskType: EasyLoadingMaskType.black,
       );
     }
+
     var bearerToken = await prefs.getString(LocalDBKeys.TOKEN);
-    String basic = '';
 
-    basic = (isStripe == true)
-        ? "$stripeToken"
-        : (token?.isNotEmpty == true ? "$token" : "");
-
-    if (!await checkInternetConnection()) {
-      EasyLoading.dismiss();
-      Utils.showToast("Check Internet Connection", true);
-      return {'success': false, 'message': 'Check Internet Connection'};
-    }
+    // if (!await checkInternetConnection()) {
+    //   EasyLoading.dismiss();
+    //   return {'success': false, 'message': 'Check Internet Connection'};
+    // }
 
     try {
       final response = await http.post(
@@ -66,24 +63,21 @@ class BaseService {
       print("Status: ${response.statusCode}");
       print("Response: ${response.body}");
 
-      // -------------------------------------------
-      // 🔥 SUCCESS (ANY 2xx)
-      // -------------------------------------------
+      // SUCCESS (NO TOAST HERE!)
       if (response.statusCode >= 200 && response.statusCode < 300) {
         var jsonData = json.decode(response.body);
 
-        Utils.showToast(jsonData["message"] ?? "Success", false);
         return {
           "success": true,
           ...jsonData,
+          "statusCode": response.statusCode
         };
       }
 
-      // -------------------------------------------
-      // ❌ ERROR CASES
-      // -------------------------------------------
+      // ERROR
       if (response.body.isNotEmpty) {
         var jsonData = json.decode(response.body);
+
         Utils.showToast(jsonData["message"] ?? "Something went wrong", true);
 
         return {
@@ -94,17 +88,18 @@ class BaseService {
       }
 
       Utils.showToast("Something went wrong", true);
-      return {"success": false, "message": "Something went wrong"};
+      return {"success": false};
     } on TimeoutException {
       EasyLoading.dismiss();
       Utils.showToast("Request timed out", true);
-      return {"success": false, "message": "Request timed out"};
+      return {"success": false};
     } catch (e) {
       EasyLoading.dismiss();
       Utils.showToast("Unexpected error", true);
-      return {"success": false, "message": "Unexpected error"};
+      return {"success": false};
     }
   }
+
 
   Future<Map<String, dynamic>> baseGetAPI(
       String endPoint, {
