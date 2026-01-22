@@ -1,12 +1,9 @@
-import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/utils/helper_functions.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
-import 'package:love_on_life/widgets/custom_phone_feild.dart';
-import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/constants_widgets.dart';
@@ -105,10 +102,7 @@ class SignupScreen extends StatelessWidget {
                         controller: controller.signupEmailField,
                         validator: (value) => HelperFunction.emailValidate(value),
                         'Email Address', 'yourname@gmail.com', 'assets/png/lock.png', false,isRequired: true),
-                    // SizedBox(height: 1.5.h,),
-                    // CustomPhoneTextFeild(
-                    //   //controller: controller.signupPhoneField,
-                    // ),
+
                     SizedBox(height: 1.5.h,),
                     customTextFeild(
                       validator: (value) => HelperFunction.passwordValidate(value),
@@ -116,7 +110,7 @@ class SignupScreen extends StatelessWidget {
                       'New Password',
                       '•••••••••••',
                       'assets/png/lock.png',
-                      true, // 👈 password field, eye button aa jayega
+                      true,
                       isRequired: true,
                     ),
                     SizedBox(height: 1.5.h,),
@@ -126,16 +120,16 @@ class SignupScreen extends StatelessWidget {
                       'Confirm Password',
                       '•••••••••••',
                       'assets/png/lock.png',
-                      true, // 👈 password field, eye button aa jayega
+                      true,
                       isRequired: true,
                     ),
                     SizedBox(height: 3.5.h),
-                    customButton("Sign Up",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
+                    customButton("Sign Up",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,
+                        ontap: (){
                       if(signupKey.currentState!.validate()){
                         controller.signUp(context, profilePicture: controller.profilePicture.value);
                       }
 
-                      //Get.offAllNamed("verification");
                       print(controller.signupNameField.text);
                       print(controller.signupEmailField.text);
                       print(controller.fullPhoneNumber.value);
@@ -269,85 +263,4 @@ class SignupScreen extends StatelessWidget {
     );
   }
 }
-
-// Widget phoneNumberField() {
-//   final LoginController controller = Get.find<LoginController>();
-//
-//   return Container(
-//     padding: EdgeInsets.symmetric(horizontal: 4.w),
-//     decoration: BoxDecoration(
-//       color: Colors.white,
-//       borderRadius: BorderRadius.circular(25.sp),
-//       border: Border.all(
-//         color: textfieldBorderColor,
-//         width: 0.8,
-//       ),
-//     ),
-//     child: Row(
-//       children: [
-//
-//         /// ✅ Country Flag (Selectable)
-//         GestureDetector(
-//           onTap: () {
-//             showCountryPicker(
-//               context: Get.context!,
-//               showPhoneCode: true,
-//               onSelect: (country) {
-//                 controller.countryCode.value = "+${country.phoneCode}";
-//                 controller.countryName.value = country.name;
-//
-//                 /// ✅ FIX: USE REAL FLAG ASSET FROM PACKAGE
-//                 controller.flagPath.value =
-//                 "packages/country_picker/assets/flags/${country.countryCode.toLowerCase()}.png";
-//
-//               },
-//             );
-//           },
-//           child: Obx(() => ClipOval(
-//             child: Image.asset(
-//               controller.flagPath.value,
-//               package: 'country_picker',
-//               width: 4.7.h,
-//               height: 4.7.h,
-//               fit: BoxFit.cover,
-//             ),
-//           )),
-//         ),
-//
-//         SizedBox(width: 2.w),
-//
-//         /// ✅ Country Code
-//         Obx(() => customText(
-//           text: controller.countryCode.value,
-//           fontSize: 15.sp,
-//           fontWeight: FontWeight.w400,
-//           color: loginGreyColor,
-//         )),
-//
-//         SizedBox(width: 1.w),
-//
-//         Icon(Icons.keyboard_arrow_down_outlined,
-//             size: 20.sp, color: loginGreyColor),
-//
-//         SizedBox(width: 3.w),
-//
-//         Expanded(
-//           child: TextField(
-//             keyboardType: TextInputType.phone,
-//             decoration: InputDecoration(
-//               border: InputBorder.none,
-//               hintText: "Enter your phone number",
-//               hintStyle: TextStyle(
-//                 fontFamily: 'dmsans',
-//                 fontWeight: FontWeight.w400,
-//                 fontSize: 14.sp,
-//                 color: loginGreyColor,
-//               ),
-//             ),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
 

@@ -9,9 +9,7 @@ import 'package:love_on_life/controllers/navigation_controller.dart';
 import 'package:love_on_life/controllers/ticket_controller.dart';
 import 'package:love_on_life/views/dashboard_screens/community_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/discover_screen.dart';
-import 'package:love_on_life/views/dashboard_screens/event_details_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/home_screen.dart';
-import 'package:love_on_life/views/dashboard_screens/profile_screen.dart';
 import 'package:love_on_life/views/dashboard_screens/ticket_screen.dart';
 import 'package:sizer/sizer.dart';
 
@@ -34,29 +32,37 @@ class _BottomNavBarState extends State<BottomNavBar> {
     DiscoverScreen(),
     CommunityScreen(),
     TicketScreen(),
-
-    //ProfileScreen(),
+    // ProfileScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
-    authController.loadUserData();
     _pageController = PageController(initialPage: controller.currentIndex.value);
-    communityController.GetAllPost();
-    communityController.getAllEvents(search: communityController.searchField.text, category: '', page: 1, limit: 10);
-    communityController.getFavoriteEvents();
-    ticketController.getTickets(limit: 10, page: 1, status: 'pending');
 
-
-    // Expose this page controller to the controller manually
+    // Expose page controller to NavigationController
     controller.setPageController(_pageController);
 
-    // Listen to current index and move page
+    // Listen to current index changes
     controller.currentIndex.listen((index) {
       if (_pageController.hasClients) {
         _pageController.jumpToPage(index);
       }
+    });
+
+    // Load user data immediately
+    authController.loadUserData();
+
+    // Schedule API calls after first frame to avoid build errors
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      communityController.GetAllPost();
+      communityController.getAllEvents(search: '', category: '', page: 1, limit: 10);
+      communityController.getFavoriteEvents();
+      ticketController.getTickets(
+        limit: 10,
+        page: ticketController.currentPage.value,
+        status: ticketController.currentStatus.value,
+      );
     });
   }
 
@@ -76,11 +82,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
       ),
       extendBody: true,
       bottomNavigationBar: SizedBox(
-        height: 11.h, // jitna space blur lena hai (padding + nav bar)
+        height: 11.h,
         child: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            // 👇 Blur sirf is chhoti height ke andar apply hoga
+            // Blur background
             Positioned.fill(
               child: Align(
                 alignment: Alignment.bottomCenter,
@@ -88,7 +94,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
                     child: Container(
-                      height: 11.h, // blur ke liye same height
+                      height: 11.h,
                       color: Colors.white.withOpacity(0.2),
                     ),
                   ),
@@ -96,7 +102,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
             ),
 
-            // 👇 Actual nav bar
+            // Actual nav bar
             Padding(
               padding: EdgeInsets.only(left: 4.w, right: 4.w, bottom: 4.h),
               child: Container(
@@ -108,7 +114,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 15,
-                      offset: Offset(0, 5),
+                      offset: const Offset(0, 5),
                     ),
                   ],
                 ),
@@ -119,7 +125,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     navItem("assets/png/bottom_nav_icon/compass.png", 1, 'Discover'),
                     navItem("assets/png/bottom_nav_icon/community.png", 2, 'Community'),
                     navItem("assets/png/bottom_nav_icon/ticket.png", 3, 'Tickets'),
-                    //navItem("assets/png/bottom_nav_icon/profile.png", 4, 'Profile'),
+                    // navItem("assets/png/bottom_nav_icon/profile.png", 4, 'Profile'),
                   ],
                 )),
               ),
@@ -127,9 +133,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
           ],
         ),
       ),
-
-
-
     );
   }
 
@@ -142,7 +145,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
       },
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
             decoration: BoxDecoration(
@@ -150,30 +152,33 @@ class _BottomNavBarState extends State<BottomNavBar> {
               color: isSelected ? containerBgBlueColor : null,
             ),
             child: Padding(
-              padding: isSelected ? EdgeInsets.symmetric(horizontal: 2.w,vertical: 0.5.h): EdgeInsets.zero,
+              padding: isSelected
+                  ? EdgeInsets.symmetric(horizontal: 2.w, vertical: 0.5.h)
+                  : EdgeInsets.zero,
               child: Row(
                 children: [
                   Image.asset(
                     iconPath,
                     height: 19.sp,
-                    color// 👈 no color apply
-                  : (isSelected ? index == 4 ? null : navIconBlueColor : index == 4 ? null : navIconGreyColor),
-
-            ),
+                    color: isSelected
+                        ? index == 4
+                        ? null
+                        : navIconBlueColor
+                        : index == 4
+                        ? null
+                        : navIconGreyColor,
+                  ),
                   SizedBox(width: 2.w),
-                  if(isSelected)
+                  if (isSelected)
                     customText(
                       text: label,
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
-                      color: blackColor
+                      color: blackColor,
                     ),
-                    // Text(label, style: TextStyle(fontSize: 12.sp, color: blackColor)),
-
                 ],
               ),
             ),
-
           ),
         ],
       ),

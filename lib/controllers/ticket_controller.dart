@@ -22,49 +22,57 @@ class TicketController extends GetxController{
     getTicketModel.value = null;
   }
 
-  Future<void> deleteTicket(String postId) async {
-    if (postId.isEmpty) {
-      Utils.showToast("Invalid post ID", true);
-      return;
-    }
+  void addTicketToLocalList(Tickets newTicket) {
+    if (getTicketModel.value?.data?.tickets != null) {
+      // Insert at the top (index 0) so the user sees it immediately
+      getTicketModel.value!.data!.tickets!.insert(0, newTicket);
 
-    try {
-      //isLoading.value = true;
-
-      // Construct the DELETE endpoint URL
-      final String url = ApiEndPoints.deleteTicket(postId);
-      print("DELETE URL: $url");
-
-      // Call the DELETE API
-      final responseData = await baseService.baseDeleteAPI(url);
-
-      print("Response: $responseData");
-
-      if (responseData == null) {
-        Utils.showToast("No response from server", true);
-        return;
-      }
-
-      if (responseData["success"] != true) {
-        Utils.showToast(responseData["message"] ?? "Something went wrong", true);
-        return;
-      }
-
-      // Show success message
-      Utils.showToast(responseData["message"] ?? "Ticket deleted successfully", false);
-
-      // Remove the post from the local list if exists
-      //getTicketModel.value?.data?.removeWhere((post) => post.id == postId);
-
-      // Trigger UI update
+      // 🔹 Crucial: Refresh the Rx object to trigger UI update
       getTicketModel.refresh();
-
-    } catch (e, stackTrace) {
-      print("❌ Delete Ticket Error: $e\n$stackTrace");
-      Utils.showToast("Unexpected error occurred", true);
+    } else {
+      // If the list was null, trigger a full fetch
+      getTickets(page: 1, limit: 10, status: 'pending');
     }
   }
 
+  Future<void> deleteTicket(String ticketId) async {
+    if (ticketId.isEmpty) return;
+
+    // 1️⃣ BACKUP: Find the ticket and its index before removing
+    final tickets = getTicketModel.value?.data?.tickets;
+    if (tickets == null) return;
+
+    final int index = tickets.indexWhere((t) => t.id == ticketId);
+    if (index == -1) return;
+
+    final backupTicket = tickets[index];
+
+    try {
+      // 2️⃣ OPTIMISTIC UPDATE: Remove instantly from local list
+      tickets.removeAt(index);
+      getTicketModel.refresh(); // Force UI update
+
+      // 3️⃣ SILENT API CALL
+      final String url = ApiEndPoints.deleteTicket(ticketId);
+      final responseData = await baseService.baseDeleteAPI(url);
+
+      if (responseData != null && responseData["success"] == true) {
+        // Success: Optional toast
+        Utils.showToast(responseData["message"] ?? "Ticket deleted", false);
+      } else {
+        // 4️⃣ ROLLBACK: If API fails, put the ticket back
+        tickets.insert(index, backupTicket);
+        getTicketModel.refresh();
+        Utils.showToast(responseData?["message"] ?? "Failed to delete ticket", true);
+      }
+    } catch (e) {
+      // 4️⃣ ROLLBACK: If app crashes/timeouts
+      tickets.insert(index, backupTicket);
+      getTicketModel.refresh();
+      debugPrint("❌ Delete Error: $e");
+      Utils.showToast("Connection error", true);
+    }
+  }
 
   // @override
   // void onInit() {
@@ -117,9 +125,4 @@ class TicketController extends GetxController{
       isLoading.value = false;
     }
   }
-
-
-
-
-
 }

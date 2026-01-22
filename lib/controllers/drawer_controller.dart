@@ -87,6 +87,7 @@ class Drawercontroller extends GetxController {
           // 1. Local Storage update
           await prefs.setString(LocalDBKeys.USERFULLNAME, data['fullname']);
           await prefs.setString(LocalDBKeys.USERPROFILEPIC, data['profilePicture']);
+          await prefs.setString(LocalDBKeys.PHONENUMBER, authController.fullPhoneNumber.value);
 
           // 2. AuthController ke variables ko foran update karein taake UI refresh ho
           authController.userProfilePic.value = data['profilePicture'] ?? "";
@@ -171,5 +172,6 @@ class Drawercontroller extends GetxController {
   void clearUpdateProfileFields(){
     editNameField.clear();
     authController.fullPhoneNumber.value = '';
+    authController.phoneController.clear();
   }
 }

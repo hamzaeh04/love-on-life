@@ -180,13 +180,18 @@ class LoginScreen extends StatelessWidget {
                           letterSpacing: -0.4,
                         ),
                         SizedBox(width: 1.w),
-                        customText(
-                          text: "Terms",
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          txtDecoration: TextDecoration.underline,
-                          height: 0.1.h,
-                          letterSpacing: -0.4,
+                        InkWell(
+                          onTap: (){
+                            Get.toNamed('term');
+                          },
+                          child: customText(
+                            text: "Terms",
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                            txtDecoration: TextDecoration.underline,
+                            height: 0.1.h,
+                            letterSpacing: -0.4,
+                          ),
                         ),
                         SizedBox(width: 1.w),
                         customText(
@@ -195,13 +200,18 @@ class LoginScreen extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                         ),
                         SizedBox(width: 1.w),
-                        customText(
-                          text: "Privacy Policy.",
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                          txtDecoration: TextDecoration.underline,
-                          height: 0.1.h,
-                          letterSpacing: -0.4,
+                        InkWell(
+                          onTap: (){
+                            Get.toNamed('privacy');
+                          },
+                          child: customText(
+                            text: "Privacy Policy.",
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.bold,
+                            txtDecoration: TextDecoration.underline,
+                            height: 0.1.h,
+                            letterSpacing: -0.4,
+                          ),
                         ),
                       ],
                     ),

@@ -2,7 +2,6 @@ import 'package:get/get.dart';
 import 'package:love_on_life/outh_file/local_db_key.dart';
 
 import '../utils/shared_prefrences_methods.dart';
-import 'auth_controller.dart';
 
 class SplashController extends GetxController {
   final String nextRoute;
@@ -15,7 +14,9 @@ class SplashController extends GetxController {
     super.onInit();
     Future.delayed(const Duration(seconds: 3), () async {
       var token = await prefs.getString(LocalDBKeys.TOKEN);
+      var id = await prefs.getString(LocalDBKeys.USERID);
       print(token);
+      print(id);
       if (token == null || token.isEmpty) {
         Get.offNamed(nextRoute);
       } else {

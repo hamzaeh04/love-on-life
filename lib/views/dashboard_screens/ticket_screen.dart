@@ -44,210 +44,222 @@ class TicketScreen extends StatelessWidget {
                   /// 🔹 Status Tabs
                   rowWidget(),
 
-                  SizedBox(height: 1.h),
+                  SizedBox(height: 1.5.h),
 
                   /// 🔹 Ticket List
-                  Expanded(
-                    child: Obx(() {
-                      /// Initial Loader
-                      if (ticketController.isLoading.value &&
-                          ticketController.currentPage.value == 1) {
-                        return Center(child: CircularProgressIndicator());
-                      }
 
-                      final tickets = ticketController
-                          .getTicketModel.value?.data?.tickets ??
-                          [];
 
-                      if (tickets.isEmpty) {
-                        return Center(
-                          child: customText(text: "No tickets found"),
-                        );
-                      }
-
-                      return CustomRefreshIndicator(
-                        onRefresh: () async {
-                          ticketController.resetPagination();
-                          await ticketController.getTickets(
-                            page: 1,
-                            limit: 10,
-                            status: ticketController.currentStatus.value,
-                          );
-                        },
-                        builder: (context, child, controller) {
-                          return Transform.translate(
-                            offset: Offset(0, controller.value * 80),
-                            child: child,
-                          );
-                        },
-                        child: ListView.builder(
-                          controller: ticketController.scrollController,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: tickets.length +
-                              (ticketController.isFetchingMore.value ? 1 : 0),
-                          itemBuilder: (context, index) {
-                            /// Pagination Loader
-                            if (index == tickets.length) {
-                              return Padding(
-                                padding: EdgeInsets.symmetric(vertical: 2.h),
-                                child: Center(
-                                  child: CircularProgressIndicator(),
-                                ),
+                      Expanded(
+                        child: CustomRefreshIndicator(
+                          onRefresh: () async {
+                            await ticketController.getTickets(
+                              page: ticketController.currentPage.value,
+                              limit: 10,
+                              status: ticketController.currentStatus.value,
+                            );
+                            print('refreshed');
+                          },
+                          builder: (context, child, controller) {
+                            return Transform.translate(
+                              offset: Offset(0, 0),
+                              child: child,
+                            );
+                          },
+                          child: Obx(() {
+                            /// Initial Loader
+                            if (ticketController.isLoading.value &&
+                                ticketController.currentPage.value == 1) {
+                              return Column(
+                                children: [
+                                  SizedBox(height: 32.h,),
+                                  CircularProgressIndicator(),
+                                ],
                               );
                             }
 
-                            final ticket = tickets[index];
+                            final tickets = ticketController
+                                .getTicketModel.value?.data?.tickets ??
+                                [];
 
-                            return Padding(
-                              padding: EdgeInsets.only(bottom: 2.h),
-                              child: TicketWidget(
-                                width: double.infinity,
-                                height: 22.h,
-                                dyOffset: 2.h,
-                                isCornerRounded: true,
-                                color: whiteColor,
-                                child: Stack(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w,
-                                        vertical: 1.5.h,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        children: [
-                                          /// 🔹 Title Row
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: customText(
-                                                  text: ticket
-                                                      ?.eventId?.eventTitle,
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: lightPurple,
-                                                  borderRadius:
-                                                  BorderRadius.circular(
-                                                      10.sp),
-                                                ),
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 1.5.w,
-                                                  vertical: 0.3.h,
-                                                ),
-                                                child: customText(
-                                                  text: ticket?.ticketNumber,
-                                                  fontSize: 13.sp,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: darkPurpleColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                            if (tickets.isEmpty) {
+                              return Column(
+                                children: [
+                                  SizedBox(height: 32.h,),
+                                  customText(text: "No tickets found"),
+                                ],
+                              );
+                            }
 
-                                          SizedBox(height: 1.h),
-
-                                          /// 🔹 Date & Price
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: _infoBox(
-                                                  color:
-                                                  const Color(0xFFD9F3FB),
-                                                  icon:
-                                                  'assets/png/event_detail_icon/date&time.png',
-                                                  title: communityController
-                                                      .formatDate(ticket
-                                                      ?.eventId?.date),
-                                                  subtitle: communityController
-                                                      .formatTime(ticket
-                                                      ?.eventId?.time),
-                                                ),
-                                              ),
-                                              SizedBox(width: 2.w),
-                                              Expanded(
-                                                child: _infoBox(
-                                                  color:
-                                                  const Color(0xFFFFE4F8),
-                                                  icon:
-                                                  'assets/png/bottom_nav_icon/ticket.png',
-                                                  title:
-                                                  "\$ ${ticket?.price}",
-                                                  subtitle: ticket.status.toString(),
-                                                  iconColor:
-                                                  buttonPinkColor,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-
-                                          SizedBox(height: 4.25.h),
-
-                                          /// 🔹 Action Buttons
-                                          Row(
-                                            children: [
-                                              Image.asset(
-                                                "assets/png/home_icons/barcode.png",
-                                                width: 12.h,
-                                              ),
-                                              SizedBox(width: 3.w),
-                                              Expanded(
-                                                child: customButton(
-                                                  "Cancel",
-                                                  color: ticketGreyColor,
-                                                  height: 4.h,
-                                                  textColor: blackColor,
-                                                  ontap: () {
-                                                    ticketController.deleteTicket("${ticket.id}");
-                                                    // ticketController.getTickets(
-                                                    //   page: 1,
-                                                    //   limit: 10,
-                                                    //   status: ticketController.currentStatus.value,
-                                                    // );
-                                                  },
-                                                ),
-                                              ),
-                                              SizedBox(width: 3.w),
-                                              Expanded(
-                                                child: customButton(
-                                                  "Pay",
-                                                  color: ticketBlueColor,
-                                                  height: 4.h,
-                                                  textColor: whiteColor,
-                                                  ontap: () {
-                                                    Get.toNamed("card");
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                            return ListView.builder(
+                              controller: ticketController.scrollController,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              itemCount: tickets.length +
+                                  (ticketController.isFetchingMore.value ? 1 : 0),
+                              itemBuilder: (context, index) {
+                                /// Pagination Loader
+                                if (index == tickets.length) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 2.h),
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
                                     ),
+                                  );
+                                }
 
-                                    /// 🔹 Dashed Line
-                                    Positioned(
-                                      top: 12.9.h,
-                                      right: 3.5.w,
-                                      child: Image.asset(
-                                        'assets/png/home_icons/line.png',
-                                        height: 0.14.h,
-                                      ),
+                                final ticket = tickets[index];
+
+                                return Padding(
+                                  padding: EdgeInsets.only(bottom: 2.h),
+                                  child: TicketWidget(
+                                    width: double.infinity,
+                                    height: 21.h,
+                                    dyOffset: 2.h,
+                                    isCornerRounded: true,
+                                    color: whiteColor,
+                                    child: Stack(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 4.w,
+                                            vertical: 1.5.h,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              /// 🔹 Title Row
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: customText(
+                                                      text: ticket
+                                                          ?.eventId?.eventTitle,
+                                                      fontSize: 16.sp,
+                                                      fontWeight: FontWeight.bold,
+                                                      color: Colors.black,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: lightPurple,
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.sp),
+                                                    ),
+                                                    padding: EdgeInsets.symmetric(
+                                                      horizontal: 1.5.w,
+                                                      vertical: 0.3.h,
+                                                    ),
+                                                    child: customText(
+                                                      text: ticket?.ticketNumber,
+                                                      fontSize: 13.sp,
+                                                      fontWeight: FontWeight.w500,
+                                                      color: darkPurpleColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              SizedBox(height: 1.h),
+
+                                              /// 🔹 Date & Price
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: _infoBox(
+                                                      color:
+                                                      const Color(0xFFD9F3FB),
+                                                      icon:
+                                                      'assets/png/event_detail_icon/date&time.png',
+                                                      title: communityController
+                                                          .formatDate(ticket
+                                                          ?.eventId?.date),
+                                                      subtitle: communityController
+                                                          .formatTime(ticket
+                                                          ?.eventId?.time),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 2.w),
+                                                  Expanded(
+                                                    child: _infoBox(
+                                                      color:
+                                                      const Color(0xFFFFE4F8),
+                                                      icon:
+                                                      'assets/png/bottom_nav_icon/ticket.png',
+                                                      title:
+                                                      "\$ ${ticket?.price}",
+                                                      subtitle: ticket.status.toString(),
+                                                      iconColor:
+                                                      buttonPinkColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              SizedBox(height: 4.5.h),
+
+                                              /// 🔹 Action Buttons
+                                              Row(
+                                                children: [
+                                                  // Image.asset(
+                                                  //   "assets/png/home_icons/barcode.png",
+                                                  //   width: 12.h,
+                                                  // ),
+                                                  // SizedBox(width: 3.w),
+                                                  Expanded(
+                                                    child: customButton(
+                                                      "Cancel",
+                                                      color: ticketGreyColor,
+                                                      height: 4.h,
+                                                      textColor: blackColor,
+                                                      ontap: () {
+                                                        ticketController.deleteTicket("${ticket.id}");
+                                                        // ticketController.getTickets(
+                                                        //   page: 1,
+                                                        //   limit: 10,
+                                                        //   status: ticketController.currentStatus.value,
+                                                        // );
+                                                      },
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 3.w),
+                                                  Expanded(
+                                                    child: customButton(
+                                                      "Pay",
+                                                      color: ticketBlueColor,
+                                                      height: 4.h,
+                                                      textColor: whiteColor,
+                                                      ontap: () {
+                                                        Get.toNamed("card");
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        /// 🔹 Dashed Line
+                                        Positioned(
+                                          top: 12.6.h,
+                                          right: 3.5.w,
+                                          child: Image.asset(
+                                            'assets/png/home_icons/line.png',
+                                            height: 0.14.h,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                              },
                             );
-                          },
+                          }),
                         ),
-                      );
-                    }),
-                  ),
+                      ),
+
+
                 ],
               ),
             ),

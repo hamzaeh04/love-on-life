@@ -29,7 +29,7 @@ class FavoriteEventModel {
 }
 
 class Data {
-  LocationType? locationType;
+  String? locationType;
   String? id;
   List<String>? userIds;
   String? image;
@@ -68,7 +68,7 @@ class Data {
   });
 
   Data.fromJson(Map<String, dynamic> json) {
-    locationType = (json['locationType'] as Map<String,dynamic>?) != null ? LocationType.fromJson(json['locationType'] as Map<String,dynamic>) : null;
+    locationType = json['locationType'] as String?;
     id = json['_id'] as String?;
     userIds = (json['userIds'] as List?)?.map((dynamic e) => e as String).toList();
     image = json['image'] as String?;
@@ -89,7 +89,7 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
-    json['locationType'] = locationType?.toJson();
+    json['locationType'] = locationType;
     json['_id'] = id;
     json['userIds'] = userIds;
     json['image'] = image;
@@ -106,24 +106,6 @@ class Data {
     json['createdAt'] = createdAt;
     json['updatedAt'] = updatedAt;
     json['__v'] = v;
-    return json;
-  }
-}
-
-class LocationType {
-  String? type;
-
-  LocationType({
-    this.type,
-  });
-
-  LocationType.fromJson(Map<String, dynamic> json) {
-    type = json['type'] as String?;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> json = <String, dynamic>{};
-    json['type'] = type;
     return json;
   }
 }

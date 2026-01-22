@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:http/http.dart';
 import 'package:love_on_life/constants/color_constants.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:love_on_life/controllers/community_controller.dart';
-import 'package:love_on_life/widgets/custom_app_bar.dart';
 import '../constants/constants_widgets.dart';
 import '../core/services/base_services.dart';
-import 'shimmer_widget.dart';
 
 void showCommentsSheet(BuildContext context, String postId, int postIndex) {
   final CommunityController communityController = Get.find<CommunityController>();

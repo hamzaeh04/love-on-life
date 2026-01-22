@@ -58,6 +58,7 @@ class AuthController extends GetxController {
   RxBool isVerified = false.obs;
 
   /// Country selection
+  final TextEditingController phoneController = TextEditingController();
   final Rxn<Country> selectedCountry = Rxn<Country>();
   RxString countryCode = "+1".obs;
   RxString flagPath = "packages/country_icons/icons/flags/png100px/us.png".obs;
@@ -334,11 +335,13 @@ class AuthController extends GetxController {
       // Save user info
       final prefs = SharedPreferencesMethod.storage;
       await prefs.setString(LocalDBKeys.USERDETAIL, jsonEncode(user));
+      await prefs.setString(LocalDBKeys.USERID, user['id'] ?? "");
       await prefs.setString(LocalDBKeys.USERFULLNAME, user['fullname'] ?? "");
       await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
       await prefs.setString(LocalDBKeys.PHONENUMBER, user['phone'] ?? "");
       await prefs.setString(LocalDBKeys.USERPROFILEPIC, user['profilePicture'] ?? "");
       await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+      await prefs.setString(LocalDBKeys.JOINDATE, user['createdAt'] ?? "");
       await prefs.setString(LocalDBKeys.TOKEN, token);
 
 
@@ -483,7 +486,7 @@ class AuthController extends GetxController {
       if (statusCode >= 200 && statusCode < 300) {
         Utils.showToast(response['message'] ?? 'OTP sent to your email', false);
 
-          Get.toNamed("verification");
+          //Get.toNamed("verification");
         forgotEmailField.clear();
         //forgotPasswordField.clear();
       }

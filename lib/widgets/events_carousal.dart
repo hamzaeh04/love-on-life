@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/community_controller.dart';
 import 'package:love_on_life/core/services/base_services.dart';
-import 'package:love_on_life/views/dashboard_screens/home_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 
@@ -15,19 +14,6 @@ class EventsCarousel extends StatelessWidget {
   final CommunityController communityController =
       Get.find<CommunityController>();
   BaseService baseService = BaseService();
-  final List<String> images = [
-    "assets/png/carousal_images/carousal1.png",
-    "assets/png/carousal_images/carousal2.png",
-    "assets/png/carousal_images/carousal3.png",
-  ];
-
-  final List<String> apiImages = [
-    "assets/png/event_detail_icon/p1.png",
-    "assets/png/event_detail_icon/p2.png",
-    "assets/png/community_icon/person3.png",
-    "assets/png/event_detail_icon/p3.png",
-    "assets/png/event_detail_icon/image.png",
-  ];
 
   EventsCarousel({super.key});
 
@@ -166,52 +152,7 @@ class EventsCarousel extends StatelessWidget {
                                 horizontal: 2.w,
                                 vertical: 0.4.h,
                               ), // 👈 inner padding
-                              // child: SizedBox(
-                              //   width: (apiImages.length * 5.w) + 2.w,
-                              //   height: 7.w,
-                              //   child: Stack(
-                              //     clipBehavior: Clip.none,
-                              //     children: [
-                              //       ...List.generate(apiImages.length, (index) {
-                              //         return Positioned(
-                              //           left: index * 5.w,
-                              //           child: ClipOval(
-                              //             child: Stack(
-                              //               alignment: Alignment.center,
-                              //               children: [
-                              //                 // Avatar Image
-                              //                 Image.asset(
-                              //                   apiImages[index],
-                              //                   width: 7.w,
-                              //                   height: 7.w,
-                              //                   fit: BoxFit.cover,
-                              //                 ),
-                              //
-                              //                 // 👇 Agar last image hai to overlay + custom text
-                              //                 if (index == apiImages.length - 1)
-                              //                   Container(
-                              //                     width: 7.w,
-                              //                     height: 7.w,
-                              //                     decoration: BoxDecoration(
-                              //                       color: Colors.black.withOpacity(0.6),
-                              //                       shape: BoxShape.circle,
-                              //                     ),
-                              //                     alignment: Alignment.center,
-                              //                     child: customText(
-                              //                       text: "12+",
-                              //                       fontSize: 12.sp,
-                              //                       fontWeight: FontWeight.bold,
-                              //                       color: Colors.white,
-                              //                     ),
-                              //                   ),
-                              //               ],
-                              //             ),
-                              //           ),
-                              //         );
-                              //       }),
-                              //     ],
-                              //   ),
-                              // ),
+
                               child: customText(
                                 text:
                                     "${event.userIds?.length.toString()} peoples attending",

@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/core/services/base_services.dart';
-import 'package:love_on_life/widgets/custom_button.dart';
+import 'package:love_on_life/outh_file/local_db_key.dart';
 import 'package:love_on_life/widgets/profile_network_image.dart';
 import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
-
 import '../constants/constants_widgets.dart';
 import '../controllers/drawer_controller.dart';
+import '../utils/shared_prefrences_methods.dart';
 
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({super.key});
   final BaseService baseService = BaseService();
   final AuthController controller = Get.find<AuthController>();
   final Drawercontroller drawerController = Get.find<Drawercontroller>();
+  final prefs = SharedPreferencesMethod.storage;
+  late final date = prefs.getString(LocalDBKeys.JOINDATE);
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,15 +53,6 @@ class CustomDrawer extends StatelessWidget {
                             "assets/png/home_icons/profile-placeholder.jpg",
                       );
                     }),
-
-                    // Positioned(
-                    //   right: -1.w,
-                    //   bottom: -0.5.h,
-                    //   child: Image.asset(
-                    //     "assets/png/camera_img.png",
-                    //     width: 5.w,
-                    //   ),
-                    // ),
                   ],
                 ),
 
@@ -79,7 +73,7 @@ class CustomDrawer extends StatelessWidget {
                       ),
                     ),
                     customText(
-                      text: "Joined since ${drawerController.formatYear(controller.date.value)}",
+                      text: "Joined since ${drawerController.formatYear(date)}",
 
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w400,
@@ -97,6 +91,7 @@ class CustomDrawer extends StatelessWidget {
               "My Profile",
               ontap: () {
                 Get.toNamed("profile");
+                print(controller.date.value);
               },
             ),
             drawerTile(

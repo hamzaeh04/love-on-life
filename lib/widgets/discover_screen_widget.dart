@@ -4,16 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/controllers/community_controller.dart';
-import 'package:love_on_life/controllers/dashboard_controller.dart';
 import 'package:love_on_life/widgets/custom_app_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
-
 import '../constants/constants_widgets.dart';
 import '../core/services/apiendpoints.dart';
 import '../views/dashboard_screens/home_screen.dart';
 import 'custom_button.dart';
-import 'profile_network_image.dart';
 
 Widget discoverWidget({
   int? index, // 👈 optional index now
@@ -34,7 +31,7 @@ Widget discoverWidget({
   BuildContext? context,
 }) {
   final CommunityController communityController = Get.find<CommunityController>();
-  print("The images are ${baseService.baseURL}${imagePath}");
+  //print("The images are ${baseService.baseURL}${imagePath}");
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(13.sp),
@@ -59,12 +56,6 @@ Widget discoverWidget({
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(topLeft: Radius.circular(12.sp), topRight: Radius.circular(12.sp)),
-                  // child: ProfileNetworkImage2(
-                  //   imageUrl: "${baseService.baseURL}${imagePath}",
-                  //   size: 10.w,
-                  //   placeholder: 'assets/png/discover1.jpeg',
-                  //   isCommunity: true,
-                  // ),
                   child: CachedNetworkImage(
                     imageUrl: "${baseService.baseURL}${imagePath}",
                     fit: BoxFit.cover,
@@ -102,24 +93,26 @@ Widget discoverWidget({
                 ),
               ),
 
-              // 🔹 Favourite (Heart) Icon
+              // Inside discoverWidget ...
+
               Positioned(
                 bottom: 1.h,
                 right: 3.w,
                 child: Obx(() {
-                  final events = communityController.getAllEventsModel.value?.data?.events;
-                  if (events == null || index == null || index! >= events.length) {
-                    return SizedBox(); // return empty widget if index is invalid
-                  }
+                  // 🔹 FIND THE EVENT BY ID INSTEAD OF INDEX
+                  final mainEvents = communityController.getAllEventsModel.value?.data?.events;
+                  final currentEvent = mainEvents?.firstWhereOrNull((e) => e.id == eventId);
 
-                  final currentEvent = events[index!];
-                  final eventIsFav = currentEvent?.isFavorite ?? false;
+                  // Fallback: If not in main list, check the favorite list
+                  final isFav = currentEvent?.isFavorite ??
+                      communityController.favEventsList.any((e) => e.id == eventId);
 
                   return GestureDetector(
                     onTap: () async {
-                      if (currentEvent?.id != null) {
-                        await communityController.toggleFavoriteEvent("${currentEvent!.id}", index!);
-                        communityController.getFavoriteEvents();
+                      if (eventId != null) {
+                        // Find index in main list to satisfy your existing function signature
+                        int mainIndex = mainEvents?.indexWhere((e) => e.id == eventId) ?? -1;
+                        await communityController.toggleFavoriteEvent(eventId, mainIndex);
                       }
                     },
                     child: Container(
@@ -129,26 +122,18 @@ Widget discoverWidget({
                         color: whiteColor,
                         border: Border.all(color: textfieldBorderColor, width: 0.3.w),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.asset(
-                            eventIsFav
-                                ? 'assets/png/community_icon/like_red.png'
-                                : 'assets/png/community_icon/Like.png',
-                            width: 4.w,
-                            height: 2.h,
-                            color: eventIsFav ? buttonPinkColor : Colors.grey,
-                          ),
-                        ],
+                      child: Image.asset(
+                        isFav
+                            ? 'assets/png/community_icon/like_red.png'
+                            : 'assets/png/community_icon/Like.png',
+                        width: 4.w,
+                        height: 2.h,
+                        color: isFav ? buttonPinkColor : Colors.grey,
                       ),
                     ),
                   );
                 }),
-
               ),
-
-              // 🔹 Share Icon
               Positioned(
                 bottom: 5.h,
                 right: 3.w,
@@ -230,18 +215,6 @@ Widget discoverWidget({
                 // 🔹 Buttons
                 Row(
                   children: [
-                    // Expanded(
-                    //   child: customButton(
-                    //     "View Location",
-                    //     color: blackColor,
-                    //     fontweight: FontWeight.w500,
-                    //     fontsize: 15.sp,
-                    //     height: 5.h,
-                    //     textColor: whiteColor,
-                    //     ontap: onViewLocation,
-                    //   ),
-                    // ),
-                    // SizedBox(width: 2.w),
                     Expanded(
                       child: customButton(
                         "Join Now",

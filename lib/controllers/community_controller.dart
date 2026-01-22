@@ -8,17 +8,19 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/controllers/dashboard_controller.dart';
-import 'package:love_on_life/model/community_post_model.dart';
-import 'package:love_on_life/model/favorite_event_model.dart';
-import 'package:love_on_life/model/get_all_events_model.dart';
-import 'package:love_on_life/model/get_event_by_id_model.dart';
-import 'package:love_on_life/utils/shared_prefrences_methods.dart';
+import 'package:love_on_life/controllers/ticket_controller.dart';
+import 'package:love_on_life/model/community_post_model.dart' hide Data;
+import 'package:love_on_life/model/favorite_event_model.dart' hide Data;
+import 'package:love_on_life/model/get_all_events_model.dart' hide Data;
+import 'package:love_on_life/model/get_event_by_id_model.dart' hide Data;
+import 'package:love_on_life/utils/shared_prefrences_methods.dart' hide Data;
 import 'package:love_on_life/widgets/custom_ticket_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../core/services/apiendpoints.dart';
 import '../core/services/base_services.dart';
 import '../model/community_post_model.dart';
+import '../model/get_ticket_model.dart';
 import '../outh_file/local_db_key.dart';
 import '../utils/utility.dart';
 import 'package:intl/intl.dart';
@@ -56,11 +58,10 @@ class CommunityController extends GetxController {
   void loadMorePosts() {
     visiblePostCount.value += 2;
   }
-  void toggleIsFav(){
-    isFavorite.value = !isFavorite.value;
-  }
+
 
   RxList<Events> eventsList = <Events>[].obs;
+  RxList favEventsList = [].obs;
 
   RxBool isLoadingEvents = false.obs;
   RxInt currentPage = 1.obs;
@@ -129,16 +130,37 @@ class CommunityController extends GetxController {
   // Image selection
   final ImagePicker _picker = ImagePicker();
   Rx<File?> selectedPostImage = Rx<File?>(null);
+  Rx<File?> selectedPostVideo = Rx<File?>(null);
+  void removePostMedia() {
+    selectedPostImage.value = null;
+    selectedPostVideo.value = null;
+  }
+
   Future<void> pickImagePost() async {
-    final XFile? image = await _picker.pickImage(
-      source: ImageSource.gallery,
+    final List<XFile> media = await _picker.pickMultipleMedia(
       imageQuality: 80,
     );
-    if (image != null) {
-      selectedPostImage.value = File(image.path);
+
+    if (media.isNotEmpty) {
+      final XFile selected = media.first;
+
+      if (selected.mimeType?.startsWith('video') == true) {
+        // Video selected
+        selectedPostVideo.value = File(selected.path);
+        selectedPostImage.value = null;
+      } else {
+        // Image selected
+        selectedPostImage.value = File(selected.path);
+        selectedPostVideo.value = null;
+      }
+
       _validatePost();
     }
   }
+
+
+
+
   void IncrementLike(bool isLiked) {
     if (isLiked == true) {
       isLikeIncremnet--;
@@ -215,30 +237,37 @@ class CommunityController extends GetxController {
 
   Future<void> toggleFavoriteEvent(String eventId, int eventIndex) async {
     try {
-      final events = getAllEventsModel.value?.data?.events;
+      // 1. Determine which event we are talking about
+      // We search the main list by ID to be safe, regardless of what screen we are on
+      final mainEvents = getAllEventsModel.value?.data?.events;
+      final event = mainEvents?.firstWhereOrNull((e) => e.id == eventId);
 
-      if (events == null || eventIndex >= events.length) return;
+      if (event == null) return;
 
-      final event = events[eventIndex];
+      // 2. Optimistic UI update
+      final bool wasFavorite = event.isFavorite ?? false;
+      event.isFavorite = !wasFavorite;
 
-      // 1️⃣ Backup old state
-      final bool oldFavoriteStatus = event.isFavorite ?? false;
+      // 3. Sync the Favorite List
+      if (event.isFavorite == false) {
+        // Remove from favorite screen list instantly
+        favEventsList.removeWhere((element) => element.id == eventId);
+      } else {
+        // Add to favorite screen list if not present
+        if (!favEventsList.any((element) => element.id == eventId)) {
+          favEventsList.add(event);
+        }
+      }
 
-      // 2️⃣ Optimistic UI update
-      event.isFavorite = !oldFavoriteStatus;
-
-// Sirf model ko nahi, apni eventsList ko bhi refresh karein
-      eventsList.refresh();
+      // Refresh everything for GetX to see changes
       getAllEventsModel.refresh();
+      favEventsList.refresh();
 
-      // 3️⃣ API Call
-      final uri = Uri.parse(
-        "${BaseService().baseURL}${ApiEndPoints.toggleFavoriteEvents(eventId)}",
-      );
-      print(uri);
-
+      // 4. API Call
+      final uri = Uri.parse("${BaseService().baseURL}${ApiEndPoints.toggleFavoriteEvents(eventId)}");
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString(LocalDBKeys.TOKEN);
+      print(uri);
 
       final response = await http.post(
         uri,
@@ -246,78 +275,81 @@ class CommunityController extends GetxController {
           "Authorization": "Bearer $token",
           "Content-Type": "application/json",
         },
-      ).timeout(const Duration(seconds: 20));
+      ).timeout(const Duration(seconds: 15));
 
-      final decoded = jsonDecode(response.body);
+      // Optional: handle failure/rollback here...
+      print("Favorite List Count: ${favEventsList.length}");
 
-      if (response.statusCode == 201 && decoded['success'] == true) {
-        // 4️⃣ Sync UI with server response
-        event.isFavorite = decoded['data']['isFavorite'] ?? event.isFavorite;
-        getAllEventsModel.refresh();
-        dashboardController.toggleFavorite(eventIndex);
-        print(event.isFavorite);
-      } else {
-        // 5️⃣ Rollback on failure
-        event.isFavorite = oldFavoriteStatus;
-        getAllEventsModel.refresh();
-        Utils.showToast("Failed to update favorite", true);
-      }
     } catch (e) {
-      // 6️⃣ Rollback on error
-      final events = getAllEventsModel.value?.data?.events;
-      if (events != null && eventIndex < events.length) {
-        events[eventIndex].isFavorite =
-        !(events[eventIndex].isFavorite ?? false);
-        getAllEventsModel.refresh();
-      }
-
-      debugPrint("Toggle Favorite Error: $e");
-      Utils.showToast("Something went wrong", true);
+      debugPrint("Toggle Error: $e");
     }
   }
-
-  Future<void> getFavoriteEvents() async {
+  Future<void> getFavoriteEvents({bool isLoadMore = false}) async {
     try {
-      final uri = ApiEndPoints.favoriteEvent; // Replace with your API endpoint
-      //final response = await http.get(uri);
+      if (!isLoadMore) {
+        isLoadingEvents.value = true;
+        currentPage.value = 1;
+      }
 
+      final uri = ApiEndPoints.favoriteEvent;
       final response = await baseService.baseGetAPI(uri);
-      print(uri);
 
-      if (response['statusCode'] == 200 || response['statusCode'] == 201) {
+      if (response != null && (response['statusCode'] == 200 || response['statusCode'] == 201)) {
         final model = FavoriteEventModel.fromJson(response);
         getFavoriteEventModel.value = model;
-        print("message: ${response['message']}");
-      } else {
-        print("Failed to fetch favorite events. Status code: ${response['statusCode']}. message: ${response['message']}");
-        return null;
+
+        // Updating the RxList
+        favEventsList.assignAll(model.data ?? []);
       }
     } catch (e) {
-      print("Error fetching favorite events: $e");
-      return null;
+      debugPrint("Error fetching favorite events: $e");
+    } finally {
+      isLoadingEvents.value = false;
     }
   }
-
   Future<void> joinEvent(BuildContext context, String eventId, String title, String date, String time) async {
     try {
-      final uri = ApiEndPoints.joinEvent; // Your API endpoint
+      final uri = ApiEndPoints.joinEvent;
       final body = {"eventId": eventId};
 
       final response = await baseService.basePostAPI(uri, body, loading: true);
 
       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
-        Utils.showToast('${response['message']}', false);
-        print("Event joined successfully: ${response['message']}");
-        showTicketDialog(context, title: title, ticketNumber: response['ticketNumber'], ticketLeft: response['status'], price: response['price'], date: date, time: time);
-      } else {
-        print("Failed to join event. Status code: ${response['statusCode']}. Message: ${response['message']}");
+        // 1️⃣ Extract data safely from the response
+        final responseData = response['data'] ?? response;
+        showTicketDialog(
+            context,
+            title: title,
+            ticketNumber: response['ticketNumber'],
+            ticketLeft: response['status'],
+            price: response['price'],
+            date: date,
+            time: time
+        );
+
+        // 2️⃣ Create the Tickets object matching GetTicketModel exactly
+        final newTicket = Tickets(
+          id: responseData['ticket']['_id'] ?? '',
+          ticketNumber: response['ticketNumber'] ?? 'N/A',
+          price: response['price'] ?? 0,
+          status: response['status'] ?? 'pending',
+          // 🔹 This is the critical part: mapping the nested event details
+          eventId: EventId(
+            eventTitle: title,
+            date: date, // Must be ISO format (e.g. 2025-09-12)
+            time: time, // Must be// HH:mm format
+          ),
+        );
+        // 3️⃣ Inject into TicketController
+        final TicketController ticketController = Get.find<TicketController>();
+        ticketController.addTicketToLocalList(newTicket);
+        ticketController.getTickets(page: 1, limit: 10, status: ticketController.currentStatus.value);
+
       }
     } catch (e) {
-      print("Error joining event: $e");
+      debugPrint("Join Event Error: $e");
     }
   }
-
-
   Future<void> addComment(String postId, int postIndex) async {
     String commentText = addCommentField.text.trim();
     if (commentText.isEmpty) return;
@@ -378,6 +410,7 @@ class CommunityController extends GetxController {
 
   Future<void> createPost() async {
     try {
+      isLoadingPosts.value = true;
       final uri = Uri.parse("${BaseService().baseURL}${ApiEndPoints.createPost}");
       final request = http.MultipartRequest('POST', uri);
 
@@ -427,6 +460,7 @@ class CommunityController extends GetxController {
 
           // Clear fields
           clearPostFields();
+          GetAllPost();
           return;
         }
 
@@ -444,6 +478,8 @@ class CommunityController extends GetxController {
     } catch (e, st) {
       Utils.showToast("Unexpected error: $e", true);
       print("Stack trace: $st");
+    } finally{
+      isLoadingPosts.value = false;
     }
   }
 
@@ -480,10 +516,10 @@ class CommunityController extends GetxController {
     try {
       isLoadingPosts.value = true;
 
-      String url = ApiEndPoints.createPost; // Replace with correct GET endpoint
+      String url = "${ApiEndPoints.createPost}"; // Replace with correct GET endpoint
       final responseData = await baseService.baseGetAPI(url);
 
-      print("GET URL: $url");
+      print("GET POSTS URL: $url");
       print("Response: $responseData");
 
       if (responseData["success"] != true) {
@@ -521,6 +557,7 @@ class CommunityController extends GetxController {
       isLoadingPosts.value = false;
     }
   }
+
 
   Future<void> GetEventById(String id) async {
     try {
@@ -596,12 +633,12 @@ class CommunityController extends GetxController {
 
       final newEvents = model.data?.events ?? [];
 
+
       if (isLoadMore) {
         eventsList.addAll(newEvents);
       } else {
         eventsList.assignAll(newEvents);
       }
-
       currentPage.value = model.data?.page ?? 1;
       totalPages.value = model.data?.totalPages ?? 1;
 

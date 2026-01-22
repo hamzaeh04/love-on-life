@@ -27,46 +27,47 @@ void showTicketDialog(BuildContext context,
           backgroundColor: Colors.transparent, // let TicketWidget control bg
           child: TicketWidget(
             width: double.infinity,
-            height: 51.h,
-            dyOffset: 15.h,
+            height: 42.h,
+            dyOffset: 13.h,
             isCornerRounded: true,
             color: whiteColor,
             child: Stack(
               clipBehavior: Clip.none,
               children: [
                 // 🔹 QR code half inside, half outside
+                // Positioned(
+                //   top: -8.5.h, // adjust karke half andar half bahar kar lega
+                //   right: 0.w,
+                //   left: 0.w,
+                //   child: Align(
+                //     alignment: Alignment.topCenter,
+                //     child: ClipOval(
+                //       clipBehavior: Clip.none,
+                //       child: Container(
+                //         padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
+                //         decoration: BoxDecoration(
+                //           color: containerPinkColor,
+                //           shape: BoxShape.circle,
+                //         ),
+                //         child: Image.asset(
+                //           'assets/png/event_detail_icon/qrcode.png',
+                //           width: 18.w,
+                //           fit: BoxFit.contain,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 Positioned(
-                  top: -8.5.h, // adjust karke half andar half bahar kar lega
-                  right: 0.w,
-                  left: 0.w,
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: ClipOval(
-                      clipBehavior: Clip.none,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
-                        decoration: BoxDecoration(
-                          color: containerPinkColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Image.asset(
-                          'assets/png/event_detail_icon/qrcode.png',
-                          width: 18.w,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 9.5.h,
+                  bottom: 7.75.h,
                   right: 0.w,
                   left: 0.w,
                   child: Image.asset(
                     'assets/png/home_icons/line.png',
                     height: 0.136.h,
                   ),
-                ),Positioned(
+                ),
+                Positioned(
                     top: 1.h,
                     right: 2.2.w,
                     child: InkWell(
@@ -78,12 +79,12 @@ void showTicketDialog(BuildContext context,
 
                 // 🔹 Main content inside ticket
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
+                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.5.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // 👇 ye aapki Row aur Date/Ticket row as it is
-                      SizedBox(height: 6.5.h,),
+                      SizedBox(height: 0.h,),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -245,14 +246,14 @@ void showTicketDialog(BuildContext context,
                         child: Image.asset('assets/png/home_icons/map.png'),
                       ),
 
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 3.5.h),
                       Row(
                         children: [
-                          Image.asset(
-                            "assets/png/home_icons/barcode.png",
-                            width: 18.w,
-                          ),
-                          SizedBox(width: 3.w),
+                          // Image.asset(
+                          //   "assets/png/home_icons/barcode.png",
+                          //   width: 18.w,
+                          // ),
+                          // SizedBox(width: 3.w),
                           Expanded(
                             child: customButton(
                               "Cancel  ",

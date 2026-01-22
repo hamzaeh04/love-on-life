@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
@@ -34,8 +33,6 @@ class EventDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // SizedBox(height: 6.h,),
-
                   //Body
                   SizedBox(height: 11.65.h,),
                   ClipRRect(
@@ -376,7 +373,7 @@ class EventDetailsScreen extends StatelessWidget {
                 child: Container(
                   // height: 14.h, // 🔹 blur limited to this height
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2), // frosted effect
+                    color: Colors.white.withValues(alpha: 0.2), // frosted effect
                   ),
                   child: Padding(
                     padding: EdgeInsets.only(left: 4.w, top: 6.h, bottom: 1.h),
@@ -421,7 +418,7 @@ class EventDetailsScreen extends StatelessWidget {
                 child: Container(
                   // height: 14.h, // 🔹 blur limited to this height
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2), // frosted effect
+                    color: Colors.white.withValues(alpha: 0.2), // frosted effect
                   ),
                   child: Padding(
                     padding: EdgeInsets.only(left: 4.w, right: 4.w, top: 3.h, bottom: 3.h),
@@ -534,7 +531,7 @@ Widget comments (String path, String name, String role, String time, String like
                 fontFamily: 'dmsans',
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
-                color: Colors.black.withOpacity(0.6)
+                color: Colors.black.withValues(alpha: 0.6)
               ),
             ],
           ),
@@ -544,7 +541,7 @@ Widget comments (String path, String name, String role, String time, String like
               fontFamily: time,
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: Colors.black.withOpacity(0.6)
+              color: Colors.black.withValues(alpha: 0.6)
           ),
           SizedBox(width: 2.w), // spacing before divider
           Container(
@@ -558,7 +555,7 @@ Widget comments (String path, String name, String role, String time, String like
               fontFamily: likes,
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: Colors.black.withOpacity(0.6)
+              color: Colors.black.withValues(alpha: 0.6)
           ),
           SizedBox(width: 2.w),
           Icon(Icons.favorite_border, size: 18.sp,)

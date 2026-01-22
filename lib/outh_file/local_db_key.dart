@@ -2,6 +2,7 @@ class LocalDBKeys {
   static const String TOKEN = "TOKEN";
   static const String FIRSTTIMEOPENAPP = "FIRSTTIMEOPENAPP";
   static const String USERTYPE = "USERTYPE";
+  static const String JOINDATE = "JOINDATE";
   static const String KHANTAR = "KHANTAR";
   static const String USERDETAIL = "USERDETAIL";
   static const String USERID = "USERID";

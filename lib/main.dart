@@ -21,6 +21,7 @@ void main() async{
   await SharedPreferencesMethod.init();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   Get.put<SharedPreferences>(prefs);
+  runApp(const MyApp());   // 👈 Only this
   // 👇 These ensure all controllers are available globally
   Get.put(NavigationController());
   Get.put(DashboardController());
@@ -29,7 +30,6 @@ void main() async{
   Get.put(PaymentController());// Put into GetX dependency
   Get.put(CommunityController());// Put into GetX dependency
   Get.put(TicketController());// Put into GetX dependency
-  runApp(const MyApp());   // 👈 Only this
 }
 
 class MyApp extends StatelessWidget {

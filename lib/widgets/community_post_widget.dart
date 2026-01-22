@@ -1,34 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/community_controller.dart';
-import 'package:love_on_life/controllers/dashboard_controller.dart';
+import 'package:love_on_life/utils/shared_prefrences_methods.dart';
 import 'package:love_on_life/widgets/custom_app_bar.dart';
 import 'package:love_on_life/widgets/profile_network_image.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
-
-import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
-import 'custom_comment_sheet.dart';
+import '../outh_file/local_db_key.dart';
+import '../utils/utility.dart';
 
 Widget communityPost(
-    String path,
-    String title,
-    String desc,
-    String time,
-    String path2,
-    String mainImage, {
-      int? index,
-      bool? isGroup = false,
-      bool? isGroupOnly = true,
-      bool? isFollow = true,
-      bool? isLiked = false,
-      String? postId,
-      VoidCallback? likeTapped,
-      VoidCallback? commentTapped,
-      BuildContext? context
-    }) {
-  final DashboardController controller = Get.find<DashboardController>();
+  String path,
+  String title,
+  String desc,
+  String time,
+  String path2,
+  String mainImage, {
+  int? index,
+  bool? isGroup = false,
+  bool? isGroupOnly = true,
+  bool? isFollow = true,
+  bool? isLiked = false,
+  String? postId,
+  VoidCallback? likeTapped,
+  VoidCallback? commentTapped,
+  BuildContext? context,
+}) {
   final CommunityController communityController = Get.find<CommunityController>();
+  final prefs = SharedPreferencesMethod.storage;
+  var id = prefs.getString(LocalDBKeys.USERID);
+  var post = communityController.getAllPostModel.value?.data?[index!];
+  bool isMyPost = post?.userId?.id == id;
 
   return Container(
     margin: EdgeInsets.only(right: 4.w),
@@ -41,30 +44,63 @@ Widget communityPost(
           children: [
             isGroup == true
                 ? Stack(
-              clipBehavior: Clip.none,
-              children: [
-                ProfileNetworkImage(
-                  imageUrl: '${baseService.baseURL}$path',
-                  size: 10.w,
-                  placeholder: 'assets/png/community_icon/person3.png',
-                ),
-                if (isGroupOnly == true)
-                  Positioned(
-                    bottom: 0,
-                    right: -1.2.w,
-                    child: ProfileNetworkImage(
+                  clipBehavior: Clip.none,
+                  children: [
+                    ProfileNetworkImage(
                       imageUrl: '${baseService.baseURL}$path',
-                      size: 5.5.w,
-                      placeholder: 'assets/png/community_icon/person1.png',
+                      size: 10.w,
+                      placeholder: 'assets/png/community_icon/person3.png',
                     ),
-                  ),
-              ],
-            )
-                : ProfileNetworkImage(
-              imageUrl: '${baseService.baseURL}$path',
-              size: 11.w,
-              placeholder: 'assets/png/community_icon/person1.png',
+                    if (isGroupOnly == true)
+                      Positioned(
+                        bottom: 0,
+                        right: -1.2.w,
+                        child: ProfileNetworkImage(
+                          imageUrl: '${baseService.baseURL}$path',
+                          size: 5.5.w,
+                          placeholder: 'assets/png/community_icon/person1.png',
+                        ),
+                      ),
+                  ],
+                ) : ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(
+                '${baseService.baseURL}$path',
+                width: 11.w,
+                height: 11.w,
+                fit: BoxFit.cover,
+
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/png/community_icon/person1.png',
+                    width: 11.w,
+                    height: 11.w,
+                    fit: BoxFit.cover,
+                  );
+                },
+
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  }
+
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: 11.w,
+                      height: 11.w,
+                      color: Colors.white,
+                    ),
+                  );
+                },
+              ),
             ),
+            // : ProfileNetworkImage(
+                //   imageUrl: '${baseService.baseURL}$path',
+                //   size: 11.w,
+                //   placeholder: 'assets/png/community_icon/person1.png',
+                // ),
             SizedBox(width: 2.w),
             Expanded(
               child: Column(
@@ -77,7 +113,8 @@ Widget communityPost(
                   ),
                   SizedBox(height: 0.3.h),
                   customText(
-                    text: "${communityController.formatDate(time)} • ${communityController.formatTime2(time)}",
+                    text:
+                        "${communityController.formatDate(time)} • ${communityController.formatTime2(time)}",
                     fontSize: 13.sp,
                     color: const Color(0xFF666666),
                   ),
@@ -88,31 +125,35 @@ Widget communityPost(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.sp),
               ),
-              onSelected: (value) {},
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  onTap: (){
-                    communityController.deletePost(postId!);
-                  },
-                  value: 'delete',
-                  child: customText(text: "Delete", color: Colors.red),
-                ),
-              ],
+              onSelected: (value) {
+                if (value == 'delete') {
+                  communityController.deletePost(postId!);
+                } else if (value == 'report') {
+                  Utils.showToast('Reported Successfully', false);
+                }
+              },
+              itemBuilder:
+                  (context) => [
+                    PopupMenuItem<String>(
+                      value: isMyPost ? 'delete' : 'report',
+                      child: customText(
+                        text: isMyPost ? "Delete" : "Report",
+                        color: Colors.red,
+                      ),
+                    ),
+                  ],
               child: Image.asset(
                 'assets/png/community_icon/DotsThreeVertical.png',
                 width: 7.w,
               ),
-            )
+            ),
           ],
         ),
 
         SizedBox(height: 0.8.h),
         Padding(
-          padding:  EdgeInsets.only(left: 2.w),
-          child: customText(
-              text: desc,
-              fontSize: 14.sp
-          ),
+          padding: EdgeInsets.only(left: 2.w),
+          child: customText(text: desc, fontSize: 14.sp),
         ),
         SizedBox(height: 0.8.h),
 
@@ -139,14 +180,18 @@ Widget communityPost(
               // --- Like Button ---
               Obx(() {
                 // Post ka data direct list se uthao
-                final currentPost = communityController.getAllPostModel.value?.data?[index!];
+                final currentPost =
+                    communityController.getAllPostModel.value?.data?[index!];
                 final postIsLiked = currentPost?.isLiked ?? false;
 
                 return GestureDetector(
                   onTap: () async {
                     if (currentPost?.id != null) {
                       // Specific post ko like karo
-                      await communityController.toggleLike("${currentPost!.id}", index!);
+                      await communityController.toggleLike(
+                        "${currentPost!.id}",
+                        index!,
+                      );
                     }
                   },
                   child: Row(
@@ -178,10 +223,7 @@ Widget communityPost(
                       width: 5.5.w,
                     ),
                     SizedBox(width: 2.w),
-                    customText(
-                      text: 'Comments',
-                      fontSize: 12.5.sp,
-                    ),
+                    customText(text: 'Comments', fontSize: 12.5.sp),
                   ],
                 ),
               ),
@@ -191,7 +233,8 @@ Widget communityPost(
 
         /// ---------------- LIKES INFO ----------------
         Obx(() {
-          final currentPost = communityController.getAllPostModel.value?.data?[index!];
+          final currentPost =
+              communityController.getAllPostModel.value?.data?[index!];
           final currentLikes = currentPost?.likesCount ?? 0;
 
           return RichText(
@@ -220,32 +263,34 @@ Widget communityPost(
 
         /// ---------------- TOP COMMENT ----------------
         Obx(() {
-          final currentPost = communityController.getAllPostModel.value?.data?[index!];
-          final topComment = currentPost?.comments?.isNotEmpty == true ? currentPost!.comments!.first : null;
+          final currentPost =
+              communityController.getAllPostModel.value?.data?[index!];
+          final topComment =
+              currentPost?.comments?.isNotEmpty == true
+                  ? currentPost!.comments!.first
+                  : null;
 
           return currentPost?.commentsCount == 0
               ? const SizedBox.shrink()
               : RichText(
-            text: TextSpan(
-              style: TextStyle(
-                fontFamily: 'dmsans',
-                fontSize: 13.5.sp,
-                color: Colors.black,
-              ),
-              children: [
-                TextSpan(
-                  text: currentPost?.userId?.fullname ?? "User",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
+                text: TextSpan(
+                  style: TextStyle(
+                    fontFamily: 'dmsans',
+                    fontSize: 13.5.sp,
+                    color: Colors.black,
                   ),
+                  children: [
+                    TextSpan(
+                      text: currentPost?.userId?.fullname ?? "User",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    TextSpan(text: " ${topComment?.comment ?? ''}"),
+                  ],
                 ),
-                TextSpan(
-                  text: " ${topComment?.comment ?? ''}",
-                ),
-              ],
-            ),
-          );
+              );
         }),
       ],
     ),

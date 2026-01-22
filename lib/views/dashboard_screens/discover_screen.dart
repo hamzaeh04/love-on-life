@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/community_controller.dart';
 import 'package:love_on_life/controllers/dashboard_controller.dart';
-import 'package:love_on_life/views/dashboard_screens/ticket_screen.dart';
-import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:love_on_life/widgets/discover_screen_widget.dart';
 import 'package:sizer/sizer.dart';
 
@@ -14,8 +12,6 @@ import '../../constants/constants_widgets.dart';
 import '../../controllers/search_controller.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_drawer_widget.dart';
-import '../../widgets/custom_text_field.dart';
-import '../../widgets/custom_ticket_dialog.dart';
 import 'dart:async';
 
 class DiscoverScreen extends StatelessWidget {
@@ -148,14 +144,6 @@ class DiscoverScreen extends StatelessWidget {
             top: 0,
             left: 0,
             right: 0,
-            // child: Obx(
-            //       () => searchController.isSearch.value == false
-            //       ? customAppBar(
-            //     "Discover Events",
-            //     ontap: () => _scaffoldKey.currentState!.openDrawer(),
-            //   )
-            //       : _buildSearchBar(context),
-            // ),
             child: customAppBar('Discover Events',
             ontap: () => _scaffoldKey.currentState!.openDrawer(),
             ),
@@ -164,8 +152,6 @@ class DiscoverScreen extends StatelessWidget {
       ),
     );
   }
-
-
 
   Widget _buildSearchFilter() {
     return Row(
@@ -235,64 +221,10 @@ class DiscoverScreen extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: 3.w),
-        InkWell(
-          onTap: () async {
-            // Optional: force search manually
-            final text = communityController.searchField.text;
-            await communityController.getAllEvents(
-              search: text,
-              category: '',
-              page: 1,
-              limit: 10,
-            );
-          },
-          child: Container(
-            height: 5.h,
-            width: 5.h,
-            decoration: BoxDecoration(color: buttonPinkColor, shape: BoxShape.circle),
-            child: Center(
-              child: Image.asset(
-                "assets/png/home_icons/search_icon.png",
-                color: Colors.white,
-                width: 4.w,
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
-
-
-
-  Widget _buildSearchBar(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 5.h, left: 4.w, right: 4.w),
-      child: Row(
-        children: [
-          InkWell(
-            onTap: () => searchController.isSearch.value = false,
-            child: Container(
-              decoration: BoxDecoration(
-                color: whiteColor,
-                shape: BoxShape.circle,
-                border: Border.all(color: textfieldBorderColor, width: 0.2.w),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(1.w),
-                child: Icon(Icons.arrow_back, size: 19.sp),
-              ),
-            ),
-          ),
-          SizedBox(width: 30.w),
-          customText(text: 'Search', fontSize: 17.sp, fontWeight: FontWeight.w700),
-        ],
-      ),
-    );
-  }
 }
-
 
 Widget options(String title) {
   return Column(

@@ -6,9 +6,9 @@ import '../constants/color_constants.dart';
 import '../controllers/auth_controller.dart';
 
 class CustomPhoneTextFeild extends StatelessWidget {
-  final TextEditingController? controller;
+  // final TextEditingController? controller;
 
-  CustomPhoneTextFeild({this.controller, super.key});
+  CustomPhoneTextFeild({super.key});
 
   final AuthController authController = Get.find<AuthController>();
 
@@ -92,7 +92,7 @@ class CustomPhoneTextFeild extends StatelessWidget {
                 /// 📞 Phone Number Input
                 Expanded(
                   child: TextField(
-                    controller: controller,
+                    controller: authController.phoneController,
                     keyboardType: TextInputType.phone,
                     style: TextStyle(fontSize: 15.sp, color: Colors.black, fontFamily: 'dmsans'),
                     decoration: InputDecoration(

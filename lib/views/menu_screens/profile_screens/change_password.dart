@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';
-
 import '../../../constants/color_constants.dart';
 import '../../../controllers/drawer_controller.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_header.dart';
-import '../../../widgets/custom_phone_feild.dart';
 import '../../../widgets/custom_text_field.dart';
-import '../../../widgets/success_dialog.dart';
 
 class ChangePassword extends StatelessWidget {
   ChangePassword({super.key});

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/utils/helper_functions.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
-import 'package:love_on_life/widgets/success_dialog.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/constants_widgets.dart';
@@ -48,7 +47,7 @@ class ResetPassScreen extends StatelessWidget {
                       'New Password',
                       '•••••••••••',
                       'assets/png/lock.png',
-                      true, // 👈 password field, eye button aa jayega
+                      true,
                       isRequired: true,
                       validator: (value) => HelperFunction.passwordValidate(value),
                     ),
@@ -58,7 +57,7 @@ class ResetPassScreen extends StatelessWidget {
                       'Confirm Password',
                       '•••••••••••',
                       'assets/png/lock.png',
-                      true, // 👈 password field, eye button aa jayega
+                      true,
                       isRequired: true,
                       validator: (value) => HelperFunction.passwordValidate(value),
                     ),
@@ -67,7 +66,6 @@ class ResetPassScreen extends StatelessWidget {
                       if(resetKey.currentState!.validate()){
                         controller.forgotPassword.value = false;
                         controller.resetPassword(context);
-                        // controller.forgotPass();
                       }
                     }),
                     SizedBox(height: 22.8.h,),
