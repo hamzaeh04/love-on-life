@@ -39,7 +39,7 @@ class TicketScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 4.w),
               child: Column(
                 children: [
-                  SizedBox(height: 11.h),
+                  SizedBox(height: 12.h),
 
                   /// 🔹 Status Tabs
                   rowWidget(),
@@ -91,6 +91,7 @@ class TicketScreen extends StatelessWidget {
                             }
 
                             return ListView.builder(
+                              padding: EdgeInsets.zero,
                               controller: ticketController.scrollController,
                               physics: const AlwaysScrollableScrollPhysics(),
                               itemCount: tickets.length +

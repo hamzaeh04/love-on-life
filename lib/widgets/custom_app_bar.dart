@@ -19,7 +19,7 @@ Widget customAppBar(String title, {VoidCallback? ontap}) {
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
       child: Container(
-        padding: EdgeInsets.only(top: 4.5.h, left: 4.w, right: 4.w, bottom: 1.h),
+        padding: EdgeInsets.only(top: 5.25.h, left: 4.w, right: 4.w, bottom: 1.h),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.2),
         ),
@@ -41,7 +41,7 @@ Widget customAppBar(String title, {VoidCallback? ontap}) {
               ),
             )),
 
-            SizedBox(width: 2.w), // small spacing
+            //SizedBox(width: 2.w), // small spacing
 
             // Title
             Expanded(

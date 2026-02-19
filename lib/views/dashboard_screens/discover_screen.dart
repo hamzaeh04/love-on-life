@@ -88,6 +88,7 @@ class DiscoverScreen extends StatelessWidget {
                           }
 
                           return ListView.builder(
+                            padding: EdgeInsets.zero,
                             itemCount: communityController.eventsList.length,
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,

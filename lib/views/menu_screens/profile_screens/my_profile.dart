@@ -21,88 +21,86 @@ class MyProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.loadUserData();
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 5.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 5.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 
-              SizedBox(height: 5.h),
+            SizedBox(height: 5.h),
 
-              // Back button
-              InkWell(
-                onTap: () {
-                  Get.back();
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: whiteColor,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: textfieldBorderColor, width: 0.2.w),
-                  ),
-                  padding: EdgeInsets.all(1.w),
-                  child: Icon(Icons.arrow_back, size: 19.sp),
+            // Back button
+            InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: whiteColor,
+                  shape: BoxShape.circle,
+                  border: Border.all(color: textfieldBorderColor, width: 0.2.w),
                 ),
+                padding: EdgeInsets.all(1.w),
+                child: Icon(Icons.arrow_back, size: 19.sp),
               ),
+            ),
 
-              SizedBox(height: 8.h),
-// Image.network('${baseService.baseURL}${controller.userProfilePic.value}'),
-              // Profile Image
-              Center(
-                child: Obx(() {
-                  print("${baseService.baseURL}${controller.userProfilePic.value}");
-                  return ProfileNetworkImage(
-                    imageUrl: controller.userProfilePic.value.isNotEmpty
-                        ? "${baseService.baseURL}${controller.userProfilePic.value}"
-                        : "",
-                    size: 30.w,
-                    placeholder: "assets/png/home_icons/profile-placeholder.jpg",
-                  );
-                }),
-              ),
+            SizedBox(height: 8.h),
+      // Image.network('${baseService.baseURL}${controller.userProfilePic.value}'),
+            // Profile Image
+            Center(
+              child: Obx(() {
+                print("${baseService.baseURL}${controller.userProfilePic.value}");
+                return ProfileNetworkImage(
+                  imageUrl: controller.userProfilePic.value.isNotEmpty
+                      ? "${baseService.baseURL}${controller.userProfilePic.value}"
+                      : "",
+                  size: 30.w,
+                  placeholder: "assets/png/home_icons/profile-placeholder.jpg",
+                );
+              }),
+            ),
 
-              SizedBox(height: 5.h),
+            SizedBox(height: 5.h),
 
-              // User Info
-              Obx(() => Center(child: _buildInfoRow("First Name", controller.userName.value.isNotEmpty ? controller.userName.value : "User Name"))),
-              SizedBox(height: 2.h),
-              Center(child: _buildInfoRow("Email Address", controller.userEmail.value.isNotEmpty ? controller.userEmail.value : "Email")),
-              SizedBox(height: 2.h),
-              Obx(() => Center(child: _buildInfoRow("Contact Number", controller.userPhone.value.isNotEmpty ? controller.userPhone.value : '+19159969739'))),
+            // User Info
+            Obx(() => Center(child: _buildInfoRow("First Name", controller.userName.value.isNotEmpty ? controller.userName.value : "User Name"))),
+            SizedBox(height: 2.h),
+            Center(child: _buildInfoRow("Email Address", controller.userEmail.value.isNotEmpty ? controller.userEmail.value : "Email")),
+            SizedBox(height: 2.h),
+            Obx(() => Center(child: _buildInfoRow("Contact Number", controller.userPhone.value.isNotEmpty ? controller.userPhone.value : '+19159969739'))),
 
-              SizedBox(height: 5.h),
+            SizedBox(height: 5.h),
 
-              // Edit Profile Button
-              customButton(
-                "Edit Profile",
-                color: buttonPinkColor,
-                fontweight: FontWeight.w700,
-                fontsize: 16.sp,
-                textColor: whiteColor,
-                ontap: () {
-                  Get.toNamed("edit");
-                },
-              ),
+            // Edit Profile Button
+            customButton(
+              "Edit Profile",
+              color: buttonPinkColor,
+              fontweight: FontWeight.w700,
+              fontsize: 16.sp,
+              textColor: whiteColor,
+              ontap: () {
+                Get.toNamed("edit");
+              },
+            ),
 
-              SizedBox(height: 1.5.h),
+            SizedBox(height: 1.5.h),
 
-              // Change Password Button
-              customButton(
-                "Change Password",
-                color: backgroundColor,
-                fontweight: FontWeight.w700,
-                fontsize: 16.sp,
-                textColor: buttonPinkColor,
-                borderColor: buttonPinkColor,
-                ontap: () {
-                  Get.toNamed("change");
-                },
-              ),
+            // Change Password Button
+            customButton(
+              "Change Password",
+              color: backgroundColor,
+              fontweight: FontWeight.w700,
+              fontsize: 16.sp,
+              textColor: buttonPinkColor,
+              borderColor: buttonPinkColor,
+              ontap: () {
+                Get.toNamed("change");
+              },
+            ),
 
-              SizedBox(height: 5.h),
-            ],
-          ),
+            SizedBox(height: 5.h),
+          ],
         ),
       ),
     );

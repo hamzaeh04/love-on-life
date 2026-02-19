@@ -6,15 +6,25 @@ import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
 import '../controllers/auth_controller.dart'; // 👈 apna controller import karo
 
+import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
+
+import '../constants/color_constants.dart';
+import '../constants/constants_widgets.dart';
+
 Widget customTextFeild(
     String title,
     String hintText,
     String path,
-    bool isPass,
-{bool? isRequired, TextEditingController? controller, bool? readOnly,dynamic validator}
-    ) {
-  final authController = Get.find<AuthController>();
-
+    bool isPass, {
+      bool? isRequired,
+      TextEditingController? controller,
+      bool? readOnly,
+      dynamic validator,
+      bool obscureText = true,
+      Icon? icon,
+      VoidCallback? ontap,
+    }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -28,74 +38,81 @@ Widget customTextFeild(
               fontWeight: FontWeight.w400,
               color: blackColor,
             ),
-            isRequired == true ?
-            customText(
+            isRequired == true
+                ? customText(
               text: "*",
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
               color: redColor,
-            ):
-                SizedBox.shrink(),
+            )
+                : const SizedBox.shrink(),
           ],
         ),
       ),
+
       SizedBox(height: 0.5.h),
+
+      /// ---------------- Password Field ----------------
       isPass
-          ? Obx(
-            () => TextFormField(
-              readOnly: readOnly ?? false,
-              controller: controller,
-          validator: validator,
-          obscureText: authController.isPasswordVisible.value,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: EdgeInsets.symmetric(vertical: 1.7.h),
+          ? TextFormField(
+        readOnly: readOnly ?? false,
+        controller: controller,
+        validator: validator,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: EdgeInsets.symmetric(vertical: 1.7.h),
 
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25.sp),
-              borderSide: BorderSide(
-                color: textfieldBorderColor, // 👈 custom border color
-                width: 0.8,
-              ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.sp),
+            borderSide: BorderSide(
+              color: textfieldBorderColor,
+              width: 0.8,
             ),
+          ),
 
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(25.sp),
-              borderSide: BorderSide(
-                color: textfieldBorderColor, // 👈 custom border color
-                width: 1.2,
-              ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(25.sp),
+            borderSide: BorderSide(
+              color: textfieldBorderColor,
+              width: 1.2,
             ),
+          ),
 
-            prefixIcon: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(width: 6.w),
-                Image.asset(path, height: 5.w, fit: BoxFit.contain),
-                SizedBox(width: 2.w),
-              ],
-            ),
+          prefixIcon: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(width: 6.w),
+              Image.asset(path, height: 5.w, fit: BoxFit.contain),
+              SizedBox(width: 2.w),
+            ],
+          ),
 
-            prefixIconConstraints: BoxConstraints(
-              minWidth: 2.w,
-              minHeight: 2.h,
-            ),
+          prefixIconConstraints: BoxConstraints(
+            minWidth: 2.w,
+            minHeight: 2.h,
+          ),
 
-            hintText: hintText,
-            hintStyle: TextStyle(
-              fontFamily: 'dmsans',
-              fontWeight: FontWeight.w400,
-              fontSize: 15.sp,
-            ),
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontFamily: 'dmsans',
+            fontWeight: FontWeight.w400,
+            fontSize: 15.sp,
+          ),
 
-            suffixIcon: IconButton(
-              icon: authController.isPasswordVisible.value ? Image.asset('assets/png/eye-off.png', width: 5.5.w,): Icon(Icons.remove_red_eye_outlined, size: 19.sp,),
-              onPressed: authController.togglePasswordVisibility,
-            ),
+          suffixIcon: IconButton(
+            icon: icon ??
+                Icon(
+                  Icons.remove_red_eye_outlined,
+                  size: 18.sp,
+                ),
+            onPressed: ontap,
           ),
         ),
       )
+
+      /// ---------------- Normal Field ----------------
           : TextFormField(
         validator: validator,
         readOnly: readOnly ?? false,
@@ -109,7 +126,7 @@ Widget customTextFeild(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.sp),
             borderSide: BorderSide(
-              color: textfieldBorderColor, // 👈 custom border color
+              color: textfieldBorderColor,
               width: 0.8,
             ),
           ),
@@ -117,7 +134,7 @@ Widget customTextFeild(
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25.sp),
             borderSide: BorderSide(
-              color: textfieldBorderColor, // 👈 custom border color
+              color: textfieldBorderColor,
               width: 1.2,
             ),
           ),
@@ -125,9 +142,9 @@ Widget customTextFeild(
           prefixIcon: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(width: 6.w), // left side gap from border
+              SizedBox(width: 6.w),
               Image.asset(path, height: 5.w, fit: BoxFit.contain),
-              SizedBox(width: 2.w), // icon aur hint text ke beech gap
+              SizedBox(width: 2.w),
             ],
           ),
 
@@ -147,6 +164,7 @@ Widget customTextFeild(
     ],
   );
 }
+
 Widget defaultTextFeild(
     String title,
     String hintText, {

@@ -6,6 +6,7 @@ import 'package:love_on_life/widgets/custom_app_bar.dart';
 import 'package:love_on_life/widgets/profile_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
+import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
 import '../outh_file/local_db_key.dart';
 import '../utils/utility.dart';
@@ -122,9 +123,11 @@ Widget communityPost(
               ),
             ),
             PopupMenuButton<String>(
+              color: whiteColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.sp),
               ),
+              offset: Offset(0, 25),
               onSelected: (value) {
                 if (value == 'delete') {
                   communityController.deletePost(postId!);
@@ -220,7 +223,7 @@ Widget communityPost(
                   children: [
                     Image.asset(
                       'assets/png/community_icon/Comment.png',
-                      width: 5.5.w,
+                      width: 4.9.w,
                     ),
                     SizedBox(width: 2.w),
                     customText(text: 'Comments', fontSize: 12.5.sp),

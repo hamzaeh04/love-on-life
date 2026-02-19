@@ -47,6 +47,8 @@ class AuthController extends GetxController {
   }
   /// Password visibility
   RxBool isPasswordVisible = true.obs;
+  RxBool isPasswordVisibleNew = true.obs;
+  RxBool isPasswordVisibleConfirm = true.obs;
   var fullPhoneNumber = "".obs;
   var otp = "".obs;
   String email = '';
@@ -68,6 +70,19 @@ class AuthController extends GetxController {
 
   Future<void> pickProfileImage() async {
     try {
+      // 🔥 iOS: let image_picker handle permission
+      if (Platform.isIOS) {
+        final XFile? pickedFile = await _picker.pickImage(
+          source: ImageSource.gallery,
+        );
+
+        if (pickedFile != null) {
+          profilePicture.value = File(pickedFile.path);
+        }
+        return;
+      }
+
+      // 🤖 Android: manual permission handling
       PermissionStatus status = await _requestStoragePermission();
 
       if (status.isDenied) {
@@ -97,18 +112,16 @@ class AuthController extends GetxController {
   }
 
   Future<PermissionStatus> _requestStoragePermission() async {
-    if (Platform.isIOS) {
-      return await Permission.photos.request();
-    } else {
-      // Android 13+ (API 33+)
+    if (Platform.isAndroid) {
       if (await _isAndroid13OrAbove()) {
         return await Permission.photos.request();
       } else {
-        // Android 12 and below
         return await Permission.storage.request();
       }
     }
+    return PermissionStatus.granted; // iOS handled by image_picker
   }
+
 
   Future<bool> _isAndroid13OrAbove() async {
     if (Platform.isAndroid) {
@@ -118,21 +131,21 @@ class AuthController extends GetxController {
     return false;
   }
 
-  Future<void> requestInitialPermissions() async {
-    PermissionStatus status = await _requestStoragePermission();
-
-    if (status.isDenied) {
-      Utils.showToast("Permission denied", true);
-    }
-
-    if (status.isPermanentlyDenied) {
-      Utils.showToast(
-        "Permission permanently denied. Enable it from settings.",
-        true,
-      );
-      await openAppSettings();
-    }
-  }
+  // Future<void> requestInitialPermissions() async {
+  //   PermissionStatus status = await _requestStoragePermission();
+  //
+  //   if (status.isDenied) {
+  //     Utils.showToast("Permission denied", true);
+  //   }
+  //
+  //   if (status.isPermanentlyDenied) {
+  //     Utils.showToast(
+  //       "Permission permanently denied. Enable it from settings.",
+  //       true,
+  //     );
+  //     await openAppSettings();
+  //   }
+  // }
 
 
   /// Text controllers for login

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "813161449252",
+    "project_id": "loveonlife-678ee",
+    "storage_bucket": "loveonlife-678ee.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813161449252:android:9817a06d8a792b7a9d95b1",
+        "android_client_info": {
+          "package_name": "com.example.love_on_life"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC5xatO20W-zBSDBUBR-epuHiETkm6NZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

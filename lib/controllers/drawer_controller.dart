@@ -105,6 +105,7 @@ class Drawercontroller extends GetxController {
 
         successDialog(context, "Done!", "Profile has been updated successfully.", "Ok", () {
           Get.back();
+          Get.back();
         });
         clearUpdateProfileFields();
         return;
@@ -150,6 +151,7 @@ class Drawercontroller extends GetxController {
 
         // Go to Reset Password screen
         successDialog(context, "Done!", "Password has been Updated successfully.", "Ok", (){
+          Get.back();
           Get.back();
           clearChangePassFields();
         });
