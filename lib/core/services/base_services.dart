@@ -11,7 +11,7 @@ import '../../utils/utility.dart';
 
 class BaseService {
   // late String baseURL = "https://app.yourwebsitemockup.net";
-  late String baseURL = "http://192.168.83.225:8000";
+  late String baseURL = "http://192.168.83.59:8000";
   late String endPoint;
   late String Url = '$baseURL$endPoint';
   late String baseURLStripe = "";
