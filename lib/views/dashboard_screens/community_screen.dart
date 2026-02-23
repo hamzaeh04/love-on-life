@@ -73,7 +73,7 @@ class CommunityScreen extends StatelessWidget {
                         if (posts == null || posts.isEmpty) {
                           return Center(
                             child: Padding(
-                              padding: EdgeInsets.only(top: 5.h),
+                              padding: EdgeInsets.only(top: 24.h),
                               child: const Text("No posts available"),
                             ),
                           );

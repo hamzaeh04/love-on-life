@@ -61,14 +61,20 @@ class LoginScreen extends StatelessWidget {
                       validator: (value) => HelperFunction.emailValidate(value),
                     ),
                     SizedBox(height: 1.h),
-                    customTextFeild(
-                      controller: controller.loginPasswordField,
-                      'Password',
-                      '•••••••••••',
-                      'assets/png/lock.png',
-                      true,
-                      isRequired: true,
-                      validator: (value) => HelperFunction.passwordValidate(value),
+                    Obx(() => customTextFeild(
+                        controller: controller.loginPasswordField,
+                        'Password',
+                        '•••••••••••',
+                        'assets/png/lock.png',
+                        true,
+                        isRequired: true,
+                        obscureText: controller.isPasswordVisible.value,
+                        icon: controller.isPasswordVisible.value == false? Icon(Icons.visibility_outlined, size: 18.sp,): Icon(Icons.visibility_off_outlined, size: 18.sp,),
+                        ontap: (){
+                          controller.isPasswordVisible.value = !controller.isPasswordVisible.value;
+                        },
+                        validator: (value) => HelperFunction.passwordValidate(value),
+                      ),
                     ),
                     SizedBox(height: 2.h),
                     Row(

@@ -27,7 +27,7 @@ class FavoriteScreen extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: 5.h),
-            customHeader('Favorites'),
+            customHeader('Favorites', padding: 28.w),
             SizedBox(height: 2.h),
             buildSearchFilter(),
             SizedBox(height: 2.h),
@@ -46,7 +46,7 @@ class FavoriteScreen extends StatelessWidget {
                       SizedBox(height: 30.h),
                       Center(
                           child: customText(
-                              text: "No favorites yet", fontSize: 14.sp)),
+                              text: "No favorites yet", fontSize: 16.sp)),
                     ],
                   );
                 }
@@ -126,9 +126,7 @@ Widget buildSearchFilter() {
                 Expanded(
                   child: TextField(
                     controller: communityController.searchField,
-                    onTap: () => searchController.isSearch.value = true,
                     onChanged: (value) {
-                      searchController.isSearch.value = true;
                       searchController.debounceSearch(value);
                     },
                     style:

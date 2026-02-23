@@ -104,24 +104,37 @@ class SignupScreen extends StatelessWidget {
                         'Email Address', 'yourname@gmail.com', 'assets/png/lock.png', false,isRequired: true),
 
                     SizedBox(height: 1.5.h,),
-                    customTextFeild(
-                      validator: (value) => HelperFunction.passwordValidate(value),
-                      controller: controller.signupPasswordField,
-                      'New Password',
-                      '•••••••••••',
-                      'assets/png/lock.png',
-                      true,
-                      isRequired: true,
+                    Obx(() => customTextFeild(
+                        validator: (value) => HelperFunction.passwordValidate(value),
+                        controller: controller.signupPasswordField,
+                        'New Password',
+                        '•••••••••••',
+                        'assets/png/lock.png',
+                        true,
+                        isRequired: true,
+                        obscureText: controller.isPasswordVisible.value,
+                        icon: controller.isPasswordVisible.value == false? Icon(Icons.visibility_outlined, size: 18.sp,): Icon(Icons.visibility_off_outlined, size: 18.sp,),
+                        ontap: (){
+                          controller.isPasswordVisible.value = !controller.isPasswordVisible.value;
+                        },
+                      ),
                     ),
                     SizedBox(height: 1.5.h,),
-                    customTextFeild(
-                      validator: (value) => HelperFunction.passwordValidate(value),
-                      controller: controller.signupConfirmPasswordField,
-                      'Confirm Password',
-                      '•••••••••••',
-                      'assets/png/lock.png',
-                      true,
-                      isRequired: true,
+                    Obx(() =>
+                       customTextFeild(
+                        validator: (value) => HelperFunction.passwordValidate(value),
+                        controller: controller.signupConfirmPasswordField,
+                        'Confirm Password',
+                        '•••••••••••',
+                        'assets/png/lock.png',
+                        true,
+                        isRequired: true,
+                        obscureText: controller.isPasswordVisibleConfirm.value,
+                        icon: controller.isPasswordVisibleConfirm.value == false? Icon(Icons.visibility_outlined, size: 18.sp,): Icon(Icons.visibility_off_outlined, size: 18.sp,),
+                        ontap: (){
+                          controller.isPasswordVisibleConfirm.value = !controller.isPasswordVisibleConfirm.value;
+                        },
+                      ),
                     ),
                     SizedBox(height: 3.5.h),
                     customButton("Sign Up",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,

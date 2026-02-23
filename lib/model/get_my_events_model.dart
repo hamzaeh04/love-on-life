@@ -1,22 +1,24 @@
-class GetAllEventModel {
+class GetMyEventsModel {
   final bool? success;
   final int? statusCode;
   final String? message;
-  final EventData? data;
+  final MyEventsData? data;
 
-  GetAllEventModel({
+  GetMyEventsModel({
     this.success,
     this.statusCode,
     this.message,
     this.data,
   });
 
-  factory GetAllEventModel.fromJson(Map<String, dynamic> json) {
-    return GetAllEventModel(
+  factory GetMyEventsModel.fromJson(Map<String, dynamic> json) {
+    return GetMyEventsModel(
       success: json['success'],
       statusCode: json['statusCode'],
       message: json['message'],
-      data: json['data'] != null ? EventData.fromJson(json['data']) : null,
+      data: json['data'] != null
+          ? MyEventsData.fromJson(json['data'])
+          : null,
     );
   }
 
@@ -30,38 +32,34 @@ class GetAllEventModel {
   }
 }
 
-class EventData {
-  final List<Event>? events;
-  final int? total;
-  final int? page;
-  final int? totalPages;
+class MyEventsData {
+  final List<Event>? upcoming;
+  final List<Event>? past;
 
-  EventData({
-    this.events,
-    this.total,
-    this.page,
-    this.totalPages,
+  MyEventsData({
+    this.upcoming,
+    this.past,
   });
 
-  factory EventData.fromJson(Map<String, dynamic> json) {
-    return EventData(
-      events: json['events'] != null
+  factory MyEventsData.fromJson(Map<String, dynamic> json) {
+    return MyEventsData(
+      upcoming: json['upcoming'] != null
           ? List<Event>.from(
-        json['events'].map((x) => Event.fromJson(x)),
+        json['upcoming'].map((x) => Event.fromJson(x)),
       )
           : [],
-      total: json['total'],
-      page: json['page'],
-      totalPages: json['totalPages'],
+      past: json['past'] != null
+          ? List<Event>.from(
+        json['past'].map((x) => Event.fromJson(x)),
+      )
+          : [],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'events': events?.map((e) => e.toJson()).toList(),
-      'total': total,
-      'page': page,
-      'totalPages': totalPages,
+      'upcoming': upcoming?.map((e) => e.toJson()).toList(),
+      'past': past?.map((e) => e.toJson()).toList(),
     };
   }
 }
@@ -84,7 +82,6 @@ class Event {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
-  bool? isFavorite;
 
   Event({
     this.locationType,
@@ -104,7 +101,6 @@ class Event {
     this.createdAt,
     this.updatedAt,
     this.v,
-    this.isFavorite,
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
@@ -119,7 +115,9 @@ class Event {
       image: json['image'],
       eventTitle: json['eventTitle'],
       description: json['description'],
-      date: json['date'] != null ? DateTime.parse(json['date']) : null,
+      date: json['date'] != null
+          ? DateTime.parse(json['date'])
+          : null,
       time: json['time'],
       coordinates: json['coordinates'] != null
           ? List<double>.from(
@@ -138,7 +136,6 @@ class Event {
           ? DateTime.parse(json['updatedAt'])
           : null,
       v: json['__v'],
-      isFavorite: json['isFavorite'],
     );
   }
 
@@ -161,7 +158,6 @@ class Event {
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
       '__v': v,
-      'isFavorite': isFavorite,
     };
   }
 }

@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:love_on_life/core/services/notification/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,7 @@ class AuthController extends GetxController {
   var date = "".obs;
   String resetToken = '';
 
+
   @override
   void onInit() {
     super.onInit();
@@ -37,6 +39,7 @@ class AuthController extends GetxController {
     // requestInitialPermissions(); // 👈 THIS
 
   }
+
 
   void loadUserData() {
     final prefs = SharedPreferencesMethod.storage;
@@ -47,6 +50,8 @@ class AuthController extends GetxController {
   }
   /// Password visibility
   RxBool isPasswordVisible = true.obs;
+  RxBool isPasswordVisibleNew = true.obs;
+  RxBool isPasswordVisibleConfirm = true.obs;
   var fullPhoneNumber = "".obs;
   var otp = "".obs;
   String email = '';
@@ -68,6 +73,19 @@ class AuthController extends GetxController {
 
   Future<void> pickProfileImage() async {
     try {
+      // 🔥 iOS: let image_picker handle permission
+      if (Platform.isIOS) {
+        final XFile? pickedFile = await _picker.pickImage(
+          source: ImageSource.gallery,
+        );
+
+        if (pickedFile != null) {
+          profilePicture.value = File(pickedFile.path);
+        }
+        return;
+      }
+
+      // 🤖 Android: manual permission handling
       PermissionStatus status = await _requestStoragePermission();
 
       if (status.isDenied) {
@@ -97,18 +115,16 @@ class AuthController extends GetxController {
   }
 
   Future<PermissionStatus> _requestStoragePermission() async {
-    if (Platform.isIOS) {
-      return await Permission.photos.request();
-    } else {
-      // Android 13+ (API 33+)
+    if (Platform.isAndroid) {
       if (await _isAndroid13OrAbove()) {
         return await Permission.photos.request();
       } else {
-        // Android 12 and below
         return await Permission.storage.request();
       }
     }
+    return PermissionStatus.granted; // iOS handled by image_picker
   }
+
 
   Future<bool> _isAndroid13OrAbove() async {
     if (Platform.isAndroid) {
@@ -118,21 +134,21 @@ class AuthController extends GetxController {
     return false;
   }
 
-  Future<void> requestInitialPermissions() async {
-    PermissionStatus status = await _requestStoragePermission();
-
-    if (status.isDenied) {
-      Utils.showToast("Permission denied", true);
-    }
-
-    if (status.isPermanentlyDenied) {
-      Utils.showToast(
-        "Permission permanently denied. Enable it from settings.",
-        true,
-      );
-      await openAppSettings();
-    }
-  }
+  // Future<void> requestInitialPermissions() async {
+  //   PermissionStatus status = await _requestStoragePermission();
+  //
+  //   if (status.isDenied) {
+  //     Utils.showToast("Permission denied", true);
+  //   }
+  //
+  //   if (status.isPermanentlyDenied) {
+  //     Utils.showToast(
+  //       "Permission permanently denied. Enable it from settings.",
+  //       true,
+  //     );
+  //     await openAppSettings();
+  //   }
+  // }
 
 
   /// Text controllers for login
@@ -294,9 +310,11 @@ class AuthController extends GetxController {
   }
 
   Future<void> login() async {
+    final fcmToken = prefs.getString("FCMTOKEN");
     final body = {
       'email': loginEmailField.text.trim(),
       'password': loginPasswordField.text.trim(),
+      'fcmToken' : fcmToken,
     };
 
     try {
@@ -345,6 +363,7 @@ class AuthController extends GetxController {
       await prefs.setString(LocalDBKeys.TOKEN, token);
 
 
+      print("✅ FCMToken stored successfully: ${LocalDBKeys.FCMTOKEN}");
       print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.TOKEN)}");
       print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.USEREMAIL)}");
 
@@ -486,7 +505,7 @@ class AuthController extends GetxController {
       if (statusCode >= 200 && statusCode < 300) {
         Utils.showToast(response['message'] ?? 'OTP sent to your email', false);
 
-          //Get.toNamed("verification");
+          Get.toNamed("verification");
         forgotEmailField.clear();
         //forgotPasswordField.clear();
       }

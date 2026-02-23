@@ -17,7 +17,7 @@ class TermAndCondition extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               customHeader("Term and Conditions",padding: 14.w),
-              SizedBox(height: 4.h),
+              SizedBox(height: 2.h),
               customText(
                   text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis commodo egestas massa, at euismod neque commodo in. Maecenas ipsum urna, vestibulum eu mollis nec, malesuada vel felis. Phasellus ultricies elementum justo, a viverra ipsum efficitur eget. Etiam cursus malesuada pretium. Nam nec massa at augue malesuada consequat. Nulla gravida placerat molestie. In eleifend felis bibendum malesuada cursus. Fusce sed auctor ex, a sollicitudin velit. Morbi sed lacinia lorem. Nam eu fermentum mauris, vitae lobortis ipsum. In a gravida ligula, dapibus cursus orci.',
                   fontSize: 14.5.sp,

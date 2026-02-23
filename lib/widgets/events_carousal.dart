@@ -114,21 +114,24 @@ class EventsCarousel extends StatelessWidget {
                         SizedBox(height: 0.5.h),
                         Row(
                           children: [
-                            carousalWidget(
-                              "assets/png/home_icons/pin_point_updated.png",
-                              'Gotham City',
-                              "3.4 km",
-                              imgwidth: 3.w,
+                            Expanded(
+                              child: carousalWidget(
+                                "assets/png/home_icons/pin_point_updated.png",
+                                'Gotham City',
+                                "3.4 km",
+                                imgwidth: 3.w,
+                              ),
                             ),
-                            SizedBox(width: 5.w),
 
-                            carousalWidget(
-                              "assets/png/home_icons/calender_grey.png",
-                              communityController.formatDate(event.date) ??
-                                  "12 Sep, 2025",
-                              communityController.formatTime(event.time) ??
-                                  "12:00 AM - 2:00 PM",
-                              imgwidth: 3.w,
+                            Expanded(
+                              child: carousalWidget(
+                                "assets/png/home_icons/calender_grey.png",
+                                communityController.formatDate(event.date) ??
+                                    "12 Sep, 2025",
+                                communityController.formatTime(event.time) ??
+                                    "12:00 AM - 2:00 PM",
+                                imgwidth: 3.w,
+                              ),
                             ),
                           ],
                         ),
