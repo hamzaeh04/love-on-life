@@ -15,7 +15,7 @@ class SplashController extends GetxController {
     Future.delayed(const Duration(seconds: 3), () async {
       var token = await prefs.getString(LocalDBKeys.TOKEN);
       var id = await prefs.getString(LocalDBKeys.USERID);
-      print(token);
+      print("jdjddjdj: ${token}");
       print(id);
       if (token == null || token.isEmpty) {
         Get.offNamed(nextRoute);

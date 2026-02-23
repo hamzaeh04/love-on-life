@@ -109,6 +109,7 @@ class HomeScreen extends StatelessWidget {
                                 return InkWell(
                                   onTap: () {
                                     communityController.toggleFavoriteEvent(event.id ?? '', safeIndex);
+                                    communityController.eventsList.refresh(); // <- important
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(horizontal:2.5.w, vertical: 1.h),

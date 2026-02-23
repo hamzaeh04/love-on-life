@@ -23,6 +23,7 @@ import 'package:sizer/sizer.dart';
 import 'controllers/community_controller.dart';
 import 'controllers/drawer_controller.dart';
 import 'controllers/notification_controller.dart';
+import 'controllers/search_controller.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,16 +44,18 @@ void main() async{
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown, // optional, if you want upside-down too
   ]);
-  runApp(const MyApp());   // 👈 Only this
-  // 👇 These ensure all controllers are available globally
   Get.put(NotificatonController());
   Get.put(NavigationController());
   Get.put(DashboardController());
   Get.put(AuthController());
   Get.put(Drawercontroller());
-  Get.put(PaymentController());// Put into GetX dependency
   Get.put(CommunityController());// Put into GetX dependency
+  Get.put(SearchController2());
+  Get.put(PaymentController());// Put into GetX dependency
   Get.put(TicketController());// Put into GetX dependency
+  runApp(const MyApp());   // 👈 Only this
+  // 👇 These ensure all controllers are available globally
+
 }
 
 @pragma('vm:entry-point')

@@ -1,11 +1,15 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:love_on_life/outh_file/local_db_key.dart';
+import 'package:love_on_life/utils/shared_prefrences_methods.dart';
 
 class FirebaseNotification {
+  final pref = SharedPreferencesMethod.storage;
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   String? FCMToken;
+
 
   Future<void> initLocalNotification() async {
     var androidInitializationSettings = AndroidInitializationSettings(
@@ -75,12 +79,16 @@ class FirebaseNotification {
  Future<void> initNotification() async{
     await messaging.requestPermission();
     FCMToken = await messaging.getToken();
+    pref.setString(LocalDBKeys.FCMTOKEN, FCMToken ?? '');
     print("Initial Token: $FCMToken");
+    print("Shared Prefrences : ${pref.getString("FCMTOKEN")}");
  }
   void onTokenRefresh() {
     messaging.onTokenRefresh.listen((newToken) {
       FCMToken = newToken;
+      pref.setString(LocalDBKeys.FCMTOKEN, FCMToken ?? '');
       print("Token refreshed: $FCMToken");
+      print("Shared Prefrences : ${pref.getString("FCMTOKEN")}");
     });
   }
 

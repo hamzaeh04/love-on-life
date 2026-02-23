@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:video_compress/video_compress.dart';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,10 +15,12 @@ import 'package:love_on_life/model/community_post_model.dart' hide Data;
 import 'package:love_on_life/model/favorite_event_model.dart' hide Data;
 import 'package:love_on_life/model/get_all_events_model.dart' hide Data;
 import 'package:love_on_life/model/get_event_by_id_model.dart' hide Data;
+import 'package:love_on_life/model/get_my_events_model.dart' hide Event;
 import 'package:love_on_life/utils/shared_prefrences_methods.dart' hide Data;
 import 'package:love_on_life/widgets/custom_ticket_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_compress/video_compress.dart';
 import '../core/services/apiendpoints.dart';
 import '../core/services/base_services.dart';
 import '../model/community_post_model.dart';
@@ -27,6 +31,7 @@ import 'package:intl/intl.dart';
 
 
 class CommunityController extends GetxController {
+  var isLoading = false.obs;
   final AuthController controller = Get.find<AuthController>();
   final DashboardController dashboardController = Get.find<DashboardController>();
 
@@ -39,6 +44,7 @@ class CommunityController extends GetxController {
   Rx<GetAllEventModel?> getAllEventsModel = Rx<GetAllEventModel?>(null);
   Rx<GetEventByIdModel?> getEventByIdModel = Rx<GetEventByIdModel?>(null);
   Rx<FavoriteEventModel?> getFavoriteEventModel = Rx<FavoriteEventModel?>(null);
+  Rx<GetMyEventsModel?> getMyEventsModel = Rx<GetMyEventsModel?>(null);
   RxString searchFieldContent = ''.obs;
 
   final prefs = SharedPreferencesMethod.storage;
@@ -60,7 +66,7 @@ class CommunityController extends GetxController {
   }
 
 
-  RxList<Events> eventsList = <Events>[].obs;
+  RxList<Event> eventsList = <Event>[].obs;
   RxList favEventsList = [].obs;
 
   RxBool isLoadingEvents = false.obs;
@@ -100,18 +106,28 @@ class CommunityController extends GetxController {
     }
   }
 
-  String formatDate(String? isoDate) {
-    if (isoDate == null || isoDate.isEmpty) return '';
+  String formatDate(dynamic value) {
+    if (value == null) return '';
 
-    try {
-      final dateTime = DateTime.parse(isoDate).toLocal();
+    DateTime? dateTime;
 
-      return "${dateTime.day.toString().padLeft(2, '0')} "
-          "${_monthName(dateTime.month)} "
-          "${dateTime.year}";
-    } catch (e) {
-      return '';
+    if (value is DateTime) {
+      dateTime = value;
+    } else if (value is String && value.isNotEmpty) {
+      try {
+        dateTime = DateTime.parse(value);
+      } catch (_) {
+        return '';
+      }
     }
+
+    if (dateTime == null) return '';
+
+    final localDate = dateTime.toLocal();
+
+    return "${localDate.day.toString().padLeft(2, '0')} "
+        "${_monthName(localDate.month)} "
+        "${localDate.year}";
   }
 
   String formatTime2(String isoTimestamp) {
@@ -129,12 +145,20 @@ class CommunityController extends GetxController {
 
   // Image selection
   final ImagePicker _picker = ImagePicker();
+
   Rx<File?> selectedPostImage = Rx<File?>(null);
   Rx<File?> selectedPostVideo = Rx<File?>(null);
+
+// Optional: unified URL for network media
+  Rx<String?> selectedPostMediaUrl = Rx<String?>(null);
+
   void removePostMedia() {
     selectedPostImage.value = null;
     selectedPostVideo.value = null;
+    selectedPostMediaUrl.value = null;
   }
+
+
 
   Future<void> pickImagePost() async {
     final List<XFile> media = await _picker.pickMultipleMedia(
@@ -146,8 +170,13 @@ class CommunityController extends GetxController {
 
       if (selected.mimeType?.startsWith('video') == true) {
         // Video selected
-        selectedPostVideo.value = File(selected.path);
-        selectedPostImage.value = null;
+        // Compress video before assigning
+        File? compressedVideo = await _compressVideo(selected.path);
+
+        if (compressedVideo != null) {
+          selectedPostVideo.value = compressedVideo;
+          selectedPostImage.value = null;
+        }
       } else {
         // Image selected
         selectedPostImage.value = File(selected.path);
@@ -158,6 +187,16 @@ class CommunityController extends GetxController {
     }
   }
 
+// Helper function to compress video
+  Future<File?> _compressVideo(String videoPath) async {
+    final MediaInfo? mediaInfo = await VideoCompress.compressVideo(
+      videoPath,
+      quality: VideoQuality.MediumQuality,
+      deleteOrigin: false, // keep original
+    );
+
+    return mediaInfo?.file;
+  }
 
 
 
@@ -678,6 +717,25 @@ class CommunityController extends GetxController {
     }
   }
 
+  Future<void> getMyEvents() async {
+    try {
+      isLoading.value = true;
+
+      final response =
+      await baseService.baseGetAPI(ApiEndPoints.getMyEvents);
+
+      if (response != null && response['success'] == true) {
+        final model = GetMyEventsModel.fromJson(response);
+        getMyEventsModel.value = model;
+      } else {
+        debugPrint("API Error: ${response?['message']}");
+      }
+    } catch (e) {
+      debugPrint("GetMyEvents Error: $e");
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
 
 

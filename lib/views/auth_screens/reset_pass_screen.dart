@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../constants/constants_widgets.dart';
 import '../../controllers/auth_controller.dart';
+import '../../utils/utility.dart';
 import '../../widgets/custom_text_field.dart';
 class ResetPassScreen extends StatelessWidget {
   ResetPassScreen({super.key});
@@ -42,30 +43,48 @@ class ResetPassScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     SizedBox(height: 2.5.h,),
-                    customTextFeild(
-                      controller: controller.forgotNewPassField,
-                      'New Password',
-                      '•••••••••••',
-                      'assets/png/lock.png',
-                      true,
-                      isRequired: true,
-                      validator: (value) => HelperFunction.passwordValidate(value),
+                    Obx(
+                        ()=> customTextFeild(
+                        controller: controller.forgotNewPassField,
+                        'New Password',
+                        '•••••••••••',
+                        'assets/png/lock.png',
+                        true,
+                        isRequired: true,
+                        obscureText: controller.isPasswordVisibleNew.value,
+                        validator: (value) => HelperFunction.passwordValidate(value),
+                        icon: controller.isPasswordVisibleNew.value == false ? Icon(Icons.visibility_outlined, size: 17.5.sp,): Icon(Icons.visibility_off_outlined, size: 17.5.sp,),
+                        ontap: (){
+                          controller.isPasswordVisibleNew.value = !controller.isPasswordVisibleNew.value;
+                        }
+                      ),
                     ),
                     SizedBox(height: 1.h,),
-                    customTextFeild(
-                      controller: controller.forgotConfirmPassField,
-                      'Confirm Password',
-                      '•••••••••••',
-                      'assets/png/lock.png',
-                      true,
-                      isRequired: true,
-                      validator: (value) => HelperFunction.passwordValidate(value),
+                    Obx(
+                        ()=> customTextFeild(
+                        controller: controller.forgotConfirmPassField,
+                        'Confirm Password',
+                        '•••••••••••',
+                        'assets/png/lock.png',
+                        true,
+                        obscureText: controller.isPasswordVisibleConfirm.value,
+                        isRequired: true,
+                        validator: (value) => HelperFunction.passwordValidate(value),
+                          icon: controller.isPasswordVisibleConfirm.value == false ? Icon(Icons.visibility_outlined, size: 17.5.sp,): Icon(Icons.visibility_off_outlined, size: 17.5.sp,),
+                          ontap: (){
+                            controller.isPasswordVisibleConfirm.value = !controller.isPasswordVisibleConfirm.value;
+                          }
+                      ),
                     ),
                     SizedBox(height: 3.5.h),
                     customButton("Update",color: buttonPinkColor,fontweight: FontWeight.w700,fontsize: 16.sp,textColor: whiteColor,ontap: (){
                       if(resetKey.currentState!.validate()){
                         controller.forgotPassword.value = false;
-                        controller.resetPassword(context);
+                        if(controller.forgotNewPassField.text == controller.forgotConfirmPassField.text){
+                          controller.resetPassword(context);
+                        } else{
+                          Utils.showToast('Passwords don\'t match.', true);
+                        }
                       }
                     }),
                     SizedBox(height: 22.8.h,),

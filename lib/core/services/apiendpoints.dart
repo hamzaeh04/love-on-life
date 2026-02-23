@@ -12,6 +12,7 @@ class ApiEndPoints{
   static const String createPost = '/posts';
   static const String favoriteEvent = '/users/favorites';
   static const String joinEvent = '/tickets/join';
+  static const String getMyEvents = '/events/my-events';
 
 
   static String getAllEvents(String search, String category, int page, int limit, ) {

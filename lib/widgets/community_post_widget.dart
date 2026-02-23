@@ -10,6 +10,7 @@ import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
 import '../outh_file/local_db_key.dart';
 import '../utils/utility.dart';
+import 'network_media_player.dart';
 
 Widget communityPost(
   String path,
@@ -163,14 +164,11 @@ Widget communityPost(
         /// ---------------- POST IMAGE ----------------
         ClipRRect(
           borderRadius: BorderRadius.circular(15.sp),
-          child: SizedBox(
+          child: NetworkMediaPlayer(
+            mediaUrl: '${baseService.baseURL}$mainImage',
             width: double.infinity,
             height: 36.h,
-            child: ProfileNetworkImage2(
-              imageUrl: '${baseService.baseURL}$mainImage',
-              size: 39.h,
-              placeholder: 'assets/png/event_detail_icon/people2.jpg',
-            ),
+            placeholder: 'assets/png/event_detail_icon/people2.jpg',
           ),
         ),
 

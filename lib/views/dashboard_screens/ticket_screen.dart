@@ -173,8 +173,7 @@ class TicketScreen extends StatelessWidget {
                                                       icon:
                                                       'assets/png/event_detail_icon/date&time.png',
                                                       title: communityController
-                                                          .formatDate(ticket
-                                                          ?.eventId?.date),
+                                                          .formatDate(ticket?.eventId?.date),
                                                       subtitle: communityController
                                                           .formatTime(ticket
                                                           ?.eventId?.time),

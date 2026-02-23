@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
+import '../../controllers/auth_controller.dart';
 import '../../controllers/dashboard_controller.dart';
 import '../../controllers/search_controller.dart';
 import '../../widgets/custom_header.dart';
@@ -12,13 +13,18 @@ import '../../widgets/discover_screen_widget.dart';
 import '../dashboard_screens/discover_screen.dart';
 
 class EventScreen extends StatelessWidget {
-  const EventScreen({super.key});
+  EventScreen({super.key});
+  final DashboardController controller = Get.find<DashboardController>();
+  final AuthController authController = Get.find<AuthController>();
+  final CommunityController communityController = Get.find<CommunityController>();
+  final SearchController2 searchController = Get.find<SearchController2>();
 
   @override
   Widget build(BuildContext context) {
-    final DashboardController controller = Get.find<DashboardController>();
-    final CommunityController communityController = Get.find<CommunityController>();
-    final SearchController2 searchController = Get.put(SearchController2());
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      communityController.getMyEvents();
+    });
+
 
     return Scaffold(
       backgroundColor: whiteColor,
@@ -65,6 +71,9 @@ class EventScreen extends StatelessWidget {
                                   isCollapsed: true,
                                   contentPadding: EdgeInsets.symmetric(vertical: 0.5.h),
                                 ),
+                                onChanged: (value) {
+                                  searchController.updateSearch(value);
+                                },
                               ),
                             ),
                           ],
@@ -72,48 +81,79 @@ class EventScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: 3.w),
-                  Container(
-                    height: 5.h, width: 5.h,
-                    decoration: BoxDecoration(color: buttonPinkColor, shape: BoxShape.circle),
-                    child: Center(child: Image.asset('assets/png/community_icon/filter.png', width: 4.w)),
-                  ),
+                  // SizedBox(width: 3.w),
+                  // Container(
+                  //   height: 5.h, width: 5.h,
+                  //   decoration: BoxDecoration(color: buttonPinkColor, shape: BoxShape.circle),
+                  //   child: Center(child: Image.asset('assets/png/community_icon/filter.png', width: 4.w)),
+                  // ),
                 ],
               ),
 
               SizedBox(height: 2.h),
 
               /// 🔹 Event List
-              Obx(() => searchController.isSearch.value == true
-                  ? ListView.builder(
-                // IMPORTANT: Dono lists sync honi chahiye crash se bachne ke liye
-                itemCount: controller.events.length,
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  var eventData = controller.events[index];
+              Obx(() {
+                if (communityController.isLoading.value) {
+                  return SizedBox(
+                    height: 70.h,
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
+                }
 
-                  return Padding(
-                    padding: EdgeInsets.only(bottom: 1.h),
-                    child: discoverWidget(
-                      index: index, // Pass index for favorite logic
-                      imagePath: eventData['imagePath'],
-                      eventName: eventData['eventName'],
-                      description: eventData['description'],
-                      date: eventData['date'],
-                      time: eventData['time'],
-                      ticketPrice: eventData['ticketPrice'],
-                      tag: eventData['tag'],
-                      noOfPeople: '20',
-                      ticketsLeft: eventData['ticketsLeft'],
-                      context: context,
-                      onViewLocation: () => print("View Location $index"),
-                      onJoinNow: () => print("Join Now $index"),
+                final data = communityController.getMyEventsModel.value?.data;
+                final upcoming = data?.upcoming ?? [];
+                final past = data?.past ?? [];
+                final allEvents = [...upcoming, ...past];
+
+                final search = searchController.searchText.value.toLowerCase();
+
+                final filteredEvents = allEvents.where((event) {
+                  final title = event.eventTitle?.toLowerCase() ?? '';
+                  final category = event.category?.toLowerCase() ?? '';
+                  return title.contains(search) || category.contains(search);
+                }).toList();
+
+                if (filteredEvents.isEmpty) {
+                  return SizedBox(
+                    height: 70.h,
+                    child: Center(
+                      child: customText(
+                        text: "No Events Found",
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
+                      ),
                     ),
                   );
-                },
-              )
-                  : _buildRecentSearches()), // Moved to a function for cleanliness
+                }
+
+                return ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: filteredEvents.length,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemBuilder: (context, index) {
+                    final event = filteredEvents[index];
+
+                    return discoverWidget(
+                      index: index,
+                      imagePath: event.image ?? '',
+                      eventName: event.eventTitle ?? '',
+                      description: event.description ?? '',
+                      date: communityController.formatDate(event.date) ?? "",
+                      time: event.time ?? '',
+                      ticketPrice: event.price?.toString() ?? '',
+                      tag: event.category ?? '',
+                      noOfPeople: '20',
+                      ticketsLeft: '5',
+                      context: context,
+                      onViewLocation: () {},
+                      onJoinNow: () {},
+                    );
+                  },
+                );
+              }),
               SizedBox(height: 13.h),
             ],
           ),

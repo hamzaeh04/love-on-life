@@ -56,8 +56,9 @@ class VerificationCodeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(width: 4.w,),
+                        // SizedBox(width: 4.w,),
                         Center(
                           child: OtpTextField(
                             numberOfFields: 6,

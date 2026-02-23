@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:love_on_life/core/services/notification/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,7 @@ class AuthController extends GetxController {
   var date = "".obs;
   String resetToken = '';
 
+
   @override
   void onInit() {
     super.onInit();
@@ -37,6 +39,7 @@ class AuthController extends GetxController {
     // requestInitialPermissions(); // 👈 THIS
 
   }
+
 
   void loadUserData() {
     final prefs = SharedPreferencesMethod.storage;
@@ -307,9 +310,11 @@ class AuthController extends GetxController {
   }
 
   Future<void> login() async {
+    final fcmToken = prefs.getString("FCMTOKEN");
     final body = {
       'email': loginEmailField.text.trim(),
       'password': loginPasswordField.text.trim(),
+      'fcmToken' : fcmToken,
     };
 
     try {
@@ -358,6 +363,7 @@ class AuthController extends GetxController {
       await prefs.setString(LocalDBKeys.TOKEN, token);
 
 
+      print("✅ FCMToken stored successfully: ${LocalDBKeys.FCMTOKEN}");
       print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.TOKEN)}");
       print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.USEREMAIL)}");
 
@@ -499,7 +505,7 @@ class AuthController extends GetxController {
       if (statusCode >= 200 && statusCode < 300) {
         Utils.showToast(response['message'] ?? 'OTP sent to your email', false);
 
-          //Get.toNamed("verification");
+          Get.toNamed("verification");
         forgotEmailField.clear();
         //forgotPasswordField.clear();
       }
