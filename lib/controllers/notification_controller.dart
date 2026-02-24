@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:love_on_life/core/services/apiendpoints.dart';
 import 'package:love_on_life/core/services/base_services.dart';
@@ -5,6 +7,17 @@ import 'package:love_on_life/core/services/notification/notification_service.dar
 import 'package:love_on_life/model/get_notification_model.dart';
 class NotificationController extends GetxController {
   BaseService baseService = BaseService();
+  FirebaseNotification firebaseApi = FirebaseNotification();
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    if(Platform.isAndroid){
+      firebaseApi.onTokenRefresh();
+      firebaseApi.firebaseInIt();
+    }
+    // firebaseApi.getTokenForApi();
+  }
   var getNotificationsModel = Rx<GetNotificationsModel?>(null);
   var notificationsList = <NotificationItem>[].obs; // cumulative list
   var isLoading = false.obs;

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +29,14 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPreferencesMethod.init();
-  FirebaseNotification notification = FirebaseNotification();
-  await notification.initLocalNotification();
-  await notification.initNotification();
-  notification.onTokenRefresh();
-  FirebaseMessaging.onBackgroundMessage(firebaseMessageBackgroundHandler);
+  if(Platform.isAndroid){
+    FirebaseNotification notification = FirebaseNotification();
+    await notification.initLocalNotification();
+    await notification.initNotification();
+    notification.onTokenRefresh();
+    FirebaseMessaging.onBackgroundMessage(firebaseMessageBackgroundHandler);
+  }
+
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   Get.put<SharedPreferences>(prefs);
   // Lock app orientation to portrait
