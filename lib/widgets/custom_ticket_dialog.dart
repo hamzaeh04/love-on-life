@@ -6,11 +6,13 @@ import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
+import '../controllers/stripe_controller.dart';
 import 'custom_button.dart';
 import 'ticketClipper.dart';
 
 void showTicketDialog(BuildContext context,
-    {String? title, String? ticketNumber, String? time, String? date, String? price, String? ticketLeft}) {
+    {String? title, String? ticketNumber, String? time, String? date, String? price, String? ticketLeft,String? ticketId}) {
+  final StripeController controller = Get.find<StripeController>();
   showDialog(
     context: context,
     barrierColor:
@@ -276,8 +278,8 @@ void showTicketDialog(BuildContext context,
                               fontsize: 14.sp,
                               textColor: whiteColor,
                               height: 4.h,
-                              ontap: () {
-                                Get.toNamed("card");
+                              ontap: () async {
+                               await controller.startPayment(ticketId: ticketId ?? "");
                               },
                             ),
                           ),

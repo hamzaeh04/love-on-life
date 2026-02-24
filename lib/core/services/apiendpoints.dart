@@ -42,4 +42,7 @@ class ApiEndPoints{
   static String getTickets(int page, int limit, String status){
     return '/tickets?page=$page&limit=$limit&status=$status';
   }
+
+  //Payment
+  static const String createPaymentIntent = '/tickets/pay';
 }

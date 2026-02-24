@@ -5,7 +5,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+import 'package:love_on_life/config/stripe_keys.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/controllers/dashboard_controller.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
@@ -24,11 +26,15 @@ import 'controllers/community_controller.dart';
 import 'controllers/drawer_controller.dart';
 import 'controllers/notification_controller.dart';
 import 'controllers/search_controller.dart';
+import 'controllers/stripe_controller.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await SharedPreferencesMethod.init();
+  Stripe.publishableKey = StripeKeys.publishableKey;
+  // 2️⃣ Apply the settings (mandatory)
+  await Stripe.instance.applySettings();
   if(Platform.isAndroid){
     FirebaseNotification notification = FirebaseNotification();
     await notification.initLocalNotification();
@@ -53,6 +59,7 @@ void main() async{
   Get.put(SearchController2());
   Get.put(PaymentController());// Put into GetX dependency
   Get.put(TicketController());// Put into GetX dependency
+  Get.put(StripeController());
   runApp(const MyApp());   // 👈 Only this
   // 👇 These ensure all controllers are available globally
 
