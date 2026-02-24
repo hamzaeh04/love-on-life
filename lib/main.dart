@@ -39,7 +39,7 @@ void main() async{
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown, // optional, if you want upside-down too
   ]);
-  Get.put(NotificatonController());
+  Get.put(NotificationController());
   Get.put(NavigationController());
   Get.put(DashboardController());
   Get.put(AuthController());

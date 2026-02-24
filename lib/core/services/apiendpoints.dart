@@ -13,6 +13,7 @@ class ApiEndPoints{
   static const String favoriteEvent = '/users/favorites';
   static const String joinEvent = '/tickets/join';
   static const String getMyEvents = '/events/my-events';
+  static const String readAllNotifications = '/notifications/mark-all-read';
 
 
   static String getAllEvents(String search, String category, int page, int limit, ) {
@@ -41,5 +42,11 @@ class ApiEndPoints{
   }
   static String getTickets(int page, int limit, String status){
     return '/tickets?page=$page&limit=$limit&status=$status';
+  }
+  static String getNotifications(int page, int limit){
+    return '/notifications/my-notifications?page=$page&limit=$limit';
+  }
+  static String readSingleNotification(String notificationId){
+    return '/notifications/$notificationId/read';
   }
 }

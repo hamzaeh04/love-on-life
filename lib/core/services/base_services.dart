@@ -11,7 +11,7 @@ import '../../utils/utility.dart';
 
 class BaseService {
   // late String baseURL = "https://app.yourwebsitemockup.net";
-  late String baseURL = "http://192.168.83.59:8000";
+  late String baseURL = "http://192.168.83.165:8000";
   late String endPoint;
   late String Url = '$baseURL$endPoint';
   late String baseURLStripe = "";
@@ -206,6 +206,76 @@ class BaseService {
       EasyLoading.dismiss();
 
       print("PUT URL: $baseURL$endPoint");
+      print("Body: $body");
+      print("Status: ${response.statusCode}");
+      print("Response: ${response.body}");
+
+      // ---------- SUCCESS ----------
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        var jsonData = json.decode(response.body);
+        return {"success": true, ...jsonData};
+      }
+
+      // ---------- ERROR ----------
+      if (response.body.isNotEmpty) {
+        var jsonData = json.decode(response.body);
+        Utils.showToast(jsonData["message"] ?? "Something went wrong", true);
+        return {
+          "success": false,
+          "message": jsonData["message"] ?? "Something went wrong",
+          "statusCode": response.statusCode
+        };
+      }
+
+      Utils.showToast("Something went wrong", true);
+      return {"success": false, "message": "Something went wrong"};
+    } on TimeoutException {
+      EasyLoading.dismiss();
+      Utils.showToast("Request timed out", true);
+      return {"success": false, "message": "Request timed out"};
+    } catch (e) {
+      EasyLoading.dismiss();
+      Utils.showToast("Unexpected error", true);
+      return {"success": false, "message": "Unexpected error"};
+    }
+  }
+
+  Future<Map<String, dynamic>> basePatchAPI(
+      String endPoint, {
+        required Map<String, dynamic> body,
+        bool loading = true,
+        bool? isStripe,
+      }) async {
+    if (loading) {
+      EasyLoading.show(
+        status: 'Please wait...',
+        maskType: EasyLoadingMaskType.black,
+      );
+    }
+
+    var bearerToken = await prefs.getString(LocalDBKeys.TOKEN);
+
+    if (!await checkInternetConnection()) {
+      EasyLoading.dismiss();
+      Utils.showToast("Check Internet Connection", true);
+      return {'success': false, 'message': 'Check Internet Connection'};
+    }
+
+    try {
+      final response = await http
+          .patch(
+        Uri.parse(isStripe == true ? baseURLStripe : "$baseURL$endPoint"),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer $bearerToken',
+        },
+        body: json.encode(body),
+      )
+          .timeout(const Duration(seconds: 60));
+
+      EasyLoading.dismiss();
+
+      print("PATCH URL: $baseURL$endPoint");
       print("Body: $body");
       print("Status: ${response.statusCode}");
       print("Response: ${response.body}");
