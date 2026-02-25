@@ -369,6 +369,7 @@ class CommunityController extends GetxController {
       if (response['statusCode'] == 200 || response['statusCode'] == 201) {
         // 1️⃣ Extract data safely from the response
         final responseData = response['data'] ?? response;
+        final ticketId = responseData['ticket']['_id'];
         showTicketDialog(
             context,
             title: title,
@@ -376,7 +377,8 @@ class CommunityController extends GetxController {
             ticketLeft: response['status'],
             price: response['price'],
             date: date,
-            time: time
+            time: time,
+            ticketId: ticketId
         );
 
         // 2️⃣ Create the Tickets object matching GetTicketModel exactly

@@ -49,4 +49,7 @@ class ApiEndPoints{
   static String readSingleNotification(String notificationId){
     return '/notifications/$notificationId/read';
   }
+
+  //Payment
+  static const String createPaymentIntent = '/tickets/pay';
 }
