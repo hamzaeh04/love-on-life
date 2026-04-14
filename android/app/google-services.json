@@ -12,7 +12,12 @@
           "package_name": "com.example.love_on_life"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "813161449252-d1kbnk7ct7q3a55g1parudfg23d7250h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCC5xatO20W-zBSDBUBR-epuHiETkm6NZk"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "813161449252-d1kbnk7ct7q3a55g1parudfg23d7250h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "813161449252-eq01riueph9mjsgnkkg17f9g2ci7mcqp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.loveOnLife"
+              }
+            }
+          ]
         }
       }
     }
