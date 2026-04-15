@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
+import 'package:love_on_life/core/services/login/apple_auth_service.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../controllers/auth_controller.dart';
+import '../../core/services/login/google_auth_service.dart';
+
 class GetStarted extends StatelessWidget {
-  const GetStarted({super.key});
+  GetStarted({super.key});
+  final GoogleAuthService _authService = GoogleAuthService();
+  final AppleAuthService _appleAuthService = AppleAuthService();
+  final AuthController controller = Get.find<AuthController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -56,9 +64,20 @@ class GetStarted extends StatelessWidget {
                       Get.toNamed('login');
                     }),
                     SizedBox(height: 1.h),
-                    customButton("Join For Free With Google",textColor: blackColor,path: "assets/png/social_icons/google.png",fontweight: FontWeight.w500),
+                    customButton("Join For Free With Google",textColor: blackColor,path: "assets/png/social_icons/google.png",fontweight: FontWeight.w500, ontap: () async {
+                      var user = await _authService.login();
+                      if(user != null){
+                        // Step 2: now tokenId is set
+                        // controller.googleTokenId = _authService.tokenId;
+                        // print("Token ID Skurrrrrrrrrrrr: ${_authService.tokenId}");
+                        // Get.toNamed("bottomnavbar");
+                        controller.googleLogin(_authService);
+                      }
+                    },),
                     SizedBox(height: 1.h),
-                    customButton("Join For Free With Apple",textColor: blackColor,path: "assets/png/social_icons/apple.png",fontweight: FontWeight.w500),
+                    customButton("Join For Free With Apple",textColor: blackColor,path: "assets/png/social_icons/apple.png",fontweight: FontWeight.w500,ontap: (){
+                      _appleAuthService.signInWithApple();
+                    }),
                     SizedBox(height: 2.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,

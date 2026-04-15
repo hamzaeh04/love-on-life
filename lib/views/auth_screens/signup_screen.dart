@@ -187,10 +187,10 @@ class SignupScreen extends StatelessWidget {
                             onTap: (){
                             },
                             child: socialIconWidget("assets/png/social_icons/apple.png")),
-                        InkWell(
-                            onTap: (){
-                            },
-                            child: socialIconWidget("assets/png/social_icons/facebook_logo.png")),
+                        // InkWell(
+                        //     onTap: (){
+                        //     },
+                        //     child: socialIconWidget("assets/png/social_icons/facebook_logo.png")),
                       ],
                     ),
                     SizedBox(height: 3.h),

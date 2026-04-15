@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:love_on_life/core/services/login/google_auth_service.dart';
 import 'package:love_on_life/core/services/notification/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,6 +30,7 @@ class AuthController extends GetxController {
   var userPhone = "".obs;
   var date = "".obs;
   String resetToken = '';
+  String googleTokenId = "";
 
 
   @override
@@ -308,7 +310,76 @@ class AuthController extends GetxController {
       Utils.showToast("Unexpected error: $e", true);
     }
   }
+  Future<void> googleLogin(GoogleAuthService authService) async {
+    final fcmToken = prefs.getString("FCMTOKEN");
+    // Step 1: login
+    final body = {
+      "idToken": authService.tokenId,
+      "fcmToken": fcmToken
+    };
+    print("Token ID Skurrrrrrrrrrrr: ${googleTokenId}");
+    try {
+      final response = await baseService.basePostAPI(
+        ApiEndPoints.googleSignIn,
+        body,
+        loading: true,
+      );
 
+      if (response == false || response == null) {
+        Utils.showToast('Check Internet Connection', true);
+        return;
+      }
+
+      if (response is! Map<String, dynamic>) {
+        Utils.showToast('Unexpected response: ${response.toString()}', true);
+        return;
+      }
+
+      // Use data key
+      final data = response['data'];
+      if (data == null) {
+        Utils.showToast(response['message'] ?? 'Login failed', true);
+        return;
+      }
+
+      date.value = response['data']['user']['createdAt'];
+      final user = data['user'];
+      final token = data['accessToken'];
+
+      if (user == null || token == null) {
+        Utils.showToast(response['message'] ?? 'Invalid email or password', true);
+        return;
+      }
+      print("Token ID Skurrrrrrrrrrrr: ${authService.tokenId}");
+      // // Save user info
+      // final prefs = SharedPreferencesMethod.storage;
+      // await prefs.setString(LocalDBKeys.USERDETAIL, jsonEncode(user));
+      // await prefs.setString(LocalDBKeys.USERID, user['id'] ?? "");
+      await prefs.setString(LocalDBKeys.USERFULLNAME, user['fullname'] ?? "");
+      await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+      await prefs.setString(LocalDBKeys.PHONENUMBER, user['phone'] ?? "");
+      await prefs.setString(LocalDBKeys.USERPROFILEPIC, user['profilePicture'] ?? "");
+      // await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+      // await prefs.setString(LocalDBKeys.JOINDATE, user['createdAt'] ?? "");
+      await prefs.setString(LocalDBKeys.TOKEN, token);
+
+      //
+      // print("✅ FCMToken stored successfully: ${LocalDBKeys.FCMTOKEN}");
+      // print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.TOKEN)}");
+      print("✅ Token stored successfully: ${authService.tokenId}");
+
+      Utils.showToast(response['message'] ?? 'Login successful', false);
+
+      // Navigate to bottom bar
+      Get.offAllNamed('/bottomnavbar');
+
+      // Clear input fields
+      clearLoginFields();
+    } catch (e, stackTrace) {
+      print("Login error: $e\n$stackTrace");
+      Utils.showToast('Something went wrong. Please try again.', true);
+    }
+  }
   Future<void> login() async {
     final fcmToken = prefs.getString("FCMTOKEN");
     final body = {
@@ -603,7 +674,65 @@ class AuthController extends GetxController {
       Utils.showToast("Error: $e", true);
     }
   }
+  Future<void> appleLogin(String? identityToken, String fullName) async {
+    final fcmToken = prefs.getString("FCMTOKEN");
 
+    final body = {
+      "identityToken": identityToken,
+      "fullname": fullName,
+      "fcmToken": fcmToken,
+    };
+
+    try {
+      var response = await baseService.basePostAPI(
+        ApiEndPoints.appleSignIn,
+        body,
+        loading: true,
+      );
+
+      if (response == false || response == null) {
+        Utils.showToast('Check Internet Connection', true);
+        return;
+      }
+
+      if (response is! Map<String, dynamic>) {
+        Utils.showToast('Unexpected response', true);
+        return;
+      }
+
+      final data = response['data'];
+
+      if (data == null) {
+        Utils.showToast(response['message'] ?? 'Login failed', true);
+        return;
+      }
+
+      final user = data['user'];
+      final token = data['accessToken'];
+
+      if (user == null || token == null) {
+        Utils.showToast('Invalid login response', true);
+        return;
+      }
+
+      // ✅ SAVE DATA
+      date.value = user['createdAt'] ?? "";
+
+      await prefs.setString(LocalDBKeys.USERFULLNAME, user['fullname'] ?? "");
+      await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+      await prefs.setString(LocalDBKeys.PHONENUMBER, user['phone'] ?? "");
+      await prefs.setString(LocalDBKeys.USERPROFILEPIC, user['profilePicture'] ?? "");
+      await prefs.setString(LocalDBKeys.TOKEN, token);
+
+      // ✅ SUCCESS TOAST (GREEN)
+      Utils.showToast(response['message'] ?? 'Login successful', false);
+
+      Get.offAllNamed('/bottomnavbar');
+
+    } catch (e) {
+      Utils.showToast("Error: $e", true);
+    }
+  }
 
 
   /// Clear signup fields

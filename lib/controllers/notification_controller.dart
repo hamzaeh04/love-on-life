@@ -12,7 +12,7 @@ class NotificationController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    if(Platform.isAndroid){
+    if(Platform.isAndroid || Platform.isIOS){
       firebaseApi.onTokenRefresh();
       firebaseApi.firebaseInIt();
     }
