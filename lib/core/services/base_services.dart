@@ -10,8 +10,8 @@ import '../../utils/shared_prefrences_methods.dart';
 import '../../utils/utility.dart';
 
 class BaseService {
-  // late String baseURL = "https://app.yourwebsitemockup.net";
-  late String baseURL = "http://192.168.83.55:8000";
+  late String baseURL = "https://app.yourwebsitemockup.net/love-on-life";
+  // late String baseURL = "http://172.16.25.79:8000/love-on-life";
   late String endPoint;
   late String Url = '$baseURL$endPoint';
   late String baseURLStripe = "";
