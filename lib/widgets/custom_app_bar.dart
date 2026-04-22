@@ -8,6 +8,8 @@ import 'package:sizer/sizer.dart';
 
 import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
+import '../outh_file/local_db_key.dart';
+import '../utils/shared_prefrences_methods.dart';
 
 BaseService baseService = BaseService();
 
@@ -15,6 +17,8 @@ BaseService baseService = BaseService();
 final AuthController controller = Get.find<AuthController>();
 
 Widget customAppBar(String title, {VoidCallback? ontap}) {
+  final prefs = SharedPreferencesMethod.storage;
+  print(prefs.getString(LocalDBKeys.USERPROFILEPIC));
   return ClipRect(
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
@@ -26,20 +30,18 @@ Widget customAppBar(String title, {VoidCallback? ontap}) {
         child: Row(
           children: [
             // Profile Image
-            Obx(() => SizedBox(
+            SizedBox(
               height: 10.w, // fixed height to match image size
               width: 10.w,  // fix width to prevent overflow
               child: InkWell(
                 onTap: ontap,
                 child: ProfileNetworkImage(
-                  imageUrl: controller.userProfilePic.value.isNotEmpty
-                      ? "${baseService.baseURL}${controller.userProfilePic.value}"
-                      : "",
+                  imageUrl: "${baseService.baseURL}${prefs.getString(LocalDBKeys.USERPROFILEPIC)}",
                   size: 10.w, // match width/height
                   placeholder: "assets/png/home_icons/profile-placeholder.jpg",
                 ),
               ),
-            )),
+            ),
 
             //SizedBox(width: 2.w), // small spacing
 

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/community_controller.dart';
 import 'package:love_on_life/core/services/apiendpoints.dart';
+import 'package:love_on_life/outh_file/local_db_key.dart';
+import 'package:love_on_life/utils/shared_prefrences_methods.dart';
 import 'package:love_on_life/widgets/custom_app_bar.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:love_on_life/widgets/events_carousal.dart';
@@ -45,10 +47,16 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(height: 12.5.h),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 4.w),
-                      child: customText(
-                        text: 'Events Near by You',
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w700,
+                      child: InkWell(
+                        onTap: (){
+                          final prefs = SharedPreferencesMethod.storage;
+                          print("${baseService.baseURL}${prefs.getString(LocalDBKeys.USERPROFILEPIC)}");
+                        },
+                        child: customText(
+                          text: 'Events Near by You',
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     SizedBox(height: 2.h),

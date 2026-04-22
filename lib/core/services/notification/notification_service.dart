@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:love_on_life/outh_file/local_db_key.dart';
@@ -69,12 +70,16 @@ class FirebaseNotification {
       iOS: darwinNotificationDetails,
     );
 
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      message.notification!.title.toString(),
-      message.notification!.body.toString(),
-      notificationDetails,
-    );
+    // iOS natively handles foreground presentation if setForegroundNotificationPresentationOptions is true.
+    // Calling this on iOS causes a duplicate notification banner.
+    if (Platform.isAndroid) {
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        message.notification!.title.toString(),
+        message.notification!.body.toString(),
+        notificationDetails,
+      );
+    }
   }
  Future<void> initNotification() async{
     NotificationSettings settings = await messaging.requestPermission(

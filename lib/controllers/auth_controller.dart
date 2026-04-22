@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:country_picker/country_picker.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
@@ -205,7 +206,12 @@ class AuthController extends GetxController {
 
   /// SignUp API call
   Future<void> signUp(BuildContext context,{File? profilePicture}) async {
+
     try {
+      EasyLoading.show(
+        status: 'Please wait...',
+        maskType: EasyLoadingMaskType.black,
+      );
       final uri = Uri.parse("${BaseService().baseURL}${ApiEndPoints.signupUser}");
       final request = http.MultipartRequest('POST', uri);
 
@@ -251,8 +257,7 @@ class AuthController extends GetxController {
           responseMap['statusCode'] ?? streamedResponse.statusCode;
       final bool success = responseMap['success'] ?? false;
 
-
-
+      print({"faaahhhh ${responseMap}"});
       // SUCCESS
       if (success == true && statusCode == 201) {
         Utils.showToast(
@@ -272,16 +277,15 @@ class AuthController extends GetxController {
           LocalDBKeys.USERFULLNAME,
           signupNameField.text.trim(),
         );
-        successDialog(
-          context,
-          "Successfully",
-          "Your account has been successfully\ncreated.",
-          "Login",
-              () {
-            Get.offNamed("login");
-          },);
-        // Get.offAllNamed("verification");
-        clearSignupFields();
+        // successDialog(
+        //   context,
+        //   "Successfully",
+        //   "Your account has been successfully\ncreated.",
+        //   "Login",
+        //       () {
+        //     Get.offNamed("login");
+        //   },);
+        Get.toNamed("verification");
         return;
       }
 
@@ -308,6 +312,8 @@ class AuthController extends GetxController {
       Utils.showToast("No Internet connection", true);
     } catch (e) {
       Utils.showToast("Unexpected error: $e", true);
+    } finally {
+      EasyLoading.dismiss();
     }
   }
   Future<void> googleLogin(GoogleAuthService authService) async {
@@ -434,6 +440,7 @@ class AuthController extends GetxController {
       await prefs.setString(LocalDBKeys.TOKEN, token);
 
 
+      print("✅ profile stored successfully: ${user['profilePicture']}");
       print("✅ FCMToken stored successfully: ${LocalDBKeys.FCMTOKEN}");
       print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.TOKEN)}");
       print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.USEREMAIL)}");
@@ -530,13 +537,14 @@ class AuthController extends GetxController {
             //     Get.offNamed("login");
             //   },);
           }else{
+            clearSignupFields();
             successDialog(
               context,
               "Successfully",
               "Your email has been successfully\nverified.",
               "Login",
                   () {
-                Get.offNamed("login");
+                Get.offAllNamed("login");
               },);
           }
 
