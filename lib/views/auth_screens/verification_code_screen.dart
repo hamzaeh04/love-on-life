@@ -104,7 +104,7 @@ class VerificationCodeScreen extends StatelessWidget {
                         Obx(() => customText(
                           text: controller.canResend.value
                               ? "You can resend now"
-                              : "Resending in 00:${controller.resendSeconds.value.toString().padLeft(2, '0')}",
+                              : "Resending in ${controller.formatTime(controller.resendSeconds.value)}",
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w400,
                           color: loginGreyColor,
