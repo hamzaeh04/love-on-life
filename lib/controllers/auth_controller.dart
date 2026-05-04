@@ -15,6 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../core/services/apiendpoints.dart';
 import '../core/services/base_services.dart';
@@ -137,6 +138,32 @@ class AuthController extends GetxController {
     return false;
   }
 
+
+  Future<void> openUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    try {
+      // Check if the device is actually capable of handling the URI
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        debugPrint("Could not launch $url - No supporting app found.");
+      }
+    } catch (e) {
+      debugPrint("Error launching URL: $e");
+    }
+  }
+
+  void openPrivacyPolicy() async {
+    await openUrl("https://loveonlife-policy.vercel.app/privacy_policy.html");
+  }
+
+  void openTerms() async {
+    await openUrl("https://loveonlife-policy.vercel.app/term_condition.html");
+  }
   // Future<void> requestInitialPermissions() async {
   //   PermissionStatus status = await _requestStoragePermission();
   //

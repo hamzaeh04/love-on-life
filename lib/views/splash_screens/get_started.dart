@@ -90,16 +90,21 @@ class GetStarted extends StatelessWidget {
                           letterSpacing: -0.4,
                         ),
                         SizedBox(width: 1.w),
-                        customText(
-                            text: "Terms",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                            color: whiteColor,
-                          txtDecoration: TextDecoration.underline,
-                          decorationColor: whiteColor,
-                          decorationThickness: 2.0,
-                          height: 0.1.h,
-                          letterSpacing: -0.4,
+                        InkWell(
+                          onTap: (){
+                            controller.openTerms();
+                          },
+                          child: customText(
+                              text: "Terms",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              color: whiteColor,
+                            txtDecoration: TextDecoration.underline,
+                            decorationColor: whiteColor,
+                            decorationThickness: 2.0,
+                            height: 0.1.h,
+                            letterSpacing: -0.4,
+                          ),
                         ),
                         SizedBox(width: 1.w),
                         customText(
@@ -109,16 +114,22 @@ class GetStarted extends StatelessWidget {
                             color: whiteColor,
                         ),
                         SizedBox(width: 1.w),
-                        customText(
-                            text: " Privacy Policy.",
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.bold,
-                            color: whiteColor,
-                            txtDecoration: TextDecoration.underline,
-                          decorationColor: whiteColor,
-                          decorationThickness: 2.0,
-                          height: 0.1.h,
-                          letterSpacing: -0.4,
+                        InkWell(
+                          onTap: (){
+                            controller.openPrivacyPolicy();
+                            print("iam here");
+                          },
+                          child: customText(
+                              text: " Privacy Policy.",
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.bold,
+                              color: whiteColor,
+                              txtDecoration: TextDecoration.underline,
+                            decorationColor: whiteColor,
+                            decorationThickness: 2.0,
+                            height: 0.1.h,
+                            letterSpacing: -0.4,
+                          ),
                         ),
                       ],
                     ),

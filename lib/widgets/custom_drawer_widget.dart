@@ -121,14 +121,14 @@ class CustomDrawer extends StatelessWidget {
               'assets/png/drawer_icons/FAQs.png',
               "Privacy Policy",
               ontap: () {
-                Get.toNamed("privacy");
+                controller.openPrivacyPolicy();
               },
             ),
             drawerTile(
               'assets/png/drawer_icons/conditions.png',
               "Terms & Conditions",
               ontap: () {
-                Get.toNamed("term");
+                controller.openTerms();
               },
             ),
 

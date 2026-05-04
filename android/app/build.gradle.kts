@@ -12,7 +12,7 @@ android {
 
   defaultConfig {
     applicationId = "com.example.love_on_life"
-    minSdk = flutter.minSdkVersion
+    minSdk = 23
     targetSdk = 36
     versionCode = 1
     versionName = "1.0"

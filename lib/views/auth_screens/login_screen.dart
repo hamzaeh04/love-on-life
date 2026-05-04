@@ -202,7 +202,7 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(width: 1.w),
                         InkWell(
                           onTap: (){
-                            Get.toNamed('term');
+                            controller.openTerms();
                           },
                           child: customText(
                             text: "Terms",
@@ -222,7 +222,7 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(width: 1.w),
                         InkWell(
                           onTap: (){
-                            Get.toNamed('privacy');
+                            controller.openPrivacyPolicy();
                           },
                           child: customText(
                             text: "Privacy Policy.",
