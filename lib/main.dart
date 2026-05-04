@@ -69,7 +69,6 @@ void main() async{
 Future<void> firebaseMessageBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print(message.notification!.title.toString());
-
 }
 
 class MyApp extends StatelessWidget {
