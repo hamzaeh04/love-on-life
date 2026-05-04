@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
+import 'package:love_on_life/core/services/login/apple_auth_service.dart';
+import 'package:love_on_life/core/services/login/google_auth_service.dart';
 import 'package:love_on_life/utils/helper_functions.dart';
 import 'package:love_on_life/widgets/custom_text_field.dart';
 import 'package:love_on_life/widgets/social_icon_widget.dart';
@@ -13,9 +15,9 @@ import '../../widgets/custom_button.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
   final GlobalKey<FormState> loginKey = GlobalKey<FormState>();
-
   final AuthController controller = Get.find<AuthController>();
-
+  final GoogleAuthService _authService = GoogleAuthService();
+  final AppleAuthService _appleAuthService = AppleAuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,11 +162,23 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         socialIconWidget(
                           "assets/png/social_icons/google.png",
-                          ontap: () {},
+                          ontap: () async {
+                            var user = await _authService.login();
+                            if(user != null){
+                              // Step 2: now tokenId is set
+                              // controller.googleTokenId = _authService.tokenId;
+                              // print("Token ID Skurrrrrrrrrrrr: ${_authService.tokenId}");
+                              // Get.toNamed("bottomnavbar");
+                              controller.googleLogin(_authService);
+                            }
+                          },
+
                         ),
                         socialIconWidget(
                           "assets/png/social_icons/apple.png",
-                          ontap: () {},
+                          ontap: () {
+                            _appleAuthService.signInWithApple();
+                          },
                         ),
                       ],
                     ),
@@ -188,7 +202,7 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(width: 1.w),
                         InkWell(
                           onTap: (){
-                            Get.toNamed('term');
+                            controller.openTerms();
                           },
                           child: customText(
                             text: "Terms",
@@ -208,7 +222,7 @@ class LoginScreen extends StatelessWidget {
                         SizedBox(width: 1.w),
                         InkWell(
                           onTap: (){
-                            Get.toNamed('privacy');
+                            controller.openPrivacyPolicy();
                           },
                           child: customText(
                             text: "Privacy Policy.",

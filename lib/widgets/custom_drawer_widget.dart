@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/core/services/base_services.dart';
+import 'package:love_on_life/core/services/login/google_auth_service.dart';
 import 'package:love_on_life/outh_file/local_db_key.dart';
 import 'package:love_on_life/widgets/profile_network_image.dart';
 import 'package:love_on_life/widgets/success_dialog.dart';
@@ -13,6 +14,7 @@ import '../utils/shared_prefrences_methods.dart';
 class CustomDrawer extends StatelessWidget {
   CustomDrawer({super.key});
   final BaseService baseService = BaseService();
+  final GoogleAuthService googleAuthService = GoogleAuthService();
   final AuthController controller = Get.find<AuthController>();
   final Drawercontroller drawerController = Get.find<Drawercontroller>();
   final prefs = SharedPreferencesMethod.storage;
@@ -119,14 +121,14 @@ class CustomDrawer extends StatelessWidget {
               'assets/png/drawer_icons/FAQs.png',
               "Privacy Policy",
               ontap: () {
-                Get.toNamed("privacy");
+                controller.openPrivacyPolicy();
               },
             ),
             drawerTile(
               'assets/png/drawer_icons/conditions.png',
               "Terms & Conditions",
               ontap: () {
-                Get.toNamed("term");
+                controller.openTerms();
               },
             ),
 
@@ -146,6 +148,7 @@ class CustomDrawer extends StatelessWidget {
                     isLogout: true,
                     ontap2: () {
                       controller.logout(context);
+                      googleAuthService.logout();
                     },
                     () {
                       Get.back();

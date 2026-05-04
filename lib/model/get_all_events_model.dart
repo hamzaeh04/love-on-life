@@ -16,7 +16,9 @@ class GetAllEventModel {
       success: json['success'],
       statusCode: json['statusCode'],
       message: json['message'],
-      data: json['data'] != null ? EventData.fromJson(json['data']) : null,
+      data: (json['data'] != null && json['data'] is Map<String, dynamic>) 
+          ? EventData.fromJson(json['data']) 
+          : null,
     );
   }
 
@@ -171,10 +173,16 @@ class LocationType {
 
   LocationType({this.type});
 
-  factory LocationType.fromJson(Map<String, dynamic> json) {
-    return LocationType(
-      type: json['type'],
-    );
+  factory LocationType.fromJson(dynamic json) {
+    if (json is String) {
+      return LocationType(type: json);
+    }
+    if (json is Map<String, dynamic>) {
+      return LocationType(
+        type: json['type'],
+      );
+    }
+    return LocationType();
   }
 
   Map<String, dynamic> toJson() {

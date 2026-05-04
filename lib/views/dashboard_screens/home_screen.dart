@@ -76,8 +76,11 @@ class HomeScreen extends StatelessWidget {
                       if (communityController.eventsList.isEmpty) {
                         return Column(
                           children: [
-                            SizedBox(height: 20.h),
+                            SizedBox(height: 12.5.h),
                             const Center(child: Text("No events found")),
+                            SizedBox(height: 12.5.h),
+                            Divider(),
+                            SizedBox(height: 1.h),
                           ],
                         );
                       }
@@ -205,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                       if (posts == null || posts.isEmpty) {
                         return Center(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 5.h),
+                            padding: EdgeInsets.only(top: 12.55.h),
                             child: const Text("No posts available"),
                           ),
                         );

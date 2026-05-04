@@ -52,4 +52,8 @@ class ApiEndPoints{
 
   //Payment
   static const String createPaymentIntent = '/tickets/pay';
+  //Google Login
+  static const String googleSignIn = "/users/auth/google";
+  //Apple Login
+  static const String appleSignIn = "/users/auth/apple";
 }

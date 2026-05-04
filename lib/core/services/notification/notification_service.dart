@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:love_on_life/outh_file/local_db_key.dart';
@@ -69,19 +70,44 @@ class FirebaseNotification {
       iOS: darwinNotificationDetails,
     );
 
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      message.notification!.title.toString(),
-      message.notification!.body.toString(),
-      notificationDetails,
-    );
+    // iOS natively handles foreground presentation if setForegroundNotificationPresentationOptions is true.
+    // Calling this on iOS causes a duplicate notification banner.
+    if (Platform.isAndroid) {
+      await flutterLocalNotificationsPlugin.show(
+        0,
+        message.notification!.title.toString(),
+        message.notification!.body.toString(),
+        notificationDetails,
+      );
+    }
   }
  Future<void> initNotification() async{
-    await messaging.requestPermission();
-    FCMToken = await messaging.getToken();
-    pref.setString(LocalDBKeys.FCMTOKEN, FCMToken ?? '');
-    print("Initial Token: $FCMToken");
-    print("Shared Prefrences : ${pref.getString("FCMTOKEN")}");
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    // Set foreground notification options specifically for iOS
+    await messaging.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    try {
+      FCMToken = await messaging.getToken();
+      pref.setString(LocalDBKeys.FCMTOKEN, FCMToken ?? '');
+      print("User granted permission: ${settings.authorizationStatus}");
+      print("Initial Token: $FCMToken");
+      print("Shared Prefrences : ${pref.getString(LocalDBKeys.FCMTOKEN)}");
+    } catch (e) {
+      print("Error getting FCM Token (APNs may not be configured): $e");
+    }
  }
   void onTokenRefresh() {
     messaging.onTokenRefresh.listen((newToken) {

@@ -9,11 +9,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:love_on_life/core/services/login/google_auth_service.dart';
 import 'package:love_on_life/core/services/notification/notification_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../core/services/apiendpoints.dart';
 import '../core/services/base_services.dart';
@@ -30,6 +32,7 @@ class AuthController extends GetxController {
   var userPhone = "".obs;
   var date = "".obs;
   String resetToken = '';
+  String googleTokenId = "";
 
 
   @override
@@ -135,6 +138,32 @@ class AuthController extends GetxController {
     return false;
   }
 
+
+  Future<void> openUrl(String url) async {
+    final Uri uri = Uri.parse(url);
+
+    try {
+      // Check if the device is actually capable of handling the URI
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(
+          uri,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        debugPrint("Could not launch $url - No supporting app found.");
+      }
+    } catch (e) {
+      debugPrint("Error launching URL: $e");
+    }
+  }
+
+  void openPrivacyPolicy() async {
+    await openUrl("https://loveonlife-policy.vercel.app/privacy_policy.html");
+  }
+
+  void openTerms() async {
+    await openUrl("https://loveonlife-policy.vercel.app/term_condition.html");
+  }
   // Future<void> requestInitialPermissions() async {
   //   PermissionStatus status = await _requestStoragePermission();
   //
@@ -314,18 +343,17 @@ class AuthController extends GetxController {
       EasyLoading.dismiss();
     }
   }
-
-  Future<void> login() async {
+  Future<void> googleLogin(GoogleAuthService authService) async {
     final fcmToken = prefs.getString("FCMTOKEN");
+    // Step 1: login
     final body = {
-      'email': loginEmailField.text.trim(),
-      'password': loginPasswordField.text.trim(),
-      'fcmToken' : fcmToken,
+      "idToken": authService.tokenId,
+      "fcmToken": fcmToken
     };
-
+    print("Token ID Skurrrrrrrrrrrr: ${googleTokenId}");
     try {
       final response = await baseService.basePostAPI(
-        ApiEndPoints.loginUser,
+        ApiEndPoints.googleSignIn,
         body,
         loading: true,
       );
@@ -355,24 +383,23 @@ class AuthController extends GetxController {
         Utils.showToast(response['message'] ?? 'Invalid email or password', true);
         return;
       }
-
-      // Save user info
-      final prefs = SharedPreferencesMethod.storage;
-      await prefs.setString(LocalDBKeys.USERDETAIL, jsonEncode(user));
-      await prefs.setString(LocalDBKeys.USERID, user['id'] ?? "");
+      print("Token ID Skurrrrrrrrrrrr: ${authService.tokenId}");
+      // // Save user info
+      // final prefs = SharedPreferencesMethod.storage;
+      // await prefs.setString(LocalDBKeys.USERDETAIL, jsonEncode(user));
+      // await prefs.setString(LocalDBKeys.USERID, user['id'] ?? "");
       await prefs.setString(LocalDBKeys.USERFULLNAME, user['fullname'] ?? "");
       await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
       await prefs.setString(LocalDBKeys.PHONENUMBER, user['phone'] ?? "");
       await prefs.setString(LocalDBKeys.USERPROFILEPIC, user['profilePicture'] ?? "");
-      await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
-      await prefs.setString(LocalDBKeys.JOINDATE, user['createdAt'] ?? "");
+      // await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+      // await prefs.setString(LocalDBKeys.JOINDATE, user['createdAt'] ?? "");
       await prefs.setString(LocalDBKeys.TOKEN, token);
 
-
-      print("✅ profile stored successfully: ${user['profilePicture']}");
-      print("✅ FCMToken stored successfully: ${LocalDBKeys.FCMTOKEN}");
-      print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.TOKEN)}");
-      print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.USEREMAIL)}");
+      //
+      // print("✅ FCMToken stored successfully: ${LocalDBKeys.FCMTOKEN}");
+      // print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.TOKEN)}");
+      print("✅ Token stored successfully: ${authService.tokenId}");
 
       Utils.showToast(response['message'] ?? 'Login successful', false);
 
@@ -383,6 +410,167 @@ class AuthController extends GetxController {
       clearLoginFields();
     } catch (e, stackTrace) {
       print("Login error: $e\n$stackTrace");
+      Utils.showToast('Something went wrong. Please try again.', true);
+    }
+  }
+  // Future<void> login() async {
+  //   final fcmToken = prefs.getString("FCMTOKEN");
+  //   final body = {
+  //     'email': loginEmailField.text.trim(),
+  //     'password': loginPasswordField.text.trim(),
+  //     'fcmToken' : fcmToken,
+  //   };
+  //
+  //   try {
+  //     final response = await baseService.basePostAPI(
+  //       ApiEndPoints.loginUser,
+  //       body,
+  //       loading: true,
+  //     );
+  //
+  //     if (response == false || response == null) {
+  //       Utils.showToast('Check Internet Connection', true);
+  //       return;
+  //     }
+  //
+  //     if (response is! Map<String, dynamic>) {
+  //       Utils.showToast('Unexpected response: ${response.toString()}', true);
+  //       return;
+  //     }
+  //
+  //     // Use data key
+  //     final data = response['data'];
+  //     if (data == null) {
+  //       Utils.showToast(response['message'] ?? 'Login failed', true);
+  //       return;
+  //     }
+  //
+  //     date.value = response['data']['user']['createdAt'];
+  //     final user = data['user'];
+  //     final token = data['accessToken'];
+  //
+  //     if (user == null || token == null) {
+  //       Utils.showToast(response['message'] ?? 'Invalid email or password', true);
+  //       return;
+  //     }
+  //
+  //     if (data["isVerified"] == false) {
+  //       print("IsVerified: ${data["isVerified"]}");
+  //       Get.toNamed("verification");
+  //     }
+  //
+  //     // Save user info
+  //     final prefs = SharedPreferencesMethod.storage;
+  //     await prefs.setString(LocalDBKeys.USERDETAIL, jsonEncode(user));
+  //     await prefs.setString(LocalDBKeys.USERID, user['id'] ?? "");
+  //     await prefs.setString(LocalDBKeys.USERFULLNAME, user['fullname'] ?? "");
+  //     await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+  //     await prefs.setString(LocalDBKeys.PHONENUMBER, user['phone'] ?? "");
+  //     await prefs.setString(LocalDBKeys.USERPROFILEPIC, user['profilePicture'] ?? "");
+  //     await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+  //     await prefs.setString(LocalDBKeys.JOINDATE, user['createdAt'] ?? "");
+  //     await prefs.setString(LocalDBKeys.TOKEN, token);
+  //
+  //
+  //     print("✅ profile stored successfully: ${user['profilePicture']}");
+  //     print("✅ FCMToken stored successfully: ${LocalDBKeys.FCMTOKEN}");
+  //     print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.TOKEN)}");
+  //     print("✅ Token stored successfully: ${prefs.getString(LocalDBKeys.USEREMAIL)}");
+  //
+  //
+  //
+  //       Utils.showToast(response['message'] ?? 'Login successful', false);
+  //
+  //     // Navigate to bottom bar
+  //     Get.offAllNamed('/bottomnavbar');
+  //
+  //     // Clear input fields
+  //     clearLoginFields();
+  //   } catch (e, stackTrace) {
+  //     print("Login error: $e\n$stackTrace");
+  //     Utils.showToast('Something went wrong. Please try again.', true);
+  //   }
+  // }
+
+  Future<void> login() async {
+    final fcmToken = prefs.getString("FCMTOKEN");
+
+    final body = {
+      'email': loginEmailField.text.trim(),
+      'password': loginPasswordField.text.trim(),
+      'fcmToken': fcmToken,
+    };
+
+    try {
+      final response = await baseService.basePostAPI(
+        ApiEndPoints.loginUser,
+        body,
+        loading: true,
+      );
+
+      if (response == null || response == false) {
+        Utils.showToast('Check Internet Connection', true);
+        return;
+      }
+
+      if (response is! Map<String, dynamic>) {
+        Utils.showToast('Unexpected response format', true);
+        return;
+      }
+
+      final data = response['data'];
+
+      if (data == null) {
+        Utils.showToast(response['message'] ?? 'Login failed', true);
+        return;
+      }
+
+      // 🔥 CASE 1: User NOT verified
+      if (data['isVerified'] == false) {
+        Utils.showToast(response['message'], true);
+
+        Get.toNamed("verification", arguments: {
+          "email": data['email'],
+        });
+
+        return; // ⛔ STOP HERE
+      }
+
+      // 🔥 CASE 2: Verified user (normal login)
+      final user = data['user'];
+      final token = data['accessToken'];
+
+      if (user == null || token == null) {
+        Utils.showToast('Invalid server response', true);
+        return;
+      }
+
+      // ✅ Safe extraction
+      final prefs = SharedPreferencesMethod.storage;
+
+      await prefs.setString(LocalDBKeys.USERDETAIL, jsonEncode(user));
+      await prefs.setString(LocalDBKeys.USERID, user['id'] ?? "");
+      await prefs.setString(LocalDBKeys.USERFULLNAME, user['fullname'] ?? "");
+      await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+      await prefs.setString(LocalDBKeys.PHONENUMBER, user['phone'] ?? "");
+      await prefs.setString(LocalDBKeys.USERPROFILEPIC, user['profilePicture'] ?? "");
+      await prefs.setString(LocalDBKeys.JOINDATE, user['createdAt'] ?? "");
+      await prefs.setString(LocalDBKeys.TOKEN, token);
+
+      date.value = user['createdAt'] ?? "";
+
+      print("✅ User stored");
+      print("✅ Token: $token");
+
+      Utils.showToast(response['message'] ?? 'Login successful', false);
+
+      Get.offAllNamed('/bottomnavbar');
+
+      clearLoginFields();
+
+    } catch (e, stackTrace) {
+      print("Login error: $e");
+      print(stackTrace);
       Utils.showToast('Something went wrong. Please try again.', true);
     }
   }
@@ -403,7 +591,7 @@ class AuthController extends GetxController {
 
   void startResendTimer() {
     canResend.value = false;       // Disable resend
-    resendSeconds.value = 50;      // Reset timer
+    resendSeconds.value = 300;      // Reset timer
 
     _timer?.cancel();
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -414,6 +602,12 @@ class AuthController extends GetxController {
         timer.cancel();
       }
     });
+  }
+
+  String formatTime(int seconds) {
+    final minutes = (seconds ~/ 60).toString().padLeft(2, '0');
+    final secs = (seconds % 60).toString().padLeft(2, '0');
+    return "$minutes:$secs";
   }
 
   Future<void> resendOtp() async {
@@ -611,7 +805,65 @@ class AuthController extends GetxController {
       Utils.showToast("Error: $e", true);
     }
   }
+  Future<void> appleLogin(String? identityToken, String fullName) async {
+    final fcmToken = prefs.getString("FCMTOKEN");
 
+    final body = {
+      "identityToken": identityToken,
+      "fullname": fullName,
+      "fcmToken": fcmToken,
+    };
+
+    try {
+      var response = await baseService.basePostAPI(
+        ApiEndPoints.appleSignIn,
+        body,
+        loading: true,
+      );
+
+      if (response == false || response == null) {
+        Utils.showToast('Check Internet Connection', true);
+        return;
+      }
+
+      if (response is! Map<String, dynamic>) {
+        Utils.showToast('Unexpected response', true);
+        return;
+      }
+
+      final data = response['data'];
+
+      if (data == null) {
+        Utils.showToast(response['message'] ?? 'Login failed', true);
+        return;
+      }
+
+      final user = data['user'];
+      final token = data['accessToken'];
+
+      if (user == null || token == null) {
+        Utils.showToast('Invalid login response', true);
+        return;
+      }
+
+      // ✅ SAVE DATA
+      date.value = user['createdAt'] ?? "";
+
+      await prefs.setString(LocalDBKeys.USERFULLNAME, user['fullname'] ?? "");
+      await prefs.setString(LocalDBKeys.USEREMAIL, user['email'] ?? "");
+      await prefs.setString(LocalDBKeys.PHONENUMBER, user['phone'] ?? "");
+      await prefs.setString(LocalDBKeys.USERPROFILEPIC, user['profilePicture'] ?? "");
+      await prefs.setString(LocalDBKeys.TOKEN, token);
+
+      // ✅ SUCCESS TOAST (GREEN)
+      Utils.showToast(response['message'] ?? 'Login successful', false);
+
+      Get.offAllNamed('/bottomnavbar');
+
+    } catch (e) {
+      Utils.showToast("Error: $e", true);
+    }
+  }
 
 
   /// Clear signup fields

@@ -30,7 +30,7 @@ Widget customAppBar(String title, {VoidCallback? ontap}) {
         child: Row(
           children: [
             // Profile Image
-            Obx(() => SizedBox(
+            SizedBox(
               height: 10.w, // fixed height to match image size
               width: 10.w,  // fix width to prevent overflow
               child: InkWell(
@@ -41,7 +41,7 @@ Widget customAppBar(String title, {VoidCallback? ontap}) {
                   placeholder: "assets/png/home_icons/profile-placeholder.jpg",
                 ),
               ),
-            )),
+            ),
 
             //SizedBox(width: 2.w), // small spacing
 
