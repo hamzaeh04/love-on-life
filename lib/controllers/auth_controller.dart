@@ -68,6 +68,7 @@ class AuthController extends GetxController {
 
   /// Country selection
   final TextEditingController phoneController = TextEditingController();
+  final GoogleAuthService googleAuthService = GoogleAuthService();
   final Rxn<Country> selectedCountry = Rxn<Country>();
   RxString countryCode = "+1".obs;
   RxString flagPath = "packages/country_icons/icons/flags/png100px/us.png".obs;
@@ -865,7 +866,31 @@ class AuthController extends GetxController {
       Utils.showToast("Error: $e", true);
     }
   }
+  Future<bool> deleteAccount(BuildContext context) async {
+    try {
+      final data = await baseService.baseDeleteAPI(
+        ApiEndPoints.deleteAccount,
+        loading: true,
+      );
 
+      if (data != null && data is Map<String, dynamic>) {
+        if (data['success'] == true) {
+          logout(context);
+          googleAuthService.logout();
+          Get.toNamed("login");
+
+          return true;
+        }
+      }
+
+      print("Failed to delete account. Response: $data");
+      return false;
+
+    } catch (e) {
+      print("Error deleting account: $e");
+      return false;
+    }
+  }
 
   /// Clear signup fields
   void clearSignupFields() {

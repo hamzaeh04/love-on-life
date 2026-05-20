@@ -56,7 +56,11 @@ class ApiEndPoints{
   static const String googleSignIn = "/users/auth/google";
   //Apple Login
   static const String appleSignIn = "/users/auth/apple";
+
+  //Delete Account
+  static const String deleteAccount = "/users/delete-account";
   //Report
   static const String reportComment = "/reports";
   static const String reportPost = "/reports";
+
 }

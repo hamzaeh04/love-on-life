@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
 import 'package:love_on_life/core/services/base_services.dart';
 import 'package:love_on_life/utils/shared_prefrences_methods.dart';
@@ -9,6 +10,7 @@ import '../../../constants/color_constants.dart';
 import '../../../constants/constants_widgets.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/profile_network_image.dart';
+import '../../../widgets/success_dialog.dart';
 
 class MyProfile extends StatelessWidget {
   MyProfile({super.key});
@@ -68,7 +70,8 @@ class MyProfile extends StatelessWidget {
             SizedBox(height: 2.h),
             Center(child: _buildInfoRow("Email Address", controller.userEmail.value.isNotEmpty ? controller.userEmail.value : "Email")),
             SizedBox(height: 2.h),
-            Obx(() => Center(child: _buildInfoRow("Contact Number", controller.userPhone.value.isNotEmpty ? controller.userPhone.value : '+19159969739'))),
+            Obx(() => Center(child: _buildInfoRow("Contact Number", controller.userPhone.value.isNotEmpty && controller.userPhone.value == 0 ? controller.userPhone.value : '-'))),
+
 
             SizedBox(height: 5.h),
 
@@ -98,7 +101,34 @@ class MyProfile extends StatelessWidget {
                 Get.toNamed("change");
               },
             ),
+            SizedBox(height: 1.5.h),
 
+            // Change Password Button
+            customButton(
+              "Delete Account",
+              color: backgroundColor,
+              fontweight: FontWeight.w700,
+              fontsize: 16.sp,
+              textColor: redColor,
+              borderColor: redColor,
+              ontap: () {
+                successDialog(
+                  context,
+                  'Oops!',
+                  'Are you sure you want to delete your account?',
+                  "No",
+                  buttonText2: "Yes",
+                  isLogout: true,
+                  ontap2: () {
+                    controller.deleteAccount(context);
+                  },
+                      () {
+                    Get.back();
+                  },
+                );
+
+              },
+            ),
             SizedBox(height: 5.h),
           ],
         ),
