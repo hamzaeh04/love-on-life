@@ -228,6 +228,8 @@ class HomeScreen extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(left: 4.w),
                                 child: communityPost(
+                                  context: context,
+                                  postId: post.id,
                                   post.userId?.profilePicture ?? '',
                                   post.userId?.fullname ?? '',
                                   post.description ?? '',

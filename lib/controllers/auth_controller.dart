@@ -561,6 +561,7 @@ class AuthController extends GetxController {
 
       print("✅ User stored");
       print("✅ Token: $token");
+      print("✅ Token: ${user['id']}");
 
       Utils.showToast(response['message'] ?? 'Login successful', false);
 

@@ -6,9 +6,15 @@ import 'package:sizer/sizer.dart';
 import 'package:love_on_life/controllers/community_controller.dart';
 import '../constants/constants_widgets.dart';
 import '../core/services/base_services.dart';
+import '../outh_file/local_db_key.dart';
+import '../utils/shared_prefrences_methods.dart';
+import '../utils/utility.dart';
+import 'custom_reason_widget.dart';
 
-void showCommentsSheet(BuildContext context, String postId, int postIndex) {
+void showCommentsSheet(BuildContext context, String postId, int postIndex, ) {
   final CommunityController communityController = Get.find<CommunityController>();
+  final prefs = SharedPreferencesMethod.storage;
+  var id = prefs.getString(LocalDBKeys.USERID);
 
   showModalBottomSheet(
     context: context,
@@ -48,6 +54,8 @@ void showCommentsSheet(BuildContext context, String postId, int postIndex) {
                   itemCount: comments.length,
                   itemBuilder: (context, index) {
                     final comment = comments[index];
+                    final commentOwner = comment.userId?.id;
+                    bool isMyComment = commentOwner == id;
 
                     return ListTile(
                       key: ValueKey(comment.id),
@@ -58,35 +66,93 @@ void showCommentsSheet(BuildContext context, String postId, int postIndex) {
                             ? CachedNetworkImageProvider("${BaseService().baseURL}${comment.userId!.profilePicture}")
                             : const AssetImage("assets/png/profile_img.png") as ImageProvider,
                       ),
-                      trailing: PopupMenuButton<String>(
-                        icon: Icon(Icons.more_vert, size: 18.sp),
-                        onSelected: (value) async {
-                          if (value == 'delete') {
-                            // Local delete (Optimistic)
-                            final commentId = comment.id ?? "";
-                            final success = await communityController.deleteComment(postId, commentId);
+                        trailing: PopupMenuButton<String>(
+                          color: whiteColor,
+                          icon: Icon(Icons.more_vert, size: 18.sp),
+                          onSelected: (value) async {
+                            if (value == 'delete') {
 
-                            if (success) {
-                              // Successfully delete hone pe UI update
+                              final commentId = comment.id ?? "";
+
+                              // Backup for rollback
+                              final removedComment = currentPost?.comments?[index];
+                              final oldCount = currentPost?.commentsCount ?? 0;
+
+                              /// OPTIMISTIC UPDATE
                               currentPost?.comments?.removeAt(index);
-                              currentPost?.commentsCount = (currentPost.commentsCount ?? 1) - 1;
+                              currentPost?.commentsCount = oldCount - 1;
+
+                              // Refresh UI instantly
                               communityController.getAllPostModel.refresh();
+
+                              /// API CALL
+                              final success = await communityController.deleteComment(
+                                postId,
+                                commentId,
+                              );
+
+                              /// ROLLBACK IF FAILED
+                              if (!success) {
+                                currentPost?.comments?.insert(index, removedComment!);
+                                currentPost?.commentsCount = oldCount;
+
+                                communityController.getAllPostModel.refresh();
+
+                                Utils.showToast("Failed to delete comment", true);
+                              } else {
+                                Utils.showToast("Comment deleted", false);
+                              }
+
+                            } else if (value == 'report') {
+                              // Utils.showToast('Reported Successfully', false);
+                              final commentId = comment.id ?? "";
+
+                              showReasonSheet(context, commentId, postId);
+
                             }
-                          }
-                        },
-                        itemBuilder: (context) => [
-                          PopupMenuItem(
-                            value: 'delete',
-                            child: Row(
-                              children: [
-                                const Icon(Icons.delete, color: Colors.red, size: 20),
-                                SizedBox(width: 2.w),
-                                customText(text: "Delete", color: Colors.red),
-                              ],
+                          },
+                          itemBuilder: (context) => [
+                            PopupMenuItem<String>(
+                              value: isMyComment ? 'delete' : 'report',
+                              child: customText(
+                                text: isMyComment ? "Delete" : "Report",
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      // trailing: PopupMenuButton<String>(
+                      //   icon: Icon(Icons.more_vert, size: 18.sp),
+                      //   onSelected: (value) async {
+                      //     if (value == 'delete') {
+                      //       print("${post} = ${id}");
+                      //       final commentId = comment.id ?? "";
+                      //       final success = await communityController.deleteComment(postId, commentId);
+                      //
+                      //       if (success) {
+                      //         // Successfully delete hone pe UI update
+                      //         currentPost?.comments?.removeAt(index);
+                      //         currentPost?.commentsCount = (currentPost.commentsCount ?? 1) - 1;
+                      //         communityController.getAllPostModel.refresh();
+                      //       }
+                      //     } else if (value == 'report') {
+                      //       print("${post} = ${id}");
+                      //       Utils.showToast('Reported Successfully', false);
+                      //     }
+                      //   },
+                      //   itemBuilder:
+                      //       (context) => [
+                      //     PopupMenuItem<String>(
+                      //       value: isMyComment ? 'delete' : 'report',
+                      //       child: customText(
+                      //         text: isMyComment ? "Delete" : "Report",
+                      //         color: Colors.red,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+
+
                       title: customText(
                           text: comment.userId?.fullname ?? "User",
                           fontWeight: FontWeight.w500,

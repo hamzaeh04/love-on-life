@@ -35,7 +35,8 @@ class CommunityController extends GetxController {
   final AuthController controller = Get.find<AuthController>();
   final DashboardController dashboardController = Get.find<DashboardController>();
 
-
+  TextEditingController reasonController = TextEditingController();
+  RxBool isSelected = false.obs;
   RxInt currentCarouselIndex = 0.obs;
   var isPostingComment = false.obs; // 🔹 disable button during post
   RxString postVisibility = 'Public'.obs;
@@ -414,8 +415,9 @@ class CommunityController extends GetxController {
       id: "temp_${DateTime.now().millisecondsSinceEpoch}", // Temporary ID
       comment: commentText,
       userId: UserId(
-        fullname: controller.userName.value, // Aap apna user name yahan dynamic bhi rakh sakte hain
-        profilePicture: controller.userProfilePic.value, // User ki current DP ka path
+        id: prefs.getString(LocalDBKeys.USERID),
+        fullname: prefs.getString(LocalDBKeys.USERFULLNAME), // Aap apna user name yahan dynamic bhi rakh sakte hain
+        profilePicture: prefs.getString(LocalDBKeys.USERPROFILEPIC), // User ki current DP ka path
       ),
     );
 
@@ -446,8 +448,30 @@ class CommunityController extends GetxController {
       final int statusCode = response['statusCode'] ?? 0;
 
       if (statusCode >= 200 && statusCode < 300) {
+        // Parse the new comment from the response if available
+        if (response['data'] != null) {
+          try {
+            final data = response['data'];
+            if (data is Map<String, dynamic>) {
+              // Check if it's a single comment
+              if (data.containsKey('_id') && data.containsKey('comment')) {
+                final serverComment = Comments.fromJson(data);
+                final commentsList = getAllPostModel.value?.data?[postIndex].comments;
+                if (commentsList != null) {
+                  final tempIndex = commentsList.indexWhere((c) => c.id == newComment.id);
+                  if (tempIndex != -1) {
+                    commentsList[tempIndex] = serverComment;
+                    getAllPostModel.refresh();
+                  }
+                }
+              }
+            }
+          } catch (e) {
+            print("Error parsing server comment: $e");
+          }
+        }
         // Success: Server se fresh data le aao (taake IDs wagera correct ho jayein)
-        // GetAllPost();
+        GetAllPost();
       } else {
         // Error handling: Rollback local change
         getAllPostModel.value?.data?[postIndex].comments?.removeWhere((c) => c.id == newComment.id);
@@ -461,6 +485,58 @@ class CommunityController extends GetxController {
       Utils.showToast('Something went wrong', true);
     }
   }
+
+  Future<void> reportComment(String commentId, String postId, String reason) async{
+    final body = {
+      "targetType": "comment",
+      "targetId": commentId,
+      "postId": postId,
+      "reason": reason
+    };
+    try{
+      final response = await baseService.basePostAPI(ApiEndPoints.reportComment, body);
+      print("Response: $response");
+      if(response["success"] == true){
+        Utils.showToast(response["message"], false);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      } else{
+        Utils.showToast(response["message"], true);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      }
+    } catch(e){
+      Utils.showToast("Something went wrong $e", true);
+    }
+  }
+
+  Future<void> reportPost(String postId, String reason) async{
+    final body = {
+      "targetType": "post",
+      "targetId": postId,
+      "reason": reason
+    };
+    try{
+      final response = await baseService.basePostAPI(ApiEndPoints.reportPost, body);
+      print("Response: $response");
+      if(response["success"] == true){
+        Utils.showToast(response["message"], false);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      } else{
+        Utils.showToast(response["message"], true);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      }
+    } catch(e){
+      Utils.showToast("Something went wrong $e", true);
+    }
+  }
+
 
   Future<void> createPost() async {
     try {

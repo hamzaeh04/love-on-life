@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/auth_controller.dart';
+import 'package:love_on_life/controllers/navigation_controller.dart';
 import 'package:love_on_life/core/services/base_services.dart';
 import 'package:love_on_life/core/services/login/google_auth_service.dart';
 import 'package:love_on_life/outh_file/local_db_key.dart';
@@ -16,6 +17,7 @@ class CustomDrawer extends StatelessWidget {
   final BaseService baseService = BaseService();
   final GoogleAuthService googleAuthService = GoogleAuthService();
   final AuthController controller = Get.find<AuthController>();
+  final NavigationController navigationController = Get.find<NavigationController>();
   final Drawercontroller drawerController = Get.find<Drawercontroller>();
   final prefs = SharedPreferencesMethod.storage;
   late final date = prefs.getString(LocalDBKeys.JOINDATE);
@@ -149,6 +151,7 @@ class CustomDrawer extends StatelessWidget {
                     ontap2: () {
                       controller.logout(context);
                       googleAuthService.logout();
+                      navigationController.goToHome();
                     },
                     () {
                       Get.back();

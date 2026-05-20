@@ -89,6 +89,7 @@ class CommunityScreen extends StatelessWidget {
                             return Column(
                               children: [
                                 communityPost(
+                                  context: context,
                                   post.userId?.profilePicture ?? '',
                                   post.userId?.fullname ?? '',
                                   post.description ?? '',

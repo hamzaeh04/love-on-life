@@ -10,6 +10,7 @@ import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
 import '../outh_file/local_db_key.dart';
 import '../utils/utility.dart';
+import 'custom_reason_widget.dart';
 import 'network_media_player.dart';
 
 Widget communityPost(
@@ -133,7 +134,7 @@ Widget communityPost(
                 if (value == 'delete') {
                   communityController.deletePost(postId!);
                 } else if (value == 'report') {
-                  Utils.showToast('Reported Successfully', false);
+                  showReasonSheet(context!, "", postId!,);
                 }
               },
               itemBuilder:
