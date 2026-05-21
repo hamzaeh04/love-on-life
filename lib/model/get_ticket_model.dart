@@ -148,7 +148,11 @@ class EventId {
   });
 
   EventId.fromJson(Map<String, dynamic> json) {
-    locationType = json['locationType'] as String?;
+    if (json['locationType'] is Map) {
+      locationType = json['locationType']['type']?.toString();
+    } else {
+      locationType = json['locationType']?.toString();
+    }
     id = json['_id'] as String?;
     userIds = (json['userIds'] as List?)?.map((dynamic e) => e as String).toList();
     image = json['image'] as String?;
@@ -156,7 +160,7 @@ class EventId {
     description = json['description'] as String?;
     date = json['date'] as String?;
     time = json['time'] as String?;
-    coordinates = (json['coordinates'] as List?)?.map((dynamic e) => e as double).toList();
+    coordinates = (json['coordinates'] as List?)?.map((dynamic e) => (e as num).toDouble()).toList();
     category = json['category'] as String?;
     ticketType = json['ticketType'] as String?;
     price = json['price'] as int?;

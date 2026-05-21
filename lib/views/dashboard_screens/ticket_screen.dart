@@ -11,6 +11,7 @@ import 'package:love_on_life/controllers/ticket_controller.dart';
 
 import '../../constants/color_constants.dart';
 import '../../constants/constants_widgets.dart';
+import '../../controllers/stripe_controller.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_drawer_widget.dart';
@@ -24,6 +25,8 @@ class TicketScreen extends StatelessWidget {
   final TicketController ticketController = Get.find<TicketController>();
   final CommunityController communityController =
   Get.find<CommunityController>();
+  final StripeController stripeController =
+  Get.find<StripeController>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -229,8 +232,9 @@ class TicketScreen extends StatelessWidget {
                                                       color: ticketBlueColor,
                                                       height: 4.h,
                                                       textColor: whiteColor,
-                                                      ontap: () {
-                                                        Get.toNamed("card");
+                                                      ontap: () async {
+                                                        await stripeController.startPayment(ticketId: "${ticket.id}");
+
                                                       },
                                                     ),
                                                   ),

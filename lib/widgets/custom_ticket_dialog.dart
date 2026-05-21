@@ -248,7 +248,7 @@ void showTicketDialog(BuildContext context,
                         child: Image.asset('assets/png/home_icons/map.png'),
                       ),
 
-                      SizedBox(height: 3.5.h),
+                      SizedBox(height: 4.5.h),
                       Row(
                         children: [
                           // Image.asset(

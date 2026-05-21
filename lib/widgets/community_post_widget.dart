@@ -131,7 +131,7 @@ Widget communityPost(
               offset: Offset(0, 25),
               onSelected: (value) {
                 if (value == 'delete') {
-                  communityController.deletePost(postId!);
+                  communityController.deletePost(postId ?? "");
                 } else if (value == 'report') {
                   Utils.showToast('Reported Successfully', false);
                 }

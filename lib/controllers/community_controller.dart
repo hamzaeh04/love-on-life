@@ -21,6 +21,7 @@ import 'package:love_on_life/widgets/custom_ticket_dialog.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_compress/video_compress.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import '../core/services/apiendpoints.dart';
 import '../core/services/base_services.dart';
 import '../model/community_post_model.dart';
@@ -161,6 +162,7 @@ class CommunityController extends GetxController {
 
   Rx<File?> selectedPostImage = Rx<File?>(null);
   Rx<File?> selectedPostVideo = Rx<File?>(null);
+  Rx<File?> selectedPostVideoThumbnail = Rx<File?>(null);
 
 // Optional: unified URL for network media
   Rx<String?> selectedPostMediaUrl = Rx<String?>(null);
@@ -168,7 +170,9 @@ class CommunityController extends GetxController {
   void removePostMedia() {
     selectedPostImage.value = null;
     selectedPostVideo.value = null;
+    selectedPostVideoThumbnail.value = null;
     selectedPostMediaUrl.value = null;
+    _validatePost();
   }
 
 
@@ -181,23 +185,59 @@ class CommunityController extends GetxController {
     if (media.isNotEmpty) {
       final XFile selected = media.first;
 
-      if (selected.mimeType?.startsWith('video') == true) {
+      if (selected.mimeType?.startsWith('video') == true || selected.path.toLowerCase().endsWith('.mp4') || selected.path.toLowerCase().endsWith('.mov')) {
         // Video selected
         // Compress video before assigning
         File? compressedVideo = await _compressVideo(selected.path);
 
         if (compressedVideo != null) {
           selectedPostVideo.value = compressedVideo;
+          selectedPostVideoThumbnail.value = await VideoCompress.getFileThumbnail(selected.path);
           selectedPostImage.value = null;
         }
       } else {
         // Image selected
-        selectedPostImage.value = File(selected.path);
-        selectedPostVideo.value = null;
+        File? compressedImage = await _compressImage(selected.path);
+        if (compressedImage != null) {
+          selectedPostImage.value = compressedImage;
+          selectedPostVideo.value = null;
+        } else {
+          selectedPostImage.value = File(selected.path); // Fallback
+          selectedPostVideo.value = null;
+        }
       }
 
       _validatePost();
     }
+  }
+
+  // Helper function to compress image
+  Future<File?> _compressImage(String imagePath) async {
+    try {
+      final lastIndex = imagePath.lastIndexOf('.');
+      if (lastIndex == -1) return null;
+      final ext = imagePath.substring(lastIndex);
+      final outPath = "${imagePath.substring(0, lastIndex)}_out${ext == '.png' ? '.png' : '.jpg'}";
+      
+      var format = CompressFormat.jpeg;
+      if (ext.toLowerCase() == '.png') {
+        format = CompressFormat.png;
+      }
+
+      final result = await FlutterImageCompress.compressAndGetFile(
+        imagePath,
+        outPath,
+        quality: 60,
+        format: format,
+      );
+
+      if (result != null) {
+        return File(result.path);
+      }
+    } catch (e) {
+      print("Image compression error: $e");
+    }
+    return null;
   }
 
 // Helper function to compress video
@@ -227,6 +267,8 @@ class CommunityController extends GetxController {
 
   void removePostImage() {
     selectedPostImage.value = null;
+    selectedPostVideo.value = null;
+    selectedPostVideoThumbnail.value = null;
     _validatePost();
   }
 
@@ -482,6 +524,18 @@ class CommunityController extends GetxController {
             file.path,
             filename: fileName,
             contentType: MediaType('image', 'jpeg'),
+          ),
+        );
+      } else if (selectedPostVideo.value != null &&
+          selectedPostVideo.value!.existsSync()) {
+        final file = selectedPostVideo.value!;
+        final fileName = file.path.split('/').last;
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            file.path,
+            filename: fileName,
+            contentType: MediaType('video', 'mp4'),
           ),
         );
       }
@@ -757,6 +811,8 @@ class CommunityController extends GetxController {
   void clearPostFields() {
     postDescField.clear();
     selectedPostImage.value = null;
+    selectedPostVideo.value = null;
+    selectedPostVideoThumbnail.value = null;
     canPost.value = false;
   }
 }

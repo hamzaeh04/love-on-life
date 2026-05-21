@@ -70,7 +70,7 @@ class MyProfile extends StatelessWidget {
             SizedBox(height: 2.h),
             Center(child: _buildInfoRow("Email Address", controller.userEmail.value.isNotEmpty ? controller.userEmail.value : "Email")),
             SizedBox(height: 2.h),
-            Obx(() => Center(child: _buildInfoRow("Contact Number", controller.userPhone.value.isNotEmpty && controller.userPhone.value == 0 ? controller.userPhone.value : '-'))),
+            Obx(() => Center(child: _buildInfoRow("Contact Number", controller.userPhone.value.isNotEmpty || controller.userPhone.value == 0 ? controller.userPhone.value : '-'))),
 
 
             SizedBox(height: 5.h),

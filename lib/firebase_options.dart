@@ -63,6 +63,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '813161449252',
     projectId: 'loveonlife-678ee',
     storageBucket: 'loveonlife-678ee.firebasestorage.app',
+    androidClientId: '813161449252-7iv5shde1mate94df2v2o76geeun4amh.apps.googleusercontent.com',
+    iosClientId: '813161449252-eq01riueph9mjsgnkkg17f9g2ci7mcqp.apps.googleusercontent.com',
     iosBundleId: 'com.example.loveOnLife',
   );
+
 }

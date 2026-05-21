@@ -34,7 +34,12 @@ Widget customAppBar(String title, {VoidCallback? ontap}) {
               height: 10.w, // fixed height to match image size
               width: 10.w,  // fix width to prevent overflow
               child: InkWell(
-                onTap: ontap,
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  if (ontap != null) {
+                    ontap();
+                  }
+                },
                 child: ProfileNetworkImage(
                   imageUrl: "${baseService.baseURL}${prefs.getString(LocalDBKeys.USERPROFILEPIC)}",
                   size: 10.w, // match width/height

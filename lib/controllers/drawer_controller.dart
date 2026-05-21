@@ -14,6 +14,7 @@ import '../outh_file/local_db_key.dart';
 import '../utils/utility.dart';
 import '../widgets/success_dialog.dart';
 import 'auth_controller.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class Drawercontroller extends GetxController {
   final AuthController authController = Get.find<AuthController>();
@@ -37,6 +38,7 @@ class Drawercontroller extends GetxController {
 
   Future<void> updateProfile(BuildContext context, {File? profilePicture}) async {
     try {
+      EasyLoading.show(status: 'Updating Profile...');
       final uri = Uri.parse("${BaseService().baseURL}${ApiEndPoints.updateProfile}");
       print("API URL: $uri"); // <-- Print API URL
 
@@ -120,6 +122,8 @@ class Drawercontroller extends GetxController {
       Utils.showToast("No Internet connection", true);
     } catch (e) {
       Utils.showToast("Unexpected error: $e", true);
+    } finally {
+      EasyLoading.dismiss();
     }
   }
 

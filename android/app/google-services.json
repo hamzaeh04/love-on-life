@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "813161449252-7iv5shde1mate94df2v2o76geeun4amh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.love_on_life",
+            "certificate_hash": "33915d95c1fb84db0e263585b585cf9a8cdd889b"
+          }
+        },
+        {
           "client_id": "813161449252-d1kbnk7ct7q3a55g1parudfg23d7250h.apps.googleusercontent.com",
           "client_type": 3
         }

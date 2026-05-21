@@ -110,15 +110,22 @@ Widget createPost() {
                     child:
                     image != null ?
                         Image.file(
-                          image!,
+                          image,
                           fit: BoxFit.cover,
                         ) : Stack(
                       alignment: Alignment.center,
                       children: [
-                        // 🎥 Video thumbnail placeholder
-                        Container(
-                          color: Colors.black12,
-                        ),
+                        // 🎥 Video thumbnail
+                        communityController.selectedPostVideoThumbnail.value != null
+                            ? Image.file(
+                                communityController.selectedPostVideoThumbnail.value!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              )
+                            : Container(
+                                color: Colors.black12,
+                              ),
 
                         // ▶ Play icon
                         Icon(

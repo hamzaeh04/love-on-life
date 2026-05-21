@@ -36,7 +36,12 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 2.h),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 2.h),
 
             /// 🔹 Profile Section
             Row(
@@ -110,13 +115,13 @@ class CustomDrawer extends StatelessWidget {
                 Get.toNamed("favourite");
               },
             ),
-            drawerTile(
-              'assets/png/drawer_icons/CreditCard.png',
-              "Payment Methods",
-              ontap: () {
-                Get.toNamed("card");
-              },
-            ),
+            // drawerTile(
+            //   'assets/png/drawer_icons/CreditCard.png',
+            //   "Payment Methods",
+            //   ontap: () {
+            //     Get.toNamed("card");
+            //   },
+            // ),
             drawerTile(
               'assets/png/drawer_icons/FAQs.png',
               "Privacy Policy",
@@ -132,7 +137,10 @@ class CustomDrawer extends StatelessWidget {
               },
             ),
 
-            const Spacer(),
+                  ],
+                ),
+              ),
+            ),
 
             // / 🔹 Logout Button
             SizedBox(

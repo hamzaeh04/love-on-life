@@ -19,8 +19,9 @@ class StripeController extends GetxController {
     );
 
     if (response == null) throw Exception("No response from server");
+    print("PAYMENT INTENT RESPONSE: $response");
     if (response['success'] != true) {
-      throw Exception(response['message'] ?? "Payment intent creation failed");
+      throw Exception(response['message'] ?? response['error'] ?? "Payment intent creation failed. Full response: $response");
     }
 
     final data = response['data'];

@@ -234,6 +234,7 @@ class HomeScreen extends StatelessWidget {
                                   post.createdAt ?? '',
                                   '',
                                   post.image ?? '',
+                                  postId: post.id,
                                   isLiked: post.isLiked,
                                   index: index,
                                   commentTapped: () {

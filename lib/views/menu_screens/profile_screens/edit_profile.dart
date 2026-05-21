@@ -112,10 +112,10 @@ class EditProfile extends StatelessWidget {
                   // Check if phone number is empty
                   bool isPhoneValid = controller.fullPhoneNumber.value.isNotEmpty;
 
-                  // Check if profile picture is selected
-                  bool isImageSelected = controller.profilePicture.value != null;
+                  // // Check if profile picture is selected
+                  // bool isImageSelected = controller.profilePicture.value != null;
 
-                  if (isFormValid && isPhoneValid && isImageSelected) {
+                  if (isFormValid && isPhoneValid) {
                     // Everything is filled, proceed
                     File? imageFile = File(controller.profilePicture.value!.path);
                     drawerController.updateProfile(context, profilePicture: imageFile);
@@ -128,9 +128,9 @@ class EditProfile extends StatelessWidget {
                     if (!isPhoneValid) {
                       message += "Please enter your phone number.\n";
                     }
-                    if (!isImageSelected) {
-                      message += "Please select a profile picture.\n";
-                    }
+                    // if (!isImageSelected) {
+                    //   message += "Please select a profile picture.\n";
+                    // }
                     Utils.showToast('Please fill all required fields', true);
 
                   }
