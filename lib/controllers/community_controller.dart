@@ -121,6 +121,71 @@ class CommunityController extends GetxController {
 
     return "$hour:${minute.toString().padLeft(2, '0')} ${isPM ? 'PM' : 'AM'}";
   }
+  final List<String> abusiveWords = [
+    // Common English abusive words
+    "fuck",
+    "fucking",
+    "shit",
+    "bitch",
+    "asshole",
+    "bastard",
+    "dick",
+    "dickhead",
+    "motherfucker",
+    "mf",
+    "slut",
+    "whore",
+    "hoe",
+    "retard",
+    "idiot",
+    "stupid",
+    "dumbass",
+    "jackass",
+    "loser",
+    "moron",
+    "piece of shit",
+    "pussy",
+    "crap",
+    "screw you",
+    "freak",
+    "psycho",
+
+    // Racist / hateful / offensive terms
+    "nigga",
+    "nigger",
+    "fag",
+    "faggot",
+    "gayass",
+    "tranny",
+    "terrorist",
+
+    // Sexual / vulgar
+    "cum",
+    "porn",
+    "sex",
+    "boobs",
+    "tits",
+    "blowjob",
+    "handjob",
+
+    // Toxic phrases
+    "kill yourself",
+    "kys",
+    "go die",
+    "shut up",
+
+    // South Asian abusive words (optional extra safety)
+    "madarchod",
+    "bc",
+    "mc",
+    "harami",
+    "kameena",
+    "chutiya",
+    "gaand",
+    "lund",
+    "randi",
+  ];
+
 
   String formatDate(dynamic value) {
     if (value == null) return '';

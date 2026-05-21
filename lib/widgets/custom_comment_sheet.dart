@@ -16,6 +16,7 @@ void showCommentsSheet(BuildContext context, String postId, int postIndex, ) {
   final prefs = SharedPreferencesMethod.storage;
   var id = prefs.getString(LocalDBKeys.USERID);
 
+
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -191,16 +192,41 @@ void showCommentsSheet(BuildContext context, String postId, int postIndex, ) {
                   ),
                   SizedBox(width: 2.w),
                   IconButton(
+                    // onPressed: () async {
+                    //   if (communityController.addCommentField.text.trim().isNotEmpty) {
+                    //     // Naya comment add karne ka logic
+                    //     await communityController.addComment(postId, postIndex);
+                    //
+                    //     // Count update karein bahar dikhane ke liye
+                    //     final currentPost = communityController.getAllPostModel.value?.data?[postIndex];
+                    //     currentPost?.commentsCount = (currentPost.commentsCount ?? 0) + 1;
+                    //     communityController.getAllPostModel.refresh();
+                    //   }
+                    // },
                     onPressed: () async {
-                      if (communityController.addCommentField.text.trim().isNotEmpty) {
-                        // Naya comment add karne ka logic
-                        await communityController.addComment(postId, postIndex);
+                      final comment =
+                      communityController.addCommentField.text.trim().toLowerCase();
 
-                        // Count update karein bahar dikhane ke liye
-                        final currentPost = communityController.getAllPostModel.value?.data?[postIndex];
-                        currentPost?.commentsCount = (currentPost.commentsCount ?? 0) + 1;
-                        communityController.getAllPostModel.refresh();
+                      if (comment.isEmpty) return;
+
+                      bool containsAbuse = communityController.abusiveWords.any(
+                            (word) => comment.contains(word),
+                      );
+
+                      if (containsAbuse) {
+                        Utils.showToast("Don't use abusive words", true);
+                        return;
                       }
+
+                      await communityController.addComment(postId, postIndex);
+
+                      final currentPost =
+                      communityController.getAllPostModel.value?.data?[postIndex];
+
+                      currentPost?.commentsCount =
+                          (currentPost.commentsCount ?? 0) + 1;
+
+                      communityController.getAllPostModel.refresh();
                     },
                     icon: const Icon(Icons.send, color: Colors.blue),
                   ),
