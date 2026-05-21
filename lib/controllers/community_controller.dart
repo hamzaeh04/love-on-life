@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:love_on_life/model/blocked_users_model.dart';
 import 'package:video_compress/video_compress.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -44,6 +45,7 @@ class CommunityController extends GetxController {
   var getAllPostModel = Rxn<GetAllPostModel>();
   Rx<GetAllEventModel?> getAllEventsModel = Rx<GetAllEventModel?>(null);
   Rx<GetEventByIdModel?> getEventByIdModel = Rx<GetEventByIdModel?>(null);
+  Rx<BlockedUsersModel?> getBlockedUsersModel = Rx<BlockedUsersModel?>(null);
   Rx<FavoriteEventModel?> getFavoriteEventModel = Rx<FavoriteEventModel?>(null);
   Rx<GetMyEventsModel?> getMyEventsModel = Rx<GetMyEventsModel?>(null);
   RxString searchFieldContent = ''.obs;
@@ -829,7 +831,74 @@ class CommunityController extends GetxController {
   }
 
 
+  Future<void> blockUser(String userId) async {
+    try {
+      final response = await baseService.basePatchAPI(ApiEndPoints.blockUser(userId), body: {});
 
+      if (response != null) {
+        debugPrint(response.toString());
+      }
+      if(response["success"] == true) {
+        Utils.showToast(response["message"], false);
+        GetAllPost();
+      } else{
+        Utils.showToast(response["message"], true);
+      }
+    } catch (e) {
+      debugPrint("Block User Error: $e");
+    }
+  }
+
+  Future<void> unblockUser(String userId) async {
+    try {
+      final response = await baseService.basePatchAPI(ApiEndPoints.unblockUser(userId), body: {});
+
+      if (response != null) {
+        debugPrint(response.toString());
+      }
+      if(response["success"] == true) {
+        Utils.showToast(response["message"], false);
+        getAllBlockedUsers();
+        GetAllPost();
+
+      } else{
+        Utils.showToast(response["message"], true);
+      }
+    } catch (e) {
+      debugPrint("Block User Error: $e");
+    }
+  }
+
+  RxBool isBlockedUsersLoading = false.obs;
+  Future<void> getAllBlockedUsers() async {
+
+    try {
+
+      isBlockedUsersLoading.value = true;
+
+      final response = await baseService.baseGetAPI(
+        ApiEndPoints.getAllBlockedUsers,
+      );
+
+      if (response["success"] == true) {
+
+        getBlockedUsersModel.value =
+            BlockedUsersModel.fromJson(response);
+
+      } else {
+
+        Utils.showToast(response["message"], true);
+      }
+
+    } catch (e) {
+
+      debugPrint("Block User Error: $e");
+
+    } finally {
+
+      isBlockedUsersLoading.value = false;
+    }
+  }
   void clearPostFields() {
     postDescField.clear();
     selectedPostImage.value = null;

@@ -230,6 +230,7 @@ class HomeScreen extends StatelessWidget {
                                 child: communityPost(
                                   context: context,
                                   postId: post.id,
+                                  UserId: post.userId?.id,
                                   post.userId?.profilePicture ?? '',
                                   post.userId?.fullname ?? '',
                                   post.description ?? '',

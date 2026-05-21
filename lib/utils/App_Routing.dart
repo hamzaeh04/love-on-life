@@ -17,6 +17,7 @@ import 'package:love_on_life/views/payment_method_screens/select_card_screen.dar
 import 'package:love_on_life/views/splash_screens/get_started.dart';
 
 import '../views/auth_screens/verification_code_screen.dart';
+import '../views/menu_screens/blocked_users.dart';
 import '../views/search_screens/event_screen.dart';
 import '../views/search_screens/favorite_screen.dart';
 import '../views/search_screens/search_screens.dart';
@@ -46,6 +47,7 @@ class AppRoutes {
     GetPage(name: '/favourite', page: () => FavoriteScreen()),
     GetPage(name: '/card', page: () => SelectCardScreen()),
     GetPage(name: '/ticket', page: () => TicketScreen()),
+    GetPage(name: '/blockedUsers', page: () => BlockedUsers()),
 
     //
   ];

@@ -133,6 +133,13 @@ class CustomDrawer extends StatelessWidget {
                 controller.openTerms();
               },
             ),
+            drawerTile(
+              'assets/png/drawer_icons/block-user.png',
+              "Blocked Users",
+              ontap: () {
+                Get.toNamed("blockedUsers");
+              },
+            ),
 
             const Spacer(),
 

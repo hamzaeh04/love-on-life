@@ -29,6 +29,7 @@ Widget communityPost(
   VoidCallback? likeTapped,
   VoidCallback? commentTapped,
   BuildContext? context,
+      String? UserId
 }) {
   final CommunityController communityController = Get.find<CommunityController>();
   final prefs = SharedPreferencesMethod.storage;
@@ -135,6 +136,11 @@ Widget communityPost(
                   communityController.deletePost(postId!);
                 } else if (value == 'report') {
                   showReasonSheet(context!, "", postId!,);
+                } else if (value == 'block') {
+                  print("Block User tapped");
+                  communityController.blockUser(UserId!);
+                  // Example:
+                  // userController.blockUser(userId);
                 }
               },
               itemBuilder:
@@ -143,6 +149,19 @@ Widget communityPost(
                       value: isMyPost ? 'delete' : 'report',
                       child: customText(
                         text: isMyPost ? "Delete" : "Report",
+                        color: Colors.red,
+                      ),
+                    ),
+                    isMyPost
+                        ? const PopupMenuItem(
+                      enabled: false,
+                      height: 0,
+                      child: SizedBox.shrink(),
+                    )
+                        : PopupMenuItem(
+                      value: "block",
+                      child: customText(
+                        text: "Block User",
                         color: Colors.red,
                       ),
                     ),
