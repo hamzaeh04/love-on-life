@@ -3,11 +3,13 @@ import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
 import 'package:love_on_life/constants/constants_widgets.dart';
 import 'package:love_on_life/core/services/login/apple_auth_service.dart';
+import 'package:love_on_life/utils/shared_prefrences_methods.dart';
 import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../controllers/auth_controller.dart';
 import '../../core/services/login/google_auth_service.dart';
+import '../../outh_file/local_db_key.dart';
 
 class GetStarted extends StatelessWidget {
   GetStarted({super.key});
@@ -148,6 +150,9 @@ class GetStarted extends StatelessWidget {
                         InkWell(
                           onTap: (){
                             Get.toNamed("login");
+                            // final prefs = SharedPreferencesMethod.storage;
+                            // prefs.getBool(LocalDBKeys.FIRSTTIMEOPENAPP);
+                            // print("first time: ${prefs.getBool(LocalDBKeys.FIRSTTIMEOPENAPP)}");
                           },
                           child: customText(
                               text: "Sign In",

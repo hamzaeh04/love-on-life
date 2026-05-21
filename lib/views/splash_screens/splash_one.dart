@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/controllers/splash_controller.dart';
+import 'package:love_on_life/outh_file/local_db_key.dart';
+import 'package:love_on_life/utils/shared_prefrences_methods.dart';
 import 'package:sizer/sizer.dart';
 
 class SplashOne extends StatelessWidget {
-  const SplashOne({super.key});
-
+  SplashOne({super.key});
+  final prefs = SharedPreferencesMethod.storage;
   @override
   Widget build(BuildContext context) {
-    Get.put(SplashController("getstarted"));
+    final hasAccepted = prefs.getBool(LocalDBKeys.FIRSTTIMEOPENAPP) ?? false;
+    print("First ${hasAccepted}");
+    Get.put(SplashController(hasAccepted ? "/getstarted" : "/term"));
     return Scaffold(
       body: Container(
         height: double.infinity,

@@ -155,9 +155,9 @@ class CustomDrawer extends StatelessWidget {
                     "No",
                     buttonText2: "Yes",
                     isLogout: true,
-                    ontap2: () {
-                      controller.logout(context);
-                      googleAuthService.logout();
+                    ontap2: () async {
+                      await controller.logout(context);
+                      await googleAuthService.logout();
                       navigationController.goToHome();
                     },
                     () {

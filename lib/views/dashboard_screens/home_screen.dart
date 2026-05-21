@@ -51,6 +51,7 @@ class HomeScreen extends StatelessWidget {
                         onTap: (){
                           final prefs = SharedPreferencesMethod.storage;
                           print("${baseService.baseURL}${prefs.getString(LocalDBKeys.USERPROFILEPIC)}");
+                          // Get.toNamed("term");
                         },
                         child: customText(
                           text: 'Events Near by You',

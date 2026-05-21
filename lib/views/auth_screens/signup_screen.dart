@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
@@ -7,6 +9,8 @@ import 'package:love_on_life/widgets/custom_button.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../constants/constants_widgets.dart';
+import '../../core/services/login/apple_auth_service.dart';
+import '../../core/services/login/google_auth_service.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/social_icon_widget.dart';
 import 'login_screen.dart';
@@ -15,6 +19,10 @@ class SignupScreen extends StatelessWidget {
 
   final AuthController controller = Get.find<AuthController>();
   GlobalKey<FormState> signupKey = GlobalKey<FormState>();
+  final GoogleAuthService _authService = GoogleAuthService();
+  final AppleAuthService _appleAuthService = AppleAuthService();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -176,29 +184,49 @@ class SignupScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 3.h),
-                    Row(
+                    Platform.isAndroid
+                        ? socialIconWidget(
+                      "assets/png/social_icons/google.png",
+                      ontap: () async {
+                        var user = await _authService.login();
+
+                        if (user != null) {
+                          controller.googleLogin(_authService);
+                        }
+                      },
+                    )
+                        : Platform.isIOS
+                        ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        InkWell(
-                            onTap: (){
-                            },
-                            child: socialIconWidget("assets/png/social_icons/google.png")),
-                        InkWell(
-                            onTap: (){
-                            },
-                            child: socialIconWidget("assets/png/social_icons/apple.png")),
-                        // InkWell(
-                        //     onTap: (){
-                        //     },
-                        //     child: socialIconWidget("assets/png/social_icons/facebook_logo.png")),
+                        socialIconWidget(
+                          "assets/png/social_icons/google.png",
+                          ontap: () async {
+                            var user = await _authService.login();
+
+                            if (user != null) {
+                              controller.googleLogin(_authService);
+                            }
+                          },
+                        ),
+
+                        SizedBox(width: 4.w),
+
+                        socialIconWidget(
+                          "assets/png/social_icons/apple.png",
+                          ontap: () async {
+                            await _appleAuthService.signInWithApple();
+                          },
+                        ),
                       ],
-                    ),
+                    )
+                        : const SizedBox(),
                     SizedBox(height: 3.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         customCheckBox(
-                          initialValue: false,
+                          initialValue: true,
                           onChanged: (value) {
                             print("Checkbox state: $value");
                           },
