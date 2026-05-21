@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 class ApiEndPoints{
   // Auth
   static const String signupUser = '/users/signup';
@@ -59,5 +61,16 @@ class ApiEndPoints{
 
   //Delete Account
   static const String deleteAccount = "/users/delete-account";
+  //Report
+  static const String reportComment = "/reports";
+  static const String reportPost = "/reports";
+  //Block
+  static String blockUser(String UserId){
+    return '/users/block/$UserId?block=true';
+  }
+  static String unblockUser(String UserId){
+    return '/users/block/$UserId?block=false';
+  }
+  static const String getAllBlockedUsers = "/users/blocked";
 
 }

@@ -10,6 +10,7 @@ import '../constants/color_constants.dart';
 import '../constants/constants_widgets.dart';
 import '../outh_file/local_db_key.dart';
 import '../utils/utility.dart';
+import 'custom_reason_widget.dart';
 import 'network_media_player.dart';
 
 Widget communityPost(
@@ -28,6 +29,7 @@ Widget communityPost(
   VoidCallback? likeTapped,
   VoidCallback? commentTapped,
   BuildContext? context,
+      String? UserId
 }) {
   final CommunityController communityController = Get.find<CommunityController>();
   final prefs = SharedPreferencesMethod.storage;
@@ -133,7 +135,12 @@ Widget communityPost(
                 if (value == 'delete') {
                   communityController.deletePost(postId ?? "");
                 } else if (value == 'report') {
-                  Utils.showToast('Reported Successfully', false);
+                  showReasonSheet(context!, "", postId!,);
+                } else if (value == 'block') {
+                  print("Block User tapped");
+                  communityController.blockUser(UserId!);
+                  // Example:
+                  // userController.blockUser(userId);
                 }
               },
               itemBuilder:
@@ -142,6 +149,19 @@ Widget communityPost(
                       value: isMyPost ? 'delete' : 'report',
                       child: customText(
                         text: isMyPost ? "Delete" : "Report",
+                        color: Colors.red,
+                      ),
+                    ),
+                    isMyPost
+                        ? const PopupMenuItem(
+                      enabled: false,
+                      height: 0,
+                      child: SizedBox.shrink(),
+                    )
+                        : PopupMenuItem(
+                      value: "block",
+                      child: customText(
+                        text: "Block User",
                         color: Colors.red,
                       ),
                     ),

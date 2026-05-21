@@ -33,6 +33,9 @@ class AuthController extends GetxController {
   var date = "".obs;
   String resetToken = '';
   String googleTokenId = "";
+  // RxBool isChecked = false.obs;
+  // RxBool isChecked2 = false.obs;
+
 
 
   @override
@@ -562,6 +565,7 @@ class AuthController extends GetxController {
 
       print("✅ User stored");
       print("✅ Token: $token");
+      print("✅ Token: ${user['id']}");
 
       Utils.showToast(response['message'] ?? 'Login successful', false);
 
@@ -579,6 +583,7 @@ class AuthController extends GetxController {
   Future<void> logout(BuildContext context) async {
     final prefs = SharedPreferencesMethod.storage;
     await prefs.clear();
+    await prefs.setBool(LocalDBKeys.FIRSTTIMEOPENAPP, true);
     Get.offAllNamed('/login');
     successDialog(context, "Done!", "You’ve been logged out successfully.", "Ok", (){
       Get.back();

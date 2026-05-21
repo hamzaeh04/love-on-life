@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
@@ -157,37 +159,49 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
                     SizedBox(height: 3.h),
-                    Row(
+                    Platform.isAndroid
+                        ? socialIconWidget(
+                      "assets/png/social_icons/google.png",
+                      ontap: () async {
+                        var user = await _authService.login();
+
+                        if (user != null) {
+                          controller.googleLogin(_authService);
+                        }
+                      },
+                    )
+                        : Platform.isIOS
+                        ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         socialIconWidget(
                           "assets/png/social_icons/google.png",
                           ontap: () async {
                             var user = await _authService.login();
-                            if(user != null){
-                              // Step 2: now tokenId is set
-                              // controller.googleTokenId = _authService.tokenId;
-                              // print("Token ID Skurrrrrrrrrrrr: ${_authService.tokenId}");
-                              // Get.toNamed("bottomnavbar");
+
+                            if (user != null) {
                               controller.googleLogin(_authService);
                             }
                           },
-
                         ),
+
+                        SizedBox(width: 4.w),
+
                         socialIconWidget(
                           "assets/png/social_icons/apple.png",
-                          ontap: () {
-                            _appleAuthService.signInWithApple();
+                          ontap: () async {
+                            await _appleAuthService.signInWithApple();
                           },
                         ),
                       ],
-                    ),
+                    )
+                        : const SizedBox(),
                     SizedBox(height: 3.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         customCheckBox(
-                          initialValue: false,
+                          initialValue: true,
                           onChanged: (value) {
                             print("Checkbox state: $value");
                           },

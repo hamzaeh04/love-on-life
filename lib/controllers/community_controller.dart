@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:love_on_life/model/blocked_users_model.dart';
 import 'package:video_compress/video_compress.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -36,7 +37,8 @@ class CommunityController extends GetxController {
   final AuthController controller = Get.find<AuthController>();
   final DashboardController dashboardController = Get.find<DashboardController>();
 
-
+  TextEditingController reasonController = TextEditingController();
+  RxBool isSelected = false.obs;
   RxInt currentCarouselIndex = 0.obs;
   var isPostingComment = false.obs; // 🔹 disable button during post
   RxString postVisibility = 'Public'.obs;
@@ -44,6 +46,7 @@ class CommunityController extends GetxController {
   var getAllPostModel = Rxn<GetAllPostModel>();
   Rx<GetAllEventModel?> getAllEventsModel = Rx<GetAllEventModel?>(null);
   Rx<GetEventByIdModel?> getEventByIdModel = Rx<GetEventByIdModel?>(null);
+  Rx<BlockedUsersModel?> getBlockedUsersModel = Rx<BlockedUsersModel?>(null);
   Rx<FavoriteEventModel?> getFavoriteEventModel = Rx<FavoriteEventModel?>(null);
   Rx<GetMyEventsModel?> getMyEventsModel = Rx<GetMyEventsModel?>(null);
   RxString searchFieldContent = ''.obs;
@@ -119,6 +122,71 @@ class CommunityController extends GetxController {
 
     return "$hour:${minute.toString().padLeft(2, '0')} ${isPM ? 'PM' : 'AM'}";
   }
+  final List<String> abusiveWords = [
+    // Common English abusive words
+    "fuck",
+    "fucking",
+    "shit",
+    "bitch",
+    "asshole",
+    "bastard",
+    "dick",
+    "dickhead",
+    "motherfucker",
+    "mf",
+    "slut",
+    "whore",
+    "hoe",
+    "retard",
+    "idiot",
+    "stupid",
+    "dumbass",
+    "jackass",
+    "loser",
+    "moron",
+    "piece of shit",
+    "pussy",
+    "crap",
+    "screw you",
+    "freak",
+    "psycho",
+
+    // Racist / hateful / offensive terms
+    "nigga",
+    "nigger",
+    "fag",
+    "faggot",
+    "gayass",
+    "tranny",
+    "terrorist",
+
+    // Sexual / vulgar
+    "cum",
+    "porn",
+    "sex",
+    "boobs",
+    "tits",
+    "blowjob",
+    "handjob",
+
+    // Toxic phrases
+    "kill yourself",
+    "kys",
+    "go die",
+    "shut up",
+
+    // South Asian abusive words (optional extra safety)
+    "madarchod",
+    "bc",
+    "mc",
+    "harami",
+    "kameena",
+    "chutiya",
+    "gaand",
+    "lund",
+    "randi",
+  ];
+
 
   String formatDate(dynamic value) {
     if (value == null) return '';
@@ -456,8 +524,9 @@ class CommunityController extends GetxController {
       id: "temp_${DateTime.now().millisecondsSinceEpoch}", // Temporary ID
       comment: commentText,
       userId: UserId(
-        fullname: controller.userName.value, // Aap apna user name yahan dynamic bhi rakh sakte hain
-        profilePicture: controller.userProfilePic.value, // User ki current DP ka path
+        id: prefs.getString(LocalDBKeys.USERID),
+        fullname: prefs.getString(LocalDBKeys.USERFULLNAME), // Aap apna user name yahan dynamic bhi rakh sakte hain
+        profilePicture: prefs.getString(LocalDBKeys.USERPROFILEPIC), // User ki current DP ka path
       ),
     );
 
@@ -488,8 +557,30 @@ class CommunityController extends GetxController {
       final int statusCode = response['statusCode'] ?? 0;
 
       if (statusCode >= 200 && statusCode < 300) {
+        // Parse the new comment from the response if available
+        if (response['data'] != null) {
+          try {
+            final data = response['data'];
+            if (data is Map<String, dynamic>) {
+              // Check if it's a single comment
+              if (data.containsKey('_id') && data.containsKey('comment')) {
+                final serverComment = Comments.fromJson(data);
+                final commentsList = getAllPostModel.value?.data?[postIndex].comments;
+                if (commentsList != null) {
+                  final tempIndex = commentsList.indexWhere((c) => c.id == newComment.id);
+                  if (tempIndex != -1) {
+                    commentsList[tempIndex] = serverComment;
+                    getAllPostModel.refresh();
+                  }
+                }
+              }
+            }
+          } catch (e) {
+            print("Error parsing server comment: $e");
+          }
+        }
         // Success: Server se fresh data le aao (taake IDs wagera correct ho jayein)
-        // GetAllPost();
+        GetAllPost();
       } else {
         // Error handling: Rollback local change
         getAllPostModel.value?.data?[postIndex].comments?.removeWhere((c) => c.id == newComment.id);
@@ -503,6 +594,58 @@ class CommunityController extends GetxController {
       Utils.showToast('Something went wrong', true);
     }
   }
+
+  Future<void> reportComment(String commentId, String postId, String reason) async{
+    final body = {
+      "targetType": "comment",
+      "targetId": commentId,
+      "postId": postId,
+      "reason": reason
+    };
+    try{
+      final response = await baseService.basePostAPI(ApiEndPoints.reportComment, body);
+      print("Response: $response");
+      if(response["success"] == true){
+        Utils.showToast(response["message"], false);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      } else{
+        Utils.showToast(response["message"], true);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      }
+    } catch(e){
+      Utils.showToast("Something went wrong $e", true);
+    }
+  }
+
+  Future<void> reportPost(String postId, String reason) async{
+    final body = {
+      "targetType": "post",
+      "targetId": postId,
+      "reason": reason
+    };
+    try{
+      final response = await baseService.basePostAPI(ApiEndPoints.reportPost, body);
+      print("Response: $response");
+      if(response["success"] == true){
+        Utils.showToast(response["message"], false);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      } else{
+        Utils.showToast(response["message"], true);
+        print("Message: ${response["message"]}");
+        reasonController.clear();
+        isSelected.value = false;
+      }
+    } catch(e){
+      Utils.showToast("Something went wrong $e", true);
+    }
+  }
+
 
   Future<void> createPost() async {
     try {
@@ -807,7 +950,74 @@ class CommunityController extends GetxController {
   }
 
 
+  Future<void> blockUser(String userId) async {
+    try {
+      final response = await baseService.basePatchAPI(ApiEndPoints.blockUser(userId), body: {});
 
+      if (response != null) {
+        debugPrint(response.toString());
+      }
+      if(response["success"] == true) {
+        Utils.showToast(response["message"], false);
+        GetAllPost();
+      } else{
+        Utils.showToast(response["message"], true);
+      }
+    } catch (e) {
+      debugPrint("Block User Error: $e");
+    }
+  }
+
+  Future<void> unblockUser(String userId) async {
+    try {
+      final response = await baseService.basePatchAPI(ApiEndPoints.unblockUser(userId), body: {});
+
+      if (response != null) {
+        debugPrint(response.toString());
+      }
+      if(response["success"] == true) {
+        Utils.showToast(response["message"], false);
+        getAllBlockedUsers();
+        GetAllPost();
+
+      } else{
+        Utils.showToast(response["message"], true);
+      }
+    } catch (e) {
+      debugPrint("Block User Error: $e");
+    }
+  }
+
+  RxBool isBlockedUsersLoading = false.obs;
+  Future<void> getAllBlockedUsers() async {
+
+    try {
+
+      isBlockedUsersLoading.value = true;
+
+      final response = await baseService.baseGetAPI(
+        ApiEndPoints.getAllBlockedUsers,
+      );
+
+      if (response["success"] == true) {
+
+        getBlockedUsersModel.value =
+            BlockedUsersModel.fromJson(response);
+
+      } else {
+
+        Utils.showToast(response["message"], true);
+      }
+
+    } catch (e) {
+
+      debugPrint("Block User Error: $e");
+
+    } finally {
+
+      isBlockedUsersLoading.value = false;
+    }
+  }
   void clearPostFields() {
     postDescField.clear();
     selectedPostImage.value = null;

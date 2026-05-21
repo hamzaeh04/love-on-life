@@ -51,6 +51,7 @@ class HomeScreen extends StatelessWidget {
                         onTap: (){
                           final prefs = SharedPreferencesMethod.storage;
                           print("${baseService.baseURL}${prefs.getString(LocalDBKeys.USERPROFILEPIC)}");
+                          // Get.toNamed("term");
                         },
                         child: customText(
                           text: 'Events Near by You',
@@ -228,13 +229,15 @@ class HomeScreen extends StatelessWidget {
                               Padding(
                                 padding: EdgeInsets.only(left: 4.w),
                                 child: communityPost(
+                                  context: context,
+                                  postId: post.id,
+                                  UserId: post.userId?.id,
                                   post.userId?.profilePicture ?? '',
                                   post.userId?.fullname ?? '',
                                   post.description ?? '',
                                   post.createdAt ?? '',
                                   '',
                                   post.image ?? '',
-                                  postId: post.id,
                                   isLiked: post.isLiked,
                                   index: index,
                                   commentTapped: () {
