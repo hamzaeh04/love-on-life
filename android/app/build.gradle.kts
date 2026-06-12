@@ -1,3 +1,14 @@
+import java.io.FileInputStream
+import java.util.Properties
+
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties()
+if (keystorePropertiesFile.exists()) {
+  keystorePropertiesFile.inputStream().use { input ->
+    keystoreProperties.load(input)
+  }
+}
+
 plugins {
   id("com.android.application")
   id("com.google.gms.google-services")
@@ -6,12 +17,12 @@ plugins {
 }
 
 android {
-  namespace = "com.example.love_on_life"
+  namespace = "com.loveonlife.app"
   compileSdk = 36
   ndkVersion = "29.0.13113456"
 
   defaultConfig {
-    applicationId = "com.example.love_on_life"
+    applicationId = "com.loveonlife.app"
     minSdk = flutter.minSdkVersion
     targetSdk = 36
     versionCode = 1
@@ -30,9 +41,19 @@ android {
     jvmTarget = "11"
   }
 
+  signingConfigs {
+    create("release") {
+      keyAlias = keystoreProperties.getProperty("keyAlias")
+      keyPassword = keystoreProperties.getProperty("keyPassword")
+      val storeFilePath = keystoreProperties.getProperty("storeFile")
+      storeFile = if (storeFilePath != null) rootProject.file(storeFilePath) else null
+      storePassword = keystoreProperties.getProperty("storePassword")
+    }
+  }
+
   buildTypes {
     getByName("release") {
-      signingConfig = signingConfigs.getByName("debug")
+      signingConfig = signingConfigs.getByName("release")
     }
   }
 }

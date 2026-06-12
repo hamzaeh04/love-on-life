@@ -1,4 +1,4 @@
-package com.example.love_on_life
+package com.loveonlife.app
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

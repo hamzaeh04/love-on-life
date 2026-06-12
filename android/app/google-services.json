@@ -7,18 +7,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:813161449252:android:9817a06d8a792b7a9d95b1",
+        "mobilesdk_app_id": "1:813161449252:android:abe71c63ac5d5b459d95b1",
         "android_client_info": {
-          "package_name": "com.example.love_on_life"
+          "package_name": "com.loveonlife.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "813161449252-7iv5shde1mate94df2v2o76geeun4amh.apps.googleusercontent.com",
+          "client_id": "813161449252-n6lrame9s12a145n2jdp3g8qhdff096s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.love_on_life",
-            "certificate_hash": "33915d95c1fb84db0e263585b585cf9a8cdd889b"
+            "package_name": "com.loveonlife.app",
+            "certificate_hash": "15751eea5b8b80b2f87ac5a00a244ca690e368dc"
           }
         },
         {

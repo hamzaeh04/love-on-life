@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:love_on_life/constants/color_constants.dart';
@@ -61,7 +63,9 @@ class GetStarted extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 6.w),
                 child: Column(
                   children: [
+                    Platform.isAndroid ? SizedBox(height: 3.5.h,):
                     SizedBox(height: 1.h),
+
                     customButton("Sign Up With Email",color: buttonPinkColor,textColor: whiteColor,ontap: (){
                       Get.toNamed('login');
                     }),
@@ -76,10 +80,18 @@ class GetStarted extends StatelessWidget {
                         controller.googleLogin(_authService);
                       }
                     },),
-                    SizedBox(height: 1.h),
-                    customButton("Join For Free With Apple",textColor: blackColor,path: "assets/png/social_icons/apple.png",fontweight: FontWeight.w500,ontap: (){
-                      _appleAuthService.signInWithApple();
-                    }),
+
+                    Platform.isIOS ?
+                    Column(
+                      children: [
+                        SizedBox(height: 1.h),
+                        customButton("Join For Free With Apple",textColor: blackColor,path: "assets/png/social_icons/apple.png",fontweight: FontWeight.w500,ontap: (){
+                          _appleAuthService.signInWithApple();
+                        }),
+
+                      ],
+                    ): SizedBox.shrink(),
+                    Platform.isAndroid ? SizedBox(height: 6.75.h,):
                     SizedBox(height: 2.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -135,7 +147,7 @@ class GetStarted extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 2.5.h),
+                    SizedBox(height: 2.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

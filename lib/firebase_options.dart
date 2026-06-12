@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCC5xatO20W-zBSDBUBR-epuHiETkm6NZk',
-    appId: '1:813161449252:android:9817a06d8a792b7a9d95b1',
+    appId: '1:813161449252:android:abe71c63ac5d5b459d95b1',
     messagingSenderId: '813161449252',
     projectId: 'loveonlife-678ee',
     storageBucket: 'loveonlife-678ee.firebasestorage.app',

@@ -160,16 +160,21 @@ class LoginScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 3.h),
                     Platform.isAndroid
-                        ? socialIconWidget(
-                      "assets/png/social_icons/google.png",
-                      ontap: () async {
-                        var user = await _authService.login();
+                        ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            socialIconWidget(
+                                                  "assets/png/social_icons/google.png",
+                                                  ontap: () async {
+                            var user = await _authService.login();
 
-                        if (user != null) {
-                          controller.googleLogin(_authService);
-                        }
-                      },
-                    )
+                            if (user != null) {
+                              controller.googleLogin(_authService);
+                            }
+                                                  },
+                                                ),
+                          ],
+                        )
                         : Platform.isIOS
                         ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,

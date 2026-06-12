@@ -13,12 +13,11 @@ import '../utils/shared_prefrences_methods.dart';
 
 BaseService baseService = BaseService();
 
-// Ensure controller is initialized safely
-final AuthController controller = Get.find<AuthController>();
-
 Widget customAppBar(String title, {VoidCallback? ontap}) {
+  final AuthController controller = Get.find<AuthController>();
   final prefs = SharedPreferencesMethod.storage;
   print(prefs.getString(LocalDBKeys.USERPROFILEPIC));
+
   return ClipRect(
     child: BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
@@ -40,11 +39,13 @@ Widget customAppBar(String title, {VoidCallback? ontap}) {
                     ontap();
                   }
                 },
-                child: ProfileNetworkImage(
-                  imageUrl: "${baseService.baseURL}${prefs.getString(LocalDBKeys.USERPROFILEPIC)}",
+                child: Obx(() => ProfileNetworkImage(
+                  imageUrl: controller.userProfilePic.value.isNotEmpty
+                      ? "${baseService.baseURL}${controller.userProfilePic.value}"
+                      : "",
                   size: 10.w, // match width/height
                   placeholder: "assets/png/home_icons/profile-placeholder.jpg",
-                ),
+                )),
               ),
             ),
 
